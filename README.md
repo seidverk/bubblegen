@@ -118,10 +118,10 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--puff` | `7` | Thickness at the centre of a stroke in mm, dome included. An upper bound: capped per letter at the stroke half-width |
 | `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
 | `--fullness` | `4` | How inflated the cross-section looks. `2` is a plain semicircle; higher steepens the flanks and broadens the top |
-| `--base-round` | `0.25*puff` | Fillet radius under the letter. The contact patch is the outline pulled in by this much; the wall then rolls out to the full silhouette |
+| `--base-round` | `0.5*puff` | Fillet radius under the letter. Half the thickness makes the cross-section fully round, like the tube of a doughnut; `0` gives a square wall |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
-| `--smooth` | `12` | Taubin smoothing passes |
+| `--smooth` | `40` | Taubin smoothing passes. Marching cubes corrugates a steep flank and the shading turns that into ribbing along the wall; this irons it out at about half a percent of volume |
 | `--faces` | `40000` | Triangle target after decimation. `0` keeps the dense mesh |
 | `--bezier-steps` | `24` | Line segments per bezier when flattening the outline |
 | `-v` / `-q` | | More or less logging |
@@ -142,8 +142,11 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 - Letters look like slabs: lower `--fullness` towards 2 for a plain pillow.
 - Fonts with steady stroke widths (Nunito Black, Lilita One) take a thicker even tube than
   fonts that swell and taper (TitanOne's `O` is 33 mm at the sides and 14 mm at the top).
-- Letters rock on the plate or the fillet is too subtle: tune `--base-round`. `0` gives the
-  old square wall, half the puff gives an almost fully rounded underside.
+- Ribbing along the walls: raise `--smooth`. It is marching-cubes corrugation on the steep
+  flank, and the default 40 passes clear it; 12 passes leave it visible.
+- Pimples on the inside of a junction: that was the medial axis running into a concave corner
+  and being read as a crest. Fixed in 0.9.0; if you still see one, it is worth a bug report.
+- Letters rock on the plate, or the underside is too round to glue: lower `--base-round`.
 - Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`. It only ever removes material, so
   the apertures of `S`, `C` and `G` stay open no matter how large it gets.
 - Facets or steps visible on the surface: raise `--res` and `--zsteps` before raising

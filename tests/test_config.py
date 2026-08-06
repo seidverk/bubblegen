@@ -10,7 +10,7 @@ def test_round_radius_defaults_to_fraction_of_puff() -> None:
 
 
 def test_base_radius_defaults_to_a_fraction_of_puff() -> None:
-    assert BubbleParams(puff_mm=8.0).base_radius == pytest.approx(2.0)
+    assert BubbleParams(puff_mm=8.0).base_radius == pytest.approx(4.0)
 
 
 def test_explicit_base_round_wins() -> None:

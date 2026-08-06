@@ -97,6 +97,20 @@ def test_decimation_never_flattens_the_dome(font: Font) -> None:
     assert inradius.max() < 1.0  # mm; the dense mesh sits at 0.09, plates at 2.5+
 
 
+def test_the_side_walls_come_out_smooth(font: Font) -> None:
+    """Marching cubes corrugates a steep flank, and the eye reads that corrugation off
+    the shading as ribbing along the wall. Smoothing is what irons it out."""
+    p = BubbleParams(size_mm=60.0, puff_mm=16.0, resolution=5.0, target_faces=0)
+
+    mesh = build_letter(font, "I", p).mesh
+    steep = np.abs(mesh.face_normals[:, 2]) < 0.5
+    pairs = mesh.face_adjacency
+    on_wall = steep[pairs[:, 0]] & steep[pairs[:, 1]]
+    kinks = np.degrees(mesh.face_adjacency_angles[on_wall])
+
+    assert np.percentile(kinks, 99) < 10.0  # degrees; raw marching cubes gives 45
+
+
 def test_oversized_rounding_is_backed_off_and_reported(
     font: Font, params: BubbleParams, caplog: pytest.LogCaptureFixture
 ) -> None:

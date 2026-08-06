@@ -39,12 +39,14 @@ NECK_PERCENTILE = 10.0
 CREST_BLUR_MM = 2.0
 """Smoothing of the crest reference, in mm."""
 
+RIDGE_SHARE = 0.99
+RIDGE_REACH_MM = 2.0
+"""How close to the tallest point nearby a centre-line pixel has to stand to count as a
+crest. The medial axis also runs into every concave corner, where the letter is not at
+its thickest at all, and taking those pixels for crests raises a pimple there."""
+
 CREST_FLOOR_MM = 1e-6
 """Keeps the division by the crest height defined on a hairline glyph."""
-
-SOLVE_PX_PER_MM = 2.0
-"""Resolution of both solves. The fields are smooth, so a coarse grid is plenty and it
-keeps the linear systems small; they are interpolated back up afterwards."""
 
 
 def uniform_limit(sd: Field, params: BubbleParams) -> float:
@@ -86,31 +88,45 @@ def _membrane(mask: Mask, px_per_mm: float) -> tuple[Field, Field, float]:
 
     The crest is the thickness the membrane reaches over the glyph's centre line, carried
     across the whole glyph so that every pixel knows how tall its own stroke stands.
+
+    Both are solved on the raster grid itself. A coarser grid is tempting, since these
+    fields are smooth, but a steep flank shows every wrinkle the interpolation back up
+    leaves behind, as ribbing along the walls.
     """
-    step = max(1, round(px_per_mm / SOLVE_PX_PER_MM))
-    coarse = mask[::step, ::step]
-    spacing = step / px_per_mm
-
-    thickness = np.zeros(coarse.shape, dtype=np.float64)
-    crest = np.zeros(coarse.shape, dtype=np.float64)
+    thickness = np.zeros(mask.shape, dtype=np.float64)
+    crest = np.zeros(mask.shape, dtype=np.float64)
     limit = 0.0
-    if coarse.any():
-        deflection = _solve(coarse, spacing, load=-1.0)
-        thickness[coarse] = np.sqrt(2.0 * np.clip(deflection, 0.0, None))
+    if mask.any():
+        deflection = _solve(mask, 1.0 / px_per_mm, load=-1.0)
+        thickness[mask] = np.sqrt(2.0 * np.clip(deflection, 0.0, None))
 
-        axis = coarse & medial_axis(coarse)
-        crest = _spread(thickness, axis, 1.0 / spacing) if axis.any() else thickness.copy()
-        body = axis & _largest_piece(coarse)
+        axis = _crest_line(thickness, mask, px_per_mm)
+        crest = _spread(thickness, axis, px_per_mm) if axis.any() else thickness.copy()
+        crest = np.maximum(crest, thickness)
+
+        body = axis & _largest_piece(mask)
         if body.any():
             # the tenth percentile, not the minimum: the centre line runs out to the tip
             # of every stroke, where the tube is meant to round off anyway
             limit = PUFF_SLACK * float(np.percentile(thickness[body], NECK_PERCENTILE))
 
-    full_thickness = _upsample(thickness, mask.shape)
-    # the two fields are interpolated apart, and a crest below the surface it measures
-    # would push the letter past the thickness that was asked for
-    full_crest = np.maximum(_upsample(crest, mask.shape), full_thickness)
-    return full_thickness, np.maximum(full_crest, CREST_FLOOR_MM), limit
+    return thickness, np.maximum(crest, CREST_FLOOR_MM), limit
+
+
+def _crest_line(thickness: Field, mask: Mask, px_per_mm: float) -> Mask:
+    """The glyph's centre line, minus the branches that run into concave corners.
+
+    The medial axis passes close to every reflex corner, and the membrane is nowhere
+    near its local peak there. Treating those pixels as crests puts a pimple on the
+    inside of every junction, so a pixel only counts if it stands within `RIDGE_SHARE`
+    of the tallest point around it.
+    """
+    axis: Mask = mask & medial_axis(mask)
+    if not axis.any():
+        return axis
+    nearby = ndimage.maximum_filter(thickness, size=int(RIDGE_REACH_MM * px_per_mm) | 1)
+    crest: Mask = axis & (thickness >= RIDGE_SHARE * nearby)
+    return crest if crest.any() else axis
 
 
 def _largest_piece(mask: Mask) -> Mask:
@@ -140,16 +156,6 @@ def _spread(thickness: Field, axis: Mask, px_per_mm: float) -> Field:
     return np.asarray(
         ndimage.gaussian_filter(lifted, sigma=CREST_BLUR_MM * px_per_mm), dtype=np.float64
     )
-
-
-def _upsample(coarse: Field, shape: tuple[int, ...]) -> Field:
-    """Back to raster resolution, cubically: bilinear leaves a kink on every cell edge,
-    which the mesh faithfully reproduces as faceting."""
-    zoom = (shape[0] / coarse.shape[0], shape[1] / coarse.shape[1])
-    upsampled = ndimage.zoom(coarse, zoom, order=3)
-    # cubic overshoots into negative values next to the clamped outline
-    trimmed = np.clip(upsampled[: shape[0], : shape[1]], 0.0, None)
-    return np.asarray(trimmed, dtype=np.float64)
 
 
 def _solve(free: Mask, spacing_mm: float, load: float) -> Field:

@@ -4,6 +4,30 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-08-06
+
+### Fixed
+
+- Ribbing along the side walls. Marching cubes corrugates a steep flank, and flat shading
+  turns a 0.2 mm corrugation into visible stripes; the default smoothing of 12 passes left
+  it. It is now 40 passes, which measures 20.9 degrees of wall kink down to under 5, and
+  costs half a percent of volume. Ruled out on the way: raster resolution, vertical sampling,
+  the distance field's quantisation, the bezier flattening, silhouette rounding, the fillet
+  formulation and decimation, none of which moved it.
+- Pimples on the inside of junctions, clearest on `K`. The medial axis passes close to every
+  concave corner, where the letter is nowhere near its thickest, so those pixels were read as
+  centre-line crests and the surface was lifted to full thickness a few millimetres from the
+  rim. A pixel now counts as a crest only if it stands within one percent of the tallest point
+  around it.
+
+### Changed
+
+- `--base-round` defaults to half the thickness instead of a quarter, which rounds the
+  underside as much as the tube allows and is what reads as a doughnut. The contact patch is
+  still about two thirds of the letter's width.
+- The membrane and the crest are solved on the raster grid rather than a coarse one, so no
+  interpolation wrinkles are left for a steep flank to show.
+
 ## [0.8.0] - 2026-08-06
 
 ### Fixed

@@ -83,6 +83,12 @@ def notched() -> NDArray[np.float64]:
 
 
 @pytest.fixture
+def fat_elbow() -> NDArray[np.float64]:
+    """An L with 30 mm arms: wide enough for its concave corner to matter."""
+    return np.array([(0, 0), (70, 0), (70, 30), (30, 30), (30, 70), (0, 70)], dtype=np.float64)
+
+
+@pytest.fixture
 def elbow() -> NDArray[np.float64]:
     """An L: two 10 mm strokes meeting at a junction, as one contour."""
     return np.array([(0, 0), (40, 0), (40, 10), (10, 10), (10, 40), (0, 40)], dtype=np.float64)

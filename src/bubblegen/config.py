@@ -7,8 +7,13 @@ from dataclasses import dataclass
 ROUND_FACTOR = 0.45
 """Silhouette rounding radius as a fraction of puff, when not given explicitly."""
 
-BASE_ROUND_FACTOR = 0.25
-"""Underside fillet radius as a fraction of puff, when not given explicitly."""
+BASE_ROUND_FACTOR = 0.5
+"""Underside fillet radius as a fraction of puff, when not given explicitly.
+
+Half the thickness rounds the underside as much as the tube allows, which is what makes
+the cross-section read as a doughnut rather than a pillow. The contact patch stays wide
+enough to glue and to print: it comes out around two thirds of the letter's width.
+"""
 
 PUFF_SLACK = 2.0
 """How far past the membrane's own peak `--puff` may push, as a multiple of it.
@@ -61,8 +66,13 @@ class BubbleParams:
     z_steps: int = 64
     """Vertical samples for marching cubes."""
 
-    smooth_iterations: int = 12
-    """Taubin smoothing passes. 0 disables smoothing."""
+    smooth_iterations: int = 40
+    """Taubin smoothing passes. 0 disables smoothing.
+
+    Marching cubes leaves fine corrugation on a steep flank, which reads as ribbing
+    along the walls; this is what irons it out. Taubin preserves volume, so more passes
+    cost shape rather than size: 40 passes take about half a percent off.
+    """
 
     target_faces: int = 40_000
     """Triangle budget after decimation. 0 keeps the raw marching-cubes mesh."""

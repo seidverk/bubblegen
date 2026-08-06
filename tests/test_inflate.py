@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
+from scipy import ndimage
 
 from bubblegen.config import BubbleParams
 from bubblegen.inflate import height_field, uniform_limit
@@ -116,6 +117,19 @@ def test_the_limit_ignores_accents(params: BubbleParams, rect: RectFactory) -> N
     accented = uniform_limit(signed_distance(with_accent.mask, params.resolution), params)
 
     assert accented == pytest.approx(plain, rel=0.1)
+
+
+def test_concave_corners_do_not_grow_pimples(
+    params: BubbleParams, fat_elbow: NDArray[np.float64]
+) -> None:
+    """The medial axis runs into every concave corner, but the letter is not at its
+    thickest there. Taking those pixels for crests puts a pimple on each junction."""
+    p = dataclasses.replace(params, puff_mm=24.0)
+    h, sd, raster = inflated([fat_elbow], p)
+
+    at_full_height = raster.mask & (h >= 0.99 * h.max()) & (sd < 10.0)
+
+    assert ndimage.label(at_full_height)[1] <= 2
 
 
 def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> None:
