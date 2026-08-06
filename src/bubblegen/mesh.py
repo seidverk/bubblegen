@@ -31,9 +31,9 @@ FIDELITY_TOLERANCE_MM = 0.15
 """Surface error decimation may add on top of the marching-cubes discretisation."""
 
 DOME_NORMAL_Z = 0.7
-DOME_HEIGHT_SHARE = 0.25
-"""Which faces count as the inflated top: upward facing and away from the rim, where
-the height field falls off a cliff and says nothing about fidelity."""
+DOME_RIM_MM = 1.0
+"""Which faces count as the inflated top: upward facing, and clear of the rim, where
+the surface follows the base fillet rather than the height field."""
 
 Z_HEADROOM = 1.15
 """Slack above the tallest point, so the isosurface closes instead of being clipped."""
@@ -43,16 +43,19 @@ PLATE_DEPTH = 0.6
 
 
 def build_mesh(
-    height: NDArray[np.float64], raster: Raster, params: BubbleParams
+    height: NDArray[np.float64],
+    sd: NDArray[np.float64],
+    raster: Raster,
+    params: BubbleParams,
 ) -> trimesh.Trimesh:
     """Marching-cubes the height field, then clean, smooth and decimate it.
 
-    The result is solid between z = 0 and z = h(x, y): a flat bottom that prints
-    without supports and hangs flush against a wall.
+    The result is solid between the plate and z = h(x, y), with the outline curving
+    down into a flat contact patch: it prints without supports and hangs flush against
+    a wall, without the hard right-angle edge of a plain extrusion.
     """
     px_mm = raster.px_per_mm
-    # the dome pushes the peak above puff, so the grid has to follow it
-    z1 = params.puff_mm * (1.0 + params.dome) * Z_HEADROOM
+    z1 = params.puff_mm * Z_HEADROOM
     z0 = -PLATE_DEPTH * params.puff_mm
 
     zs = np.linspace(z0, z1, params.z_steps)
@@ -61,6 +64,10 @@ def build_mesh(
     h = height[:, :, None]
     z = zs[None, None, :]
     field = np.minimum(h - z, z)
+
+    inset = _base_inset(zs, params.base_radius)
+    if inset is not None:
+        field = np.minimum(field, sd[:, :, None] - inset[None, None, :])
 
     field = np.pad(field, 1, mode="constant", constant_values=OUTSIDE_VALUE)
     verts, faces, _normals, _values = measure.marching_cubes(
@@ -86,7 +93,19 @@ def build_mesh(
         trimesh.smoothing.filter_taubin(
             mesh, lamb=TAUBIN_LAMB, nu=TAUBIN_NU, iterations=params.smooth_iterations
         )
-    return _decimate(mesh, params.target_faces, height, raster)
+    return _decimate(mesh, params.target_faces, height, sd, raster, params)
+
+
+def _base_inset(zs: NDArray[np.float64], radius: float) -> NDArray[np.float64] | None:
+    """How far the outline is pulled in at each height, as a quarter-circle fillet.
+
+    `radius` at the plate, nothing from `radius` upwards: the contact patch is the
+    silhouette eroded by `radius`, and the wall rolls out to the full silhouette.
+    """
+    if radius <= 0:
+        return None
+    rise = np.clip(radius - zs, 0.0, radius)
+    return np.asarray(radius - np.sqrt(np.clip(radius**2 - rise**2, 0.0, None)))
 
 
 def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:
@@ -99,7 +118,13 @@ def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:
     mesh.remove_unreferenced_vertices()
 
 
-def _surface_error(mesh: trimesh.Trimesh, height: NDArray[np.float64], raster: Raster) -> float:
+def _surface_error(
+    mesh: trimesh.Trimesh,
+    height: NDArray[np.float64],
+    sd: NDArray[np.float64],
+    raster: Raster,
+    rim_mm: float,
+) -> float:
     """Worst gap between the inflated top of `mesh` and the height field it follows."""
     centers = mesh.triangles_center
     px = np.clip(
@@ -114,7 +139,7 @@ def _surface_error(mesh: trimesh.Trimesh, height: NDArray[np.float64], raster: R
     )
     target = height[py, px]
 
-    dome = (mesh.face_normals[:, 2] > DOME_NORMAL_Z) & (target > DOME_HEIGHT_SHARE * height.max())
+    dome = (mesh.face_normals[:, 2] > DOME_NORMAL_Z) & (sd[py, px] > rim_mm)
     if not dome.any():
         return 0.0
     return float(np.abs(centers[dome, 2] - target[dome]).max())
@@ -124,7 +149,9 @@ def _decimate(
     mesh: trimesh.Trimesh,
     target_faces: int,
     height: NDArray[np.float64],
+    sd: NDArray[np.float64],
     raster: Raster,
+    params: BubbleParams,
 ) -> trimesh.Trimesh:
     """Marching cubes is very dense; trim it to keep STL files sane.
 
@@ -137,7 +164,8 @@ def _decimate(
     if not target_faces or len(mesh.faces) <= target_faces:
         return mesh
 
-    budget_error = _surface_error(mesh, height, raster) + FIDELITY_TOLERANCE_MM
+    rim = params.base_radius + DOME_RIM_MM
+    budget_error = _surface_error(mesh, height, sd, raster, rim) + FIDELITY_TOLERANCE_MM
     for multiplier in DECIMATION_RETRIES:
         budget = int(target_faces * multiplier)
         if budget >= len(mesh.faces):
@@ -153,7 +181,7 @@ def _decimate(
             logger.debug("decimation to %d faces was not watertight, retrying", budget)
             continue
 
-        error = _surface_error(candidate, height, raster)
+        error = _surface_error(candidate, height, sd, raster, rim)
         if error <= budget_error:
             return candidate
         logger.debug("decimation to %d faces was %.2f mm off the surface, retrying", budget, error)

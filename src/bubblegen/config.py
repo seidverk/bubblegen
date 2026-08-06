@@ -8,8 +8,8 @@ from enum import StrEnum
 ROUND_FACTOR = 0.45
 """Silhouette rounding radius as a fraction of puff, when not given explicitly."""
 
-MIN_ROLL_MM = 0.1
-"""Floor for the automatic roll, so a hairline glyph cannot divide by zero."""
+BASE_ROUND_FACTOR = 0.25
+"""Underside fillet radius as a fraction of puff, when not given explicitly."""
 
 
 class Profile(StrEnum):
@@ -32,26 +32,31 @@ class BubbleParams:
     """Cap height. Every letter shares this scale, so an alphabet stays consistent."""
 
     puff_mm: float = 7.0
-    """Thickness at the centre of a stroke, dome included.
+    """Thickness at the centre of a stroke.
 
-    An upper bound: it is capped per glyph by the stroke half-width, because a bubble
-    taller than half its width reads as a tube.
+    An upper bound: each stroke is capped by its own half-width, because a bubble
+    taller than half its width reads as a sausage.
     """
 
     roll_mm: float | None = None
-    """Distance over which the edge rounds up to full thickness.
+    """Distance over which the surface climbs to full thickness.
 
-    Left unset it follows each glyph's own half-width, so the peak sits at the middle
-    of the stroke and nothing flattens into a plateau.
+    Left unset it follows the local stroke thickness, so every stroke inflates to its
+    own width. Setting it applies one distance everywhere, which flattens wide strokes
+    into plateaus.
     """
 
     round_mm: float | None = None
     """Silhouette rounding radius. Defaults to ROUND_FACTOR * puff."""
 
-    dome: float = 0.15
-    """Extra centre bulge as a fraction of puff. 0 keeps the top flat."""
-
     profile: Profile = Profile.SPHERE
+
+    base_round_mm: float | None = None
+    """Fillet radius under the letter. Defaults to BASE_ROUND_FACTOR * puff.
+
+    The bottom stays flat and printable, but the outline curves down into it instead of
+    meeting the plate at a right angle.
+    """
 
     resolution: float = 5.0
     """Raster pixels per mm. Drives both quality and cost quadratically."""
@@ -84,10 +89,10 @@ class BubbleParams:
             self._require_positive("roll_mm", self.roll_mm)
         if self.round_mm is not None:
             self._require_non_negative("round_mm", self.round_mm)
+        if self.base_round_mm is not None:
+            self._require_non_negative("base_round_mm", self.base_round_mm)
         self._require_non_negative("smooth_iterations", self.smooth_iterations)
         self._require_non_negative("target_faces", self.target_faces)
-        if not 0.0 <= self.dome <= 1.0:
-            raise ValueError(f"dome must be within 0..1, got {self.dome}")
         if self.z_steps < 2:
             raise ValueError(f"z_steps must be at least 2, got {self.z_steps}")
 
@@ -101,27 +106,15 @@ class BubbleParams:
         if value < 0:
             raise ValueError(f"{name} must not be negative, got {value}")
 
-    def puff_for(self, deepest_mm: float) -> float:
-        """Thickness for a glyph whose deepest point is `deepest_mm` in.
-
-        Capped so the peak (puff plus dome) never exceeds the stroke half-width: a
-        light font at a large puff would otherwise inflate into sausages.
-        """
-        return min(self.puff_mm, deepest_mm / (1.0 + self.dome))
-
-    def roll_for(self, deepest_mm: float) -> float:
-        """Edge roll distance for a glyph whose deepest point is `deepest_mm` in.
-
-        A fixed roll shorter than the stroke leaves the middle of the stroke flat, so
-        straight letters read as extrusions with a chamfer rather than as bubbles.
-        """
-        if self.roll_mm is not None:
-            return self.roll_mm
-        return max(deepest_mm, MIN_ROLL_MM)
-
     @property
     def round_radius(self) -> float:
         return ROUND_FACTOR * self.puff_mm if self.round_mm is None else self.round_mm
+
+    @property
+    def base_radius(self) -> float:
+        if self.base_round_mm is not None:
+            return self.base_round_mm
+        return BASE_ROUND_FACTOR * self.puff_mm
 
     @property
     def margin(self) -> float:

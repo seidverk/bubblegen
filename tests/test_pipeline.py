@@ -35,17 +35,15 @@ def test_bottom_is_a_flat_plate(font: Font, params: BubbleParams) -> None:
 
     assert len(bottom) > 0
     assert bottom[:, 2].max() == pytest.approx(0.0, abs=0.01)
-    assert 0.0 < letter.extents[2] <= params.puff_mm * (1 + params.dome) + 0.05
+    assert 0.0 < letter.extents[2] <= params.puff_mm + 0.05
 
 
 def test_thickness_reaches_the_requested_puff_on_fat_strokes(font: Font) -> None:
-    p = BubbleParams(
-        size_mm=60.0, puff_mm=3.0, dome=0.2, resolution=4.0, z_steps=32, target_faces=0
-    )
+    p = BubbleParams(size_mm=60.0, puff_mm=3.0, resolution=4.0, z_steps=32, target_faces=0)
 
     letter = build_letter(font, "I", p)
 
-    assert letter.extents[2] == pytest.approx(p.puff_mm * (1 + p.dome), abs=0.3)
+    assert letter.extents[2] == pytest.approx(p.puff_mm, abs=0.4)
 
 
 def test_capped_thickness_is_reported(
@@ -66,7 +64,6 @@ def test_decimation_meets_the_face_budget(font: Font) -> None:
     params = BubbleParams(
         size_mm=45.0,
         puff_mm=6.0,
-        dome=0.4,
         resolution=5.0,
         smooth_iterations=0,
         target_faces=budget,

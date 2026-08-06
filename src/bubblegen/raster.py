@@ -30,6 +30,10 @@ MIN_AREA_RATIO = 0.75
 MAX_AREA_RATIO = 1.15
 """Rounding trims tips and fills inner corners; more than this is damage."""
 
+THICKNESS_STEPS = 24
+"""Disk radii probed when measuring local stroke thickness: the step size is the
+quantisation of the result, so too few of them terrace the surface."""
+
 
 @dataclass(frozen=True, slots=True)
 class Raster:
@@ -152,6 +156,25 @@ def round_silhouette(mask: Mask, px_per_mm: float, radius: float) -> tuple[Mask,
         attempt *= ROUND_BACKOFF
 
     return mask, 0.0
+
+
+def local_thickness(sd: Field, px_per_mm: float, steps: int = THICKNESS_STEPS) -> Field:
+    """Radius of the largest inscribed disk covering each pixel, in mm.
+
+    The signed distance alone says how far the nearest edge is, which collapses to
+    zero along a stroke's centre line as much as at its tip. This says how wide the
+    stroke *is* at that point, so a thin stroke and a fat junction inflate to their
+    own size instead of sharing one profile.
+    """
+    thickness = np.zeros_like(sd)
+    inside = np.clip(sd, 0.0, None)
+    for radius in np.linspace(float(sd.max()), 0.0, steps, endpoint=False):
+        centres = sd >= radius
+        if not centres.any():
+            continue
+        covered = dilate(centres, px_per_mm, radius)
+        thickness = np.where((thickness == 0) & covered, radius, thickness)
+    return np.maximum(thickness, inside)
 
 
 def signed_distance(mask: Mask, px_per_mm: float) -> Field:

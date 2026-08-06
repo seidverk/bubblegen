@@ -46,7 +46,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--roll",
         type=float,
         default=None,
-        help="edge rounding distance in mm [default: the glyph half-width]",
+        help="climb distance in mm [default: the local stroke thickness]",
     )
     shape.add_argument(
         "--round",
@@ -55,7 +55,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="max silhouette rounding radius in mm [default: 0.45*puff]",
     )
-    shape.add_argument("--dome", type=float, default=defaults.dome, help="extra centre bulge, 0..1")
+    shape.add_argument(
+        "--base-round",
+        type=float,
+        default=None,
+        help="underside fillet radius in mm [default: 0.25*puff]",
+    )
     shape.add_argument(
         "--profile",
         type=Profile,
@@ -98,7 +103,7 @@ def params_from_args(args: argparse.Namespace) -> BubbleParams:
         puff_mm=args.puff,
         roll_mm=args.roll,
         round_mm=args.round_r,
-        dome=args.dome,
+        base_round_mm=args.base_round,
         profile=args.profile,
         resolution=args.res,
         z_steps=args.zsteps,

@@ -74,15 +74,14 @@ def _rounded(raster: Raster, char: str, params: BubbleParams) -> Raster:
 def _report_puff_cap(sd: Field, char: str, params: BubbleParams) -> None:
     """Say so when the stroke, not `--puff`, is what sets the thickness."""
     deepest = float(sd.max())
-    capped = params.puff_for(deepest)
-    if capped < params.puff_mm:
+    if deepest < params.puff_mm:
         logger.warning(
-            "%r: strokes are %.1f mm wide, so --puff %.1f mm is capped at %.1f mm; "
+            "%r: the widest stroke is %.1f mm, so --puff %.1f mm is capped at %.1f mm; "
             "use a heavier font or a larger --size for a fatter bubble",
             char,
             2 * deepest,
             params.puff_mm,
-            capped,
+            deepest,
         )
 
 
@@ -93,7 +92,7 @@ def build_letter(font: Font, char: str, params: BubbleParams) -> LetterMesh:
     raster = _rounded(rasterize(contours, params), char, params)
     sd = signed_distance(raster.mask, params.resolution)
     _report_puff_cap(sd, char, params)
-    mesh = build_mesh(height_field(sd, params), raster, params)
+    mesh = build_mesh(height_field(sd, params), sd, raster, params)
 
     # drop to z = 0 so it lands on the build plate
     mesh.apply_translation([0, 0, -mesh.bounds[0][2]])

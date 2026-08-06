@@ -1,91 +1,93 @@
 from __future__ import annotations
 
 import dataclasses
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
-from numpy.typing import NDArray
 
 from bubblegen.config import BubbleParams, Profile
 from bubblegen.inflate import height_field
+from bubblegen.raster import rasterize, signed_distance
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
+    from bubblegen.raster import Raster
+    from conftest import SquareFactory
 
 
-@pytest.fixture
-def sd() -> NDArray[np.float64]:
-    """One-dimensional signed distance ramp: outside, edge roll, deep interior."""
-    return np.linspace(-2.0, 6.0, 201)
+def inflated(
+    contours: list[NDArray[np.float64]], params: BubbleParams
+) -> tuple[NDArray[np.float64], NDArray[np.float64], Raster]:
+    raster = rasterize(contours, params)
+    sd = signed_distance(raster.mask, params.resolution)
+    return height_field(sd, params), sd, raster
 
 
-def test_automatic_roll_spans_the_whole_stroke(sd: NDArray[np.float64]) -> None:
-    """Without an explicit roll the peak must sit at the deepest point only: a fixed
-    roll shorter than the stroke leaves a flat plateau, which reads as an extrusion."""
-    p = BubbleParams(puff_mm=2.0, roll_mm=None, dome=0.0)
+def test_each_stroke_inflates_to_its_own_width(params: BubbleParams, square: SquareFactory) -> None:
+    """A thin stroke next to a fat one must not borrow the fat one's profile, or it
+    comes out as a tall sausage with a tent ridge down the middle."""
+    p = dataclasses.replace(params, puff_mm=20.0)
+    h, _sd, raster = inflated([square(6.0), square(20.0, offset=10.0)], p)
 
-    h = height_field(sd, p)
-
-    assert h.max() == pytest.approx(p.puff_mm)
-    plateau = (h >= p.puff_mm - 1e-9).sum()
-    assert plateau == 1
-    assert h[sd >= sd.max() / 2].min() < p.puff_mm
-
-
-def test_thickness_is_capped_by_the_stroke_width() -> None:
-    """A peak taller than the stroke half-width is a tube, not a bubble."""
-    thin = np.linspace(-2.0, 2.0, 101)
-    p = BubbleParams(puff_mm=10.0, dome=0.0)
-
-    assert height_field(thin, p).max() == pytest.approx(2.0, rel=0.02)
+    thin = raster.to_pixel((3.0, 3.0))
+    fat = raster.to_pixel((20.0, 20.0))
+    assert h[thin[1], thin[0]] == pytest.approx(3.0, abs=0.5)
+    assert h[fat[1], fat[0]] == pytest.approx(10.0, abs=0.7)
 
 
-def test_thick_strokes_keep_the_requested_puff() -> None:
-    fat = np.linspace(-2.0, 20.0, 201)
-    p = BubbleParams(puff_mm=5.0, dome=0.0)
+def test_surface_arrives_flat_at_the_centre_line(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    """The centre line is the top of the bubble: the surface has to level off there
+    rather than meeting itself at an angle."""
+    p = dataclasses.replace(params, puff_mm=20.0)
+    h, _sd, raster = inflated([square(6.0), square(20.0, offset=10.0)], p)
 
-    assert height_field(fat, p).max() == pytest.approx(5.0)
+    row = raster.to_pixel((3.0, 3.0))[1]
+    across = h[row]
+    peak = int(np.argmax(across[: raster.to_pixel((6.0, 3.0))[0]]))
+    slope = np.abs(np.diff(across))[peak - 1 : peak + 1].max() * p.resolution
 
-
-def test_dome_counts_towards_the_cap() -> None:
-    thin = np.linspace(-2.0, 3.0, 101)
-    p = BubbleParams(puff_mm=10.0, dome=0.5)
-
-    assert height_field(thin, p).max() == pytest.approx(3.0, rel=0.02)
-
-
-def test_explicit_roll_saturates_early(sd: NDArray[np.float64]) -> None:
-    p = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.0)
-
-    h = height_field(sd, p)
-
-    assert (h >= p.puff_mm - 1e-9).sum() > 1
+    assert slope < 0.2  # mm of rise per mm across; a tent ridge is around 1
 
 
-def test_full_thickness_reached_beyond_the_roll(sd: NDArray[np.float64]) -> None:
-    p = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.0)
-    assert height_field(sd, p).max() == pytest.approx(p.puff_mm)
+def test_puff_caps_the_thickness(params: BubbleParams, square: SquareFactory) -> None:
+    p = dataclasses.replace(params, puff_mm=3.0)
+    h, _sd, _raster = inflated([square(40.0)], p)
+
+    assert h.max() == pytest.approx(3.0, abs=0.05)
 
 
-def test_dome_adds_a_central_bulge(sd: NDArray[np.float64]) -> None:
-    p = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.5)
-    assert height_field(sd, p).max() == pytest.approx(p.puff_mm * 1.5)
+def test_field_sign_follows_the_silhouette(params: BubbleParams, square: SquareFactory) -> None:
+    h, sd, _raster = inflated([square(10.0)], params)
 
-
-def test_field_sign_follows_the_silhouette(sd: NDArray[np.float64]) -> None:
-    p = BubbleParams(puff_mm=2.0, roll_mm=1.0)
-    h = height_field(sd, p)
     assert np.all(h[sd < 0] < 0)
     assert np.all(h[sd > 0] >= 0)
 
 
-def test_height_is_monotonic_in_distance(sd: NDArray[np.float64]) -> None:
-    p = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.2)
-    assert np.all(np.diff(height_field(sd, p)) >= -1e-9)
+def test_explicit_roll_saturates_early(params: BubbleParams, square: SquareFactory) -> None:
+    """A short explicit roll is the old behaviour: full thickness a millimetre in,
+    flat from there. Useful for a sharp shoulder, wrong as a default."""
+    base = dataclasses.replace(params, puff_mm=3.0)
+    auto, _sd, raster = inflated([square(20.0)], base)
+    early, _sd2, _raster2 = inflated([square(20.0)], dataclasses.replace(base, roll_mm=1.0))
+
+    probe = raster.to_pixel((2.0, 10.0))  # 2 mm inside a 10 mm half-width stroke
+    assert early[probe[1], probe[0]] == pytest.approx(base.puff_mm, abs=0.1)
+    assert auto[probe[1], probe[0]] < 0.7 * base.puff_mm
 
 
-def test_profiles_are_ordered_by_shoulder_fullness(sd: NDArray[np.float64]) -> None:
-    base = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.0)
+def test_profiles_are_ordered_by_shoulder_fullness(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    base = dataclasses.replace(params, puff_mm=20.0)
     heights = {
-        profile: height_field(sd, dataclasses.replace(base, profile=profile)) for profile in Profile
+        profile: inflated([square(10.0)], dataclasses.replace(base, profile=profile))[0]
+        for profile in Profile
     }
+    _h, sd, _raster = inflated([square(10.0)], base)
     inside = sd > 0
     assert np.all(heights[Profile.SUPER][inside] >= heights[Profile.SPHERE][inside] - 1e-9)
     assert np.all(heights[Profile.SPHERE][inside] >= heights[Profile.SMOOTH][inside] - 1e-9)

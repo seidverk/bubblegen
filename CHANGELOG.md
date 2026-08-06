@@ -4,6 +4,30 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-08-06
+
+Letters shaped like inflated bubbles, front and back.
+
+### Changed
+
+- The inflation profile is normalised by the local stroke thickness (a granulometry of the
+  glyph) instead of one distance per letter. Every stroke becomes a tube of its own width and
+  the surface levels off at the centre line, so letters no longer come out with a tent ridge
+  and creases fanning out of every corner.
+- `--puff` is capped per stroke rather than per letter, so a thin stroke next to a fat
+  junction stays proportional instead of inflating into a sausage.
+
+### Added
+
+- `--base-round`: a fillet under the letter, default `0.25 * puff`. The bottom stays flat and
+  support-free, but the outline curves down into a slightly smaller contact patch instead of
+  meeting the plate at a right angle.
+
+### Removed
+
+- `--dome`. It added its bulge at the medial axis, which sharpened the very ridge it was
+  meant to soften, and with per-stroke normalisation it only scaled `--puff`.
+
 ## [0.3.0] - 2026-08-06
 
 Letters that actually read as bubbles. Three shaping defects, all visible in print.
