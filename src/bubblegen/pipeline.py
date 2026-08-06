@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 import trimesh
 
 from bubblegen.errors import BubbleGenError
-from bubblegen.inflate import height_field
+from bubblegen.inflate import height_field, uniform_limit
 from bubblegen.mesh import build_mesh
 from bubblegen.raster import Field, Raster, rasterize, round_silhouette, signed_distance
 
@@ -22,6 +22,10 @@ if TYPE_CHECKING:
     from bubblegen.fonts import Font
 
 logger = logging.getLogger(__name__)
+
+NECK_TOLERANCE = 1.05
+"""How far past the narrowest section's own limit --puff may go before it is worth
+mentioning: a couple of percent is invisible."""
 
 _PLAIN_NAME = re.compile(r"[A-Za-z0-9]")
 
@@ -72,16 +76,16 @@ def _rounded(raster: Raster, char: str, params: BubbleParams) -> Raster:
 
 
 def _report_puff_cap(sd: Field, char: str, params: BubbleParams) -> None:
-    """Say so when the stroke, not `--puff`, is what sets the thickness."""
-    deepest = float(sd.max())
-    if deepest < params.puff_mm:
+    """Say so when the glyph, not `--puff`, is what sets the thickness."""
+    limit = uniform_limit(sd, params)
+    if params.puff_mm > limit * NECK_TOLERANCE:
         logger.warning(
-            "%r: the widest stroke is %.1f mm, so --puff %.1f mm is capped at %.1f mm; "
-            "use a heavier font or a larger --size for a fatter bubble",
+            "%r: the narrowest section holds %.1f mm, so --puff %.1f mm notches it; "
+            "use --puff %.0f for one even tube, or a font with steadier strokes",
             char,
-            2 * deepest,
+            limit,
             params.puff_mm,
-            deepest,
+            limit,
         )
 
 

@@ -4,6 +4,24 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-08-06
+
+### Fixed
+
+- Narrow sections were pinched into grooves. Height came straight from the membrane, which
+  follows the local stroke width, so the thin waist of an `S` or the top of TitanOne's `O`
+  (14 mm against 33 mm at the sides) sat visibly lower than the rest, and raising `--puff`
+  made the gap worse. Thickness is now measured against the crest the membrane reaches over
+  the nearest centre line, so `--puff` is one tube thickness for the whole letter.
+- The crest reference is read off the glyph's medial axis. A local-maximum test only marks
+  the highest point of a crest that rises along its own length, so every narrow section of a
+  ring was measured against a fat one somewhere else.
+
+### Added
+
+- A warning naming the thickest even tube a letter can hold, since that is the number to pass
+  to `--puff`: TitanOne at 80 mm holds 18 mm, and anything past it notches the thin sections.
+
 ## [0.6.0] - 2026-08-06
 
 ### Fixed
@@ -20,6 +38,13 @@ All notable changes to this project are documented here. The format follows
   balloon by steepening the flanks and broadening the top, without moving any ridge. The
   reference for the power is the local ridge height, not the letter's peak, so thin strokes
   are not stretched up towards the tallest one.
+
+### Changed
+
+- `--puff` may now reach the full width of the stroke it sits on, not half of it. The
+  membrane on its own stops at half the stroke width, which reads as flattened; the full
+  width is a round tube, which is what a doughnut is. Past that the letter would stand
+  taller than it is wide, and it is refused with a warning.
 
 ## [0.5.0] - 2026-08-06
 

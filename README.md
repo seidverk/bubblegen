@@ -20,7 +20,8 @@ glyph outline (fontTools)
   -> raster mask                 even-odd winding, so counters stay open
   -> silhouette rounding         opening, backed off to keep counters and strokes
   -> membrane solve              laplace(u) = -1, clamped to the outline
-  -> thickness h = sqrt(2u)      shaped by --fullness, capped by --puff
+  -> crest over the centre line  the height each section can hold
+  -> thickness                   one tube for the letter: --puff, --fullness
   -> 3D scalar field             solid between the plate and h, filleted at the base
   -> marching cubes              scikit-image
   -> Taubin smoothing            volume-preserving, unlike Laplacian
@@ -29,13 +30,14 @@ glyph outline (fontTools)
 
 The shape is not a profile drawn by hand, it is a balloon: a membrane clamped to the letter's
 outline and pushed up by uniform pressure. That is what `laplace(u) = -1` with `u = 0` on the
-outline says, and `sqrt(2u)` is the thickness.
+outline says, and `sqrt(2u)` is the thickness. Because the solution is smooth everywhere,
+there is no ridge down the centre line and no crease radiating from a corner, which is what
+any profile built from the distance to the outline gives you instead.
 
-For a straight stroke it works out to exactly a semicircular cross-section of that stroke's own
-half-width, so every stroke inflates to its own size. Because the solution is smooth
-everywhere, there is no ridge down the centre line, no crease radiating from a corner, and
-junctions bulge rather than dent: a wider patch of membrane deflects further. Anything built
-from the distance to the outline instead gets all three of those artefacts.
+That membrane follows the local stroke width, though, and a doughnut does not: its tube is one
+thickness however its outline wanders. So the height is measured against the crest the
+membrane reaches over the nearest centre line and then set to `--puff` everywhere, which is
+what keeps the thin waist of an `S` from being pinched into a groove.
 
 ## Install
 
@@ -85,8 +87,8 @@ a light weight — pin a heavy instance first (see `scripts/fetch_fonts.py`).
 # Icelandic alphabet, 60 mm tall
 uv run bubblegen --font fonts/Nunito-Black.ttf --chars "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ"
 
-# a name for the wall, fat and balloon-like
-uv run bubblegen --font fonts/TitanOne-Regular.ttf --chars "IGOR" --size 80 --puff 14
+# a name for the wall, doughnut-fat: 18 mm is the most this font holds evenly at 80 mm
+uv run bubblegen --font fonts/TitanOne-Regular.ttf --chars "IGOR" --size 80 --puff 18
 
 # fast preview, then final quality
 uv run bubblegen --font fonts/Nunito-Black.ttf --chars "A" --res 3 --zsteps 32 --smooth 0
@@ -123,10 +125,14 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 - "--round 5.4 mm would deform the glyph, using 3.8 mm": the radius would have filled a
   counter or eaten a stroke, so it was reduced for that letter. Set `--round` explicitly to
   silence it.
-- Letters look under-inflated: raise `--fullness` towards 6 for a balloon, or raise `--puff`
-  and use a font with fatter strokes so the ceiling does not bite. Thickness is bounded by the
-  stroke, not by the flag.
+- Letters look flattened: raise `--puff` until the log stops telling you the narrowest
+  section holds less. `--fullness` towards 6 steepens the flanks on top of that.
+- A notch across the thin part of an `O`, `G` or `S`: `--puff` is past what that section can
+  hold, so the wide parts went higher and it did not. The warning prints the value that comes
+  out even; below it the tube is one thickness all the way round.
 - Letters look like slabs: lower `--fullness` towards 2 for a plain pillow.
+- Fonts with steady stroke widths (Nunito Black, Lilita One) take a thicker even tube than
+  fonts that swell and taper (TitanOne's `O` is 33 mm at the sides and 14 mm at the top).
 - Letters rock on the plate or the fillet is too subtle: tune `--base-round`. `0` gives the
   old square wall, half the puff gives an almost fully rounded underside.
 - Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`. It only ever removes material, so

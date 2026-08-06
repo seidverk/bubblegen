@@ -10,6 +10,14 @@ ROUND_FACTOR = 0.45
 BASE_ROUND_FACTOR = 0.25
 """Underside fillet radius as a fraction of puff, when not given explicitly."""
 
+PUFF_SLACK = 2.0
+"""How far past the membrane's own peak `--puff` may push, as a multiple of it.
+
+The membrane on its own reaches half the stroke width, which reads as flattened. Twice
+that is a full round tube: as tall as the stroke is wide, which is what a doughnut is.
+Beyond it the letter would be taller than wide, which is a sausage.
+"""
+
 MIN_FULLNESS = 2.0
 MAX_FULLNESS = 8.0
 """Below 2 the cross-section would dip below a semicircle and read as deflated."""
@@ -29,8 +37,8 @@ class BubbleParams:
     puff_mm: float = 7.0
     """Thickness at the centre of a stroke.
 
-    An upper bound: each stroke is capped by its own half-width, because a bubble
-    taller than half its width reads as a sausage.
+    An upper bound: each stroke is capped at its own width, past which the letter
+    would stand taller than it is wide. See PUFF_SLACK.
     """
 
     round_mm: float | None = None

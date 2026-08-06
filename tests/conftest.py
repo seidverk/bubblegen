@@ -65,6 +65,15 @@ def rect() -> RectFactory:
 
 
 @pytest.fixture
+def uneven_ring() -> list[NDArray[np.float64]]:
+    """An O whose ring is narrower at top and bottom, as in most typefaces."""
+    angle = np.linspace(0.0, 2.0 * np.pi, 240, endpoint=False)
+    outer = np.column_stack([40 + 30 * np.cos(angle), 40 + 30 * np.sin(angle)])
+    inner = np.column_stack([40 + 14 * np.cos(angle), 40 + 18 * np.sin(angle)])
+    return [outer, inner]
+
+
+@pytest.fixture
 def notched() -> NDArray[np.float64]:
     """A fat C: 16 mm walls around an 8 mm aperture, like the apertures of S and G."""
     return np.array(

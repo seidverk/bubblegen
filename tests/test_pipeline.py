@@ -47,15 +47,17 @@ def test_thickness_reaches_the_requested_puff_on_fat_strokes(font: Font) -> None
     assert letter.extents[2] == pytest.approx(p.puff_mm, abs=0.4)
 
 
-def test_capped_thickness_is_reported(
+def test_a_puff_the_glyph_cannot_hold_is_reported(
     font: Font, params: BubbleParams, caplog: pytest.LogCaptureFixture
 ) -> None:
+    """The number in the warning is the thickness that comes out even, so it is worth
+    printing rather than leaving the user to guess."""
     p = dataclasses.replace(params, puff_mm=6.0)
 
     with caplog.at_level("WARNING"):
         build_letter(font, "I", p)
 
-    assert "is capped at" in caplog.text
+    assert "narrowest section holds" in caplog.text
 
 
 def test_decimation_meets_the_face_budget(font: Font) -> None:

@@ -5,12 +5,10 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
-from scipy import ndimage
 
 from bubblegen.config import BubbleParams
-from bubblegen.fonts import Font
-from bubblegen.inflate import height_field
-from bubblegen.raster import rasterize, round_silhouette, signed_distance
+from bubblegen.inflate import height_field, uniform_limit
+from bubblegen.raster import rasterize, signed_distance
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -27,52 +25,85 @@ def inflated(
     return height_field(sd, params), sd, raster
 
 
-def valley_pixels(h: NDArray[np.float64], mask: NDArray[np.bool_], px_per_mm: float) -> int:
-    """Interior pixels where the surface curves upwards.
+def ring_spread(h: NDArray[np.float64], raster: Raster) -> float:
+    """How much the tube height varies around the `uneven_ring`, as a share of its peak.
 
-    An inflated membrane is concave everywhere inside, so a valley means the profile
-    dented instead of blending: exactly the crease that shows up where strokes meet.
+    The tube of a doughnut is the same height all the way round. Variation here is the
+    groove that shows up across the top of an O, where the ring happens to be narrower.
     """
-    inner = ndimage.binary_erosion(mask, iterations=5)
-    curvature = ndimage.laplace(h) * px_per_mm**2
-    return int(((curvature > 0.5) & inner).sum())
+    angles = np.linspace(0.0, 2.0 * np.pi, 120)
+    radius = (30.0 + 14.0 * 18.0 / np.hypot(18.0 * np.cos(angles), 14.0 * np.sin(angles))) / 2
+    heights = [
+        h[py, px]
+        for px, py in (
+            raster.to_pixel((40 + r * np.cos(a), 40 + r * np.sin(a)))
+            for a, r in zip(angles, radius, strict=True)
+        )
+    ]
+    return float((max(heights) - min(heights)) / max(heights))
 
 
-def test_each_stroke_inflates_to_its_own_width(params: BubbleParams, rect: RectFactory) -> None:
-    """A stroke rises to its own half-width, so a thin one next to a fat one stays
-    proportional instead of borrowing the fat one's profile."""
-    p = dataclasses.replace(params, puff_mm=20.0)
-    h, _sd, raster = inflated([rect(6.0, 40.0), rect(20.0, 40.0, x=14.0)], p)
+def test_strokes_reach_the_same_thickness(params: BubbleParams, rect: RectFactory) -> None:
+    """A doughnut has one tube thickness however its outline wanders. Scaling the height
+    with the local stroke width instead pinches every narrow section into a groove."""
+    p = dataclasses.replace(params, puff_mm=5.0)
+    h, _sd, raster = inflated([rect(12.0, 40.0), rect(30.0, 40.0, x=20.0)], p)
 
-    thin = raster.to_pixel((3.0, 20.0))
-    fat = raster.to_pixel((24.0, 20.0))
-    assert h[thin[1], thin[0]] == pytest.approx(3.0, rel=0.15)
-    assert h[fat[1], fat[0]] == pytest.approx(10.0, rel=0.15)
+    thin = raster.to_pixel((6.0, 20.0))
+    fat = raster.to_pixel((35.0, 20.0))
+    assert h[thin[1], thin[0]] == pytest.approx(5.0, rel=0.05)
+    assert h[fat[1], fat[0]] == pytest.approx(5.0, rel=0.05)
 
 
-def test_junctions_bulge_instead_of_denting(
-    params: BubbleParams, elbow: NDArray[np.float64]
+def test_a_stroke_too_thin_for_the_puff_stops_at_its_own_width(
+    params: BubbleParams, rect: RectFactory
 ) -> None:
-    """Where two strokes meet there is more room, so the surface rises there and stays
-    convex; a per-stroke profile creases along the junction instead."""
     p = dataclasses.replace(params, puff_mm=20.0)
+    h, _sd, raster = inflated([rect(8.0, 40.0), rect(30.0, 40.0, x=16.0)], p)
+
+    thin = raster.to_pixel((4.0, 20.0))
+    fat = raster.to_pixel((31.0, 20.0))
+    assert h[thin[1], thin[0]] == pytest.approx(8.0, rel=0.2)
+    assert h[fat[1], fat[0]] == pytest.approx(20.0, rel=0.05)
+
+
+def test_junctions_stay_level(params: BubbleParams, elbow: NDArray[np.float64]) -> None:
+    """A junction has more room than the strokes it joins, but a doughnut does not swell
+    there: it stays level, and above all it does not crease."""
+    p = dataclasses.replace(params, puff_mm=8.0)
     h, _sd, raster = inflated([elbow], p)
 
     corner = raster.to_pixel((5.0, 5.0))
     along = raster.to_pixel((25.0, 5.0))
-    assert h[corner[1], corner[0]] > h[along[1], along[0]]
-    assert valley_pixels(h, raster.mask, p.resolution) == 0
+    assert h[corner[1], corner[0]] == pytest.approx(h[along[1], along[0]], rel=0.1)
 
 
-def test_a_letter_surface_stays_convex(font: Font, params: BubbleParams) -> None:
-    """K has the sharpest junctions in the alphabet: no creases allowed there either."""
-    p = dataclasses.replace(params, size_mm=60.0, puff_mm=8.0, resolution=4.0)
-    contours = font.contours_mm("K", p.size_mm, p.bezier_steps)
-    raster = rasterize(contours, p)
-    mask, _used = round_silhouette(raster.mask, p.resolution, p.round_radius)
-    h = height_field(signed_distance(mask, p.resolution), p)
+def test_a_narrowing_ring_keeps_one_thickness(
+    params: BubbleParams, uneven_ring: list[NDArray[np.float64]]
+) -> None:
+    """The ring of an O is narrower at top and bottom. The tube must not be pinched
+    there: that is the groove that shows up across the top of an O."""
+    p = dataclasses.replace(params, puff_mm=10.0)
+    h, _sd, raster = inflated(uneven_ring, p)
 
-    assert valley_pixels(h, mask, p.resolution) == 0
+    side = raster.to_pixel((18.0, 40.0))  # ring is 16 mm wide here
+    top = raster.to_pixel((40.0, 64.0))  # and 12 mm wide here
+    assert h[side[1], side[0]] == pytest.approx(h[top[1], top[0]], rel=0.05)
+    assert ring_spread(h, raster) < 0.1
+
+
+def test_the_reported_limit_is_the_thickness_that_comes_out_even(
+    params: BubbleParams, uneven_ring: list[NDArray[np.float64]]
+) -> None:
+    raster = rasterize(uneven_ring, params)
+    sd = signed_distance(raster.mask, params.resolution)
+
+    limit = uniform_limit(sd, params)
+    even = height_field(sd, dataclasses.replace(params, puff_mm=limit))
+    greedy = height_field(sd, dataclasses.replace(params, puff_mm=limit * 2.0))
+
+    assert ring_spread(even, raster) < 0.1
+    assert ring_spread(greedy, raster) > 0.15
 
 
 def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> None:
@@ -82,14 +113,22 @@ def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> Non
     assert h.max() == pytest.approx(3.0, abs=0.05)
 
 
-def test_thin_strokes_are_not_scaled_up_to_the_puff(
-    params: BubbleParams, rect: RectFactory
-) -> None:
-    """`--puff` is a ceiling: a 6 mm stroke stays a 3 mm bubble, not a sausage."""
-    p = dataclasses.replace(params, puff_mm=20.0)
+def test_thickness_stops_at_the_stroke_width(params: BubbleParams, rect: RectFactory) -> None:
+    """As tall as it is wide is a doughnut; taller is a sausage. A 6 mm stroke tops out
+    at 6 mm no matter what `--puff` asks for."""
+    p = dataclasses.replace(params, puff_mm=40.0)
     h, _sd, _raster = inflated([rect(6.0, 40.0)], p)
 
-    assert h.max() == pytest.approx(3.0, rel=0.15)
+    assert h.max() == pytest.approx(6.0, rel=0.2)
+
+
+def test_puff_can_go_past_the_natural_peak(params: BubbleParams, rect: RectFactory) -> None:
+    """The membrane on its own only reaches half the stroke width, which reads as
+    flattened. Asking for more has to be allowed, up to the doughnut limit."""
+    p = dataclasses.replace(params, puff_mm=25.0)
+    h, _sd, _raster = inflated([rect(30.0, 60.0)], p)
+
+    assert h.max() == pytest.approx(25.0, rel=0.05)
 
 
 def test_fullness_steepens_the_flanks_without_moving_the_peak(
@@ -109,7 +148,7 @@ def test_fullness_steepens_the_flanks_without_moving_the_peak(
 
 
 def test_fullness_two_is_a_semicircle(params: BubbleParams, rect: RectFactory) -> None:
-    p = dataclasses.replace(params, puff_mm=20.0, fullness=2.0)
+    p = dataclasses.replace(params, puff_mm=10.0, fullness=2.0)
     h, _sd, raster = inflated([rect(20.0, 60.0)], p)
 
     # a semicircle of radius 10 stands 8.66 mm tall 5 mm in from the edge
