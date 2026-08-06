@@ -1,0 +1,909 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "bubble_letters.py",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "bubble_letters",
+      "community": 1,
+      "norm_label": "bubble_letters.py"
+    },
+    {
+      "label": "FlattenPen",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen",
+      "community": 0,
+      "norm_label": "flattenpen"
+    },
+    {
+      "label": "BasePen",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "basepen",
+      "community": 0,
+      "norm_label": "basepen"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._moveTo()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_moveto",
+      "community": 3,
+      "norm_label": "._moveto()"
+    },
+    {
+      "label": "._lineTo()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_lineto",
+      "community": 0,
+      "norm_label": "._lineto()"
+    },
+    {
+      "label": "._curveToOne()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_curvetoone",
+      "community": 0,
+      "norm_label": "._curvetoone()"
+    },
+    {
+      "label": "._closePath()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_closepath",
+      "community": 3,
+      "norm_label": "._closepath()"
+    },
+    {
+      "label": "._endPath()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_endpath",
+      "community": 3,
+      "norm_label": "._endpath()"
+    },
+    {
+      "label": "._flushContour()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_flushcontour",
+      "community": 3,
+      "norm_label": "._flushcontour()"
+    },
+    {
+      "label": ".result()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L78",
+      "_origin": "ast",
+      "id": "bubble_letters_flattenpen_result",
+      "community": 4,
+      "norm_label": ".result()"
+    },
+    {
+      "label": "glyph_contours()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "bubble_letters_glyph_contours",
+      "community": 4,
+      "norm_label": "glyph_contours()"
+    },
+    {
+      "label": "font_reference_height()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L98",
+      "_origin": "ast",
+      "id": "bubble_letters_font_reference_height",
+      "community": 7,
+      "norm_label": "font_reference_height()"
+    },
+    {
+      "label": "rasterize()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L109",
+      "_origin": "ast",
+      "id": "bubble_letters_rasterize",
+      "community": 9,
+      "norm_label": "rasterize()"
+    },
+    {
+      "label": "_dilate()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L137",
+      "_origin": "ast",
+      "id": "bubble_letters_dilate",
+      "community": 1,
+      "norm_label": "_dilate()"
+    },
+    {
+      "label": "_erode()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L144",
+      "_origin": "ast",
+      "id": "bubble_letters_erode",
+      "community": 1,
+      "norm_label": "_erode()"
+    },
+    {
+      "label": "soften()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L151",
+      "_origin": "ast",
+      "id": "bubble_letters_soften",
+      "community": 1,
+      "norm_label": "soften()"
+    },
+    {
+      "label": "signed_distance()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L164",
+      "_origin": "ast",
+      "id": "bubble_letters_signed_distance",
+      "community": 10,
+      "norm_label": "signed_distance()"
+    },
+    {
+      "label": "height_field()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L175",
+      "_origin": "ast",
+      "id": "bubble_letters_height_field",
+      "community": 8,
+      "norm_label": "height_field()"
+    },
+    {
+      "label": "find_hole_center()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L208",
+      "_origin": "ast",
+      "id": "bubble_letters_find_hole_center",
+      "community": 6,
+      "norm_label": "find_hole_center()"
+    },
+    {
+      "label": "cut_hole()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L232",
+      "_origin": "ast",
+      "id": "bubble_letters_cut_hole",
+      "community": 2,
+      "norm_label": "cut_hole()"
+    },
+    {
+      "label": "build_mesh()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L249",
+      "_origin": "ast",
+      "id": "bubble_letters_build_mesh",
+      "community": 5,
+      "norm_label": "build_mesh()"
+    },
+    {
+      "label": "safe_name()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L317",
+      "_origin": "ast",
+      "id": "bubble_letters_safe_name",
+      "community": 2,
+      "norm_label": "safe_name()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "bubble_letters.py",
+      "source_location": "L323",
+      "_origin": "ast",
+      "id": "bubble_letters_main",
+      "community": 2,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Collects glyph contours as flat polylines (beziers sampled into lines).",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_40",
+      "community": 0,
+      "norm_label": "collects glyph contours as flat polylines (beziers sampled into lines)."
+    },
+    {
+      "label": "Return list of contours (Nx2 arrays) in font units for one character.",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_84",
+      "community": 4,
+      "norm_label": "return list of contours (nx2 arrays) in font units for one character."
+    },
+    {
+      "label": "Units that a capital letter occupies \u2014 used so all letters share one scale.",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L99",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_99",
+      "community": 7,
+      "norm_label": "units that a capital letter occupies \u2014 used so all letters share one scale."
+    },
+    {
+      "label": "Rasterize contours (already in mm) to a boolean mask.      Returns (mask, origin",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L110",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_110",
+      "community": 9,
+      "norm_label": "rasterize contours (already in mm) to a boolean mask.      returns (mask, origin"
+    },
+    {
+      "label": "Round the silhouette itself \u2014 this is what makes letters read as 'bubble'.",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L152",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_152",
+      "community": 1,
+      "norm_label": "round the silhouette itself \u2014 this is what makes letters read as 'bubble'."
+    },
+    {
+      "label": "Signed distance in mm: positive inside the glyph, negative outside.",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L165",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_165",
+      "community": 10,
+      "norm_label": "signed distance in mm: positive inside the glyph, negative outside."
+    },
+    {
+      "label": "Half-thickness h(x,y) in mm from the signed distance field.      puff    : max h",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L176",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_176",
+      "community": 8,
+      "norm_label": "half-thickness h(x,y) in mm from the signed distance field.      puff    : max h"
+    },
+    {
+      "label": "Pick a keyring-hole centre that still leaves `wall` mm of material.",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L209",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_209",
+      "community": 6,
+      "norm_label": "pick a keyring-hole centre that still leaves `wall` mm of material."
+    },
+    {
+      "label": "Drill the keyring hole as a real boolean (needs `pip install manifold3d`).",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L233",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_233",
+      "community": 2,
+      "norm_label": "drill the keyring hole as a real boolean (needs `pip install manifold3d`)."
+    },
+    {
+      "label": "Marching-cubes a height field into a watertight mesh.",
+      "file_type": "rationale",
+      "source_file": "bubble_letters.py",
+      "source_location": "L251",
+      "_origin": "ast",
+      "id": "bubble_letters_rationale_251",
+      "community": 5,
+      "norm_label": "marching-cubes a height field into a watertight mesh."
+    },
+    {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude",
+      "community": 11,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude_graphify",
+      "community": 11,
+      "norm_label": "graphify"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_build_mesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L232",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_cut_hole",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_dilate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_erode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_find_hole_center",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_flattenpen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_font_reference_height",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_glyph_contours",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_height_field",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L323",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_rasterize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L317",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_safe_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_signed_distance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "bubble_letters",
+      "target": "bubble_letters_soften",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "basepen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_closepath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_curvetoone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_endpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_flushcontour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_lineto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_moveto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen",
+      "target": "bubble_letters_flattenpen_result",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "bubble_letters_glyph_contours",
+      "target": "bubble_letters_flattenpen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_40",
+      "target": "bubble_letters_flattenpen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen_moveto",
+      "target": "bubble_letters_flattenpen_flushcontour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen_closepath",
+      "target": "bubble_letters_flattenpen_flushcontour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen_endpath",
+      "target": "bubble_letters_flattenpen_flushcontour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "bubble_letters_flattenpen_result",
+      "target": "bubble_letters_flattenpen_flushcontour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "bubble_letters_glyph_contours",
+      "target": "bubble_letters_flattenpen_result",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_glyph_contours",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_84",
+      "target": "bubble_letters_glyph_contours",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L364",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_font_reference_height",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_99",
+      "target": "bubble_letters_font_reference_height",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_rasterize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_110",
+      "target": "bubble_letters_rasterize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "bubble_letters_soften",
+      "target": "bubble_letters_dilate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "bubble_letters_soften",
+      "target": "bubble_letters_erode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L381",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_soften",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_152",
+      "target": "bubble_letters_soften",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_signed_distance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_165",
+      "target": "bubble_letters_signed_distance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L393",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_height_field",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_176",
+      "target": "bubble_letters_height_field",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_find_hole_center",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_209",
+      "target": "bubble_letters_find_hole_center",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L399",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_cut_hole",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_233",
+      "target": "bubble_letters_cut_hole",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L394",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_build_mesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "bubble_letters_rationale_251",
+      "target": "bubble_letters_build_mesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bubble_letters.py",
+      "source_location": "L404",
+      "weight": 1.0,
+      "source": "bubble_letters_main",
+      "target": "bubble_letters_safe_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "claude",
+      "target": "claude_graphify",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "a6dab77b5f8bccab5ee14ba43eade2300709ee27"
+}

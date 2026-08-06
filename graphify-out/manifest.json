@@ -1,0 +1,27 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1786028210.7323723,
+    "ast_hash": "e51077b6a7f1f67afc748f1a32a1557d",
+    "semantic_hash": ""
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1786028152.9432545,
+    "ast_hash": "9fd338dcbbcb89b68a8f34914347606a",
+    "semantic_hash": ""
+  },
+  "bubble_letters.py": {
+    "mtime": 1786027948.9523823,
+    "ast_hash": "15d74c115e393abd74d2079b749d18ea",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1786028210.7321951,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1786028087.3468966,
+    "ast_hash": "7bde4ace2dd549914085d1dd62d04a59",
+    "semantic_hash": ""
+  }
+}
