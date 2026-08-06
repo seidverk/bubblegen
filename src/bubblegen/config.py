@@ -3,21 +3,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum
 
 ROUND_FACTOR = 0.45
 """Silhouette rounding radius as a fraction of puff, when not given explicitly."""
 
 BASE_ROUND_FACTOR = 0.25
 """Underside fillet radius as a fraction of puff, when not given explicitly."""
-
-
-class Profile(StrEnum):
-    """Shape of the edge roll — how the surface climbs from 0 to full thickness."""
-
-    SPHERE = "sphere"  # quarter-circle: classic pillow edge
-    SMOOTH = "smooth"  # smoothstep: softer, more balloon-like
-    SUPER = "super"  # superellipse: fuller, squarer shoulder
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,18 +29,8 @@ class BubbleParams:
     taller than half its width reads as a sausage.
     """
 
-    roll_mm: float | None = None
-    """Distance over which the surface climbs to full thickness.
-
-    Left unset it follows the local stroke thickness, so every stroke inflates to its
-    own width. Setting it applies one distance everywhere, which flattens wide strokes
-    into plateaus.
-    """
-
     round_mm: float | None = None
     """Silhouette rounding radius. Defaults to ROUND_FACTOR * puff."""
-
-    profile: Profile = Profile.SPHERE
 
     base_round_mm: float | None = None
     """Fillet radius under the letter. Defaults to BASE_ROUND_FACTOR * puff.
@@ -74,19 +55,10 @@ class BubbleParams:
     """Line segments per bezier when flattening the outline."""
 
     def __post_init__(self) -> None:
-        # StrEnum coercion lets callers pass plain strings from CLIs and config files.
-        try:
-            object.__setattr__(self, "profile", Profile(self.profile))
-        except ValueError as exc:
-            known = ", ".join(p.value for p in Profile)
-            raise ValueError(f"unknown profile {self.profile!r}, expected one of {known}") from exc
-
         self._require_positive("size_mm", self.size_mm)
         self._require_positive("puff_mm", self.puff_mm)
         self._require_positive("resolution", self.resolution)
         self._require_positive("bezier_steps", self.bezier_steps)
-        if self.roll_mm is not None:
-            self._require_positive("roll_mm", self.roll_mm)
         if self.round_mm is not None:
             self._require_non_negative("round_mm", self.round_mm)
         if self.base_round_mm is not None:

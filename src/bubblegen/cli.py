@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from bubblegen.config import BubbleParams, Profile
+from bubblegen.config import BubbleParams
 from bubblegen.errors import BubbleGenError
 from bubblegen.fonts import Font
 from bubblegen.pipeline import build_alphabet, export_stl
@@ -43,12 +43,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="thickness in mm, capped per letter at the stroke half-width",
     )
     shape.add_argument(
-        "--roll",
-        type=float,
-        default=None,
-        help="climb distance in mm [default: the local stroke thickness]",
-    )
-    shape.add_argument(
         "--round",
         dest="round_r",
         type=float,
@@ -60,13 +54,6 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=None,
         help="underside fillet radius in mm [default: 0.25*puff]",
-    )
-    shape.add_argument(
-        "--profile",
-        type=Profile,
-        choices=list(Profile),
-        default=defaults.profile,
-        help="edge roll shape",
     )
 
     quality = parser.add_argument_group("quality and cost")
@@ -101,10 +88,8 @@ def params_from_args(args: argparse.Namespace) -> BubbleParams:
     return BubbleParams(
         size_mm=args.size,
         puff_mm=args.puff,
-        roll_mm=args.roll,
         round_mm=args.round_r,
         base_round_mm=args.base_round,
-        profile=args.profile,
         resolution=args.res,
         z_steps=args.zsteps,
         smooth_iterations=args.smooth,

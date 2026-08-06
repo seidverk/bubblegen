@@ -3,6 +3,7 @@ from __future__ import annotations
 import dataclasses
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from bubblegen.config import BubbleParams
@@ -77,15 +78,21 @@ def test_decimation_meets_the_face_budget(font: Font) -> None:
 
 def test_decimation_never_flattens_the_dome(font: Font) -> None:
     """Quadric decimation collapses whole strips of a straight stroke into plates,
-    which prints as a low-poly letter. Fidelity has to win over the face budget."""
+    which prints as a low-poly letter. Fidelity has to win over the face budget.
+
+    Measured as the inradius of the dome faces: slivers along a straight stroke are
+    fine, since the surface is ruled there, but a plate is wide in both directions.
+    """
     p = BubbleParams(
         size_mm=40.0, puff_mm=4.0, resolution=4.0, smooth_iterations=0, target_faces=3_000
     )
 
     mesh = build_letter(font, "H", p).mesh
-    dome = mesh.area_faces[mesh.face_normals[:, 2] > 0.7]
+    dome = mesh.triangles[mesh.face_normals[:, 2] > 0.7]
+    sides = [np.linalg.norm(dome[:, i] - dome[:, i - 1], axis=1) for i in range(3)]
+    inradius = 2 * mesh.area_faces[mesh.face_normals[:, 2] > 0.7] / sum(sides)
 
-    assert dome.max() < 1.0  # mm2; dense faces are ~0.04, plates are tens
+    assert inradius.max() < 1.0  # mm; the dense mesh sits at 0.08, plates at 2+
 
 
 def test_oversized_rounding_is_backed_off_and_reported(

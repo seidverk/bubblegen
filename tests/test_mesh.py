@@ -59,7 +59,7 @@ def test_the_underside_is_filleted_into_a_smaller_flat_patch(
 
     assert mesh.is_watertight
     assert patch[:, 2].max() == pytest.approx(0.0, abs=0.01)
-    assert footprint == pytest.approx(widest - 2 * p.base_radius, abs=0.5)
+    assert footprint == pytest.approx(widest - 2 * p.base_radius, abs=1.0)
 
 
 def test_zero_base_round_keeps_the_wall_square(params: BubbleParams, square: SquareFactory) -> None:

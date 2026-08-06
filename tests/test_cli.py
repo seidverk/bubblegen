@@ -5,7 +5,6 @@ from pathlib import Path
 import pytest
 
 from bubblegen.cli import build_parser, main, params_from_args
-from bubblegen.config import Profile
 
 
 def test_font_and_chars_are_required() -> None:
@@ -29,8 +28,6 @@ def test_flags_map_onto_params() -> None:
             "AB",
             "--puff",
             "3",
-            "--profile",
-            "smooth",
             "--base-round",
             "0.5",
         ]
@@ -38,9 +35,7 @@ def test_flags_map_onto_params() -> None:
     params = params_from_args(args)
 
     assert params.puff_mm == 3.0
-    assert params.profile is Profile.SMOOTH
     assert params.base_radius == 0.5
-    assert params.roll_mm is None
 
 
 def test_run_writes_an_stl(font_path: Path, tmp_path: Path) -> None:

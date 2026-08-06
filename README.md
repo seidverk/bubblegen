@@ -19,20 +19,23 @@ glyph outline (fontTools)
   -> flattened contours          bezier sampling
   -> raster mask                 even-odd winding, so counters stay open
   -> silhouette rounding         closing + opening, backed off to keep counters
-  -> signed distance field (mm)  scipy EDT
-  -> local stroke thickness      granulometry: how wide each stroke actually is
-  -> height profile h(d)         a tube per stroke, capped by --puff
+  -> membrane solve              laplace(u) = -1, clamped to the outline
+  -> thickness h = sqrt(2u)      capped by --puff
   -> 3D scalar field             solid between the plate and h, filleted at the base
   -> marching cubes              scikit-image
   -> Taubin smoothing            volume-preserving, unlike Laplacian
   -> decimation + watertight STL
 ```
 
-The signed distance field is what makes this work: thickness is a function of distance to the
-letter's edge, so every stroke inflates evenly and counters inflate inward. The profile is
-normalised by the *local* stroke thickness, not by one number per letter, so every stroke
-becomes a tube of its own width and the surface levels off at the centre line instead of
-meeting itself in a ridge.
+The shape is not a profile drawn by hand, it is a balloon: a membrane clamped to the letter's
+outline and pushed up by uniform pressure. That is what `laplace(u) = -1` with `u = 0` on the
+outline says, and `sqrt(2u)` is the thickness.
+
+For a straight stroke it works out to exactly a semicircular cross-section of that stroke's own
+half-width, so every stroke inflates to its own size. Because the solution is smooth
+everywhere, there is no ridge down the centre line, no crease radiating from a corner, and
+junctions bulge rather than dent: a wider patch of membrane deflects further. Anything built
+from the distance to the outline instead gets all three of those artefacts.
 
 ## Install
 
@@ -102,10 +105,8 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--out` | `out` | Output directory |
 | `--size` | `60` | Cap height in mm; shared by every letter so an alphabet stays consistent |
 | `--puff` | `7` | Thickness at the centre of a stroke in mm, dome included. An upper bound: capped per letter at the stroke half-width |
-| `--roll` | stroke | Distance over which the edge rounds up to full thickness. Follows each glyph's half-width unless set; a fixed value shorter than the stroke leaves a flat plateau |
 | `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Backed off per letter so counters and thin strokes survive |
 | `--base-round` | `0.25*puff` | Fillet radius under the letter. The contact patch is the outline pulled in by this much; the wall then rolls out to the full silhouette |
-| `--profile` | `sphere` | Edge roll shape: `sphere` (pillow), `smooth` (balloon), `super` (fuller shoulder) |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
 | `--smooth` | `12` | Taubin smoothing passes |
@@ -121,10 +122,8 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 - "--round 5.4 mm would deform the glyph, using 3.8 mm": the radius would have filled a
   counter or eaten a stroke, so it was reduced for that letter. Set `--round` explicitly to
   silence it.
-- Letters look under-inflated: raise `--puff`, and use a font with fatter strokes so the cap
-  does not bite.
-- Flat plateau or a tent ridge on straight letters: you set `--roll`. Unset it and the climb
-  follows the local stroke thickness, which is what makes the top level off smoothly.
+- Letters look under-inflated: raise `--puff`, and use a font with fatter strokes so the
+  ceiling does not bite. Thickness is bounded by the stroke, not by the flag.
 - Letters rock on the plate or the fillet is too subtle: tune `--base-round`. `0` gives the
   old square wall, half the puff gives an almost fully rounded underside.
 - Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`.
@@ -150,10 +149,10 @@ weight off the tape.
 ```python
 from pathlib import Path
 
-from bubblegen import BubbleParams, Font, Profile, build_alphabet, export_stl
+from bubblegen import BubbleParams, Font, build_alphabet, export_stl
 
 font = Font.load("fonts/Nunito-Black.ttf")
-params = BubbleParams(size_mm=40, puff_mm=5, profile=Profile.SMOOTH)
+params = BubbleParams(size_mm=40, puff_mm=5, base_round_mm=1.5)
 
 for letter in build_alphabet(font, "IGOR", params):
     print(letter.char, letter.extents, letter.is_watertight)
@@ -170,8 +169,8 @@ producing a broken mesh. `build_letter` raises `BubbleGenError` subclasses
 src/bubblegen/
   config.py     BubbleParams, Profile: every tunable, validated
   fonts.py      outline extraction, bezier flattening, mm scaling
-  raster.py     contours -> mask -> signed distance field, local stroke thickness
-  inflate.py    signed distance -> thickness, one tube per stroke
+  raster.py     contours -> mask -> signed distance field
+  inflate.py    the membrane solve: silhouette -> thickness
   mesh.py       marching cubes, cleanup, smoothing, decimation
   pipeline.py   character -> LetterMesh -> STL
   cli.py        argument parsing and logging

@@ -4,6 +4,35 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-08-06
+
+The shape is now solved, not sculpted.
+
+### Changed
+
+- Thickness comes from a membrane clamped to the outline under uniform pressure
+  (`laplace(u) = -1`, `h = sqrt(2u)`) instead of a profile built from the distance to the
+  outline. A straight stroke still comes out as a semicircle of its own half-width, but the
+  surface is smooth everywhere, so the ridge along the centre line, the creases radiating
+  from corners and the dents at junctions are all gone: a junction now bulges, because a
+  wider patch of membrane deflects further. Measured as pixels where the surface curves the
+  wrong way: 54 on a DejaVu `K`, now zero.
+- `--puff` is a ceiling. Letters are never stretched taller than the membrane naturally
+  sits, which is what keeps a thin stroke from becoming a sausage.
+
+### Removed
+
+- `--roll` and `--profile`. Both existed to hand-shape a profile that the membrane now
+  derives, and neither had a meaning left.
+- `local_thickness`, the granulometry the previous profile was normalised by.
+
+### Fixed
+
+- Decimation fidelity was measured on a band selected by distance from the outline, which on
+  a thin stroke left almost nothing to check. It now follows height above the base fillet, so
+  plates on the dome are caught: a DejaVu `H` at a 3000-face budget went from 2.0 mm to
+  0.7 mm of dome facet inradius.
+
 ## [0.4.0] - 2026-08-06
 
 Letters shaped like inflated bubbles, front and back.

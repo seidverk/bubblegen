@@ -14,6 +14,7 @@ from bubblegen.config import BubbleParams
 from bubblegen.fonts import Font
 
 SquareFactory = Callable[..., NDArray[np.float64]]
+RectFactory = Callable[..., NDArray[np.float64]]
 
 
 @pytest.fixture(scope="session")
@@ -48,3 +49,22 @@ def square() -> SquareFactory:
         return np.array([(o, o), (o + s, o), (o + s, o + s), (o, o + s)], dtype=np.float64)
 
     return make
+
+
+@pytest.fixture
+def rect() -> RectFactory:
+    """Axis-aligned rectangle contour in mm: a stroke of a given width."""
+
+    def make(width: float, height: float, x: float = 0.0, y: float = 0.0) -> NDArray[np.float64]:
+        return np.array(
+            [(x, y), (x + width, y), (x + width, y + height), (x, y + height)],
+            dtype=np.float64,
+        )
+
+    return make
+
+
+@pytest.fixture
+def elbow() -> NDArray[np.float64]:
+    """An L: two 10 mm strokes meeting at a junction, as one contour."""
+    return np.array([(0, 0), (40, 0), (40, 10), (10, 10), (10, 40), (0, 40)], dtype=np.float64)

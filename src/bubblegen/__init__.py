@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from importlib.metadata import PackageNotFoundError, version
 
-from bubblegen.config import BubbleParams, Profile
+from bubblegen.config import BubbleParams
 from bubblegen.errors import (
     BubbleGenError,
     EmptyGlyphError,
@@ -27,7 +27,6 @@ __all__ = [
     "FontError",
     "GlyphNotFoundError",
     "LetterMesh",
-    "Profile",
     "__version__",
     "build_alphabet",
     "build_letter",

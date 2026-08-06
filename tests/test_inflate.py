@@ -5,16 +5,18 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
+from scipy import ndimage
 
-from bubblegen.config import BubbleParams, Profile
+from bubblegen.config import BubbleParams
+from bubblegen.fonts import Font
 from bubblegen.inflate import height_field
-from bubblegen.raster import rasterize, signed_distance
+from bubblegen.raster import rasterize, round_silhouette, signed_distance
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
     from bubblegen.raster import Raster
-    from conftest import SquareFactory
+    from conftest import RectFactory
 
 
 def inflated(
@@ -25,69 +27,73 @@ def inflated(
     return height_field(sd, params), sd, raster
 
 
-def test_each_stroke_inflates_to_its_own_width(params: BubbleParams, square: SquareFactory) -> None:
-    """A thin stroke next to a fat one must not borrow the fat one's profile, or it
-    comes out as a tall sausage with a tent ridge down the middle."""
+def valley_pixels(h: NDArray[np.float64], mask: NDArray[np.bool_], px_per_mm: float) -> int:
+    """Interior pixels where the surface curves upwards.
+
+    An inflated membrane is concave everywhere inside, so a valley means the profile
+    dented instead of blending: exactly the crease that shows up where strokes meet.
+    """
+    inner = ndimage.binary_erosion(mask, iterations=5)
+    curvature = ndimage.laplace(h) * px_per_mm**2
+    return int(((curvature > 0.5) & inner).sum())
+
+
+def test_each_stroke_inflates_to_its_own_width(params: BubbleParams, rect: RectFactory) -> None:
+    """A stroke rises to its own half-width, so a thin one next to a fat one stays
+    proportional instead of borrowing the fat one's profile."""
     p = dataclasses.replace(params, puff_mm=20.0)
-    h, _sd, raster = inflated([square(6.0), square(20.0, offset=10.0)], p)
+    h, _sd, raster = inflated([rect(6.0, 40.0), rect(20.0, 40.0, x=14.0)], p)
 
-    thin = raster.to_pixel((3.0, 3.0))
-    fat = raster.to_pixel((20.0, 20.0))
-    assert h[thin[1], thin[0]] == pytest.approx(3.0, abs=0.5)
-    assert h[fat[1], fat[0]] == pytest.approx(10.0, abs=0.7)
+    thin = raster.to_pixel((3.0, 20.0))
+    fat = raster.to_pixel((24.0, 20.0))
+    assert h[thin[1], thin[0]] == pytest.approx(3.0, rel=0.15)
+    assert h[fat[1], fat[0]] == pytest.approx(10.0, rel=0.15)
 
 
-def test_surface_arrives_flat_at_the_centre_line(
-    params: BubbleParams, square: SquareFactory
+def test_junctions_bulge_instead_of_denting(
+    params: BubbleParams, elbow: NDArray[np.float64]
 ) -> None:
-    """The centre line is the top of the bubble: the surface has to level off there
-    rather than meeting itself at an angle."""
+    """Where two strokes meet there is more room, so the surface rises there and stays
+    convex; a per-stroke profile creases along the junction instead."""
     p = dataclasses.replace(params, puff_mm=20.0)
-    h, _sd, raster = inflated([square(6.0), square(20.0, offset=10.0)], p)
+    h, _sd, raster = inflated([elbow], p)
 
-    row = raster.to_pixel((3.0, 3.0))[1]
-    across = h[row]
-    peak = int(np.argmax(across[: raster.to_pixel((6.0, 3.0))[0]]))
-    slope = np.abs(np.diff(across))[peak - 1 : peak + 1].max() * p.resolution
-
-    assert slope < 0.2  # mm of rise per mm across; a tent ridge is around 1
+    corner = raster.to_pixel((5.0, 5.0))
+    along = raster.to_pixel((25.0, 5.0))
+    assert h[corner[1], corner[0]] > h[along[1], along[0]]
+    assert valley_pixels(h, raster.mask, p.resolution) == 0
 
 
-def test_puff_caps_the_thickness(params: BubbleParams, square: SquareFactory) -> None:
+def test_a_letter_surface_stays_convex(font: Font, params: BubbleParams) -> None:
+    """K has the sharpest junctions in the alphabet: no creases allowed there either."""
+    p = dataclasses.replace(params, size_mm=60.0, puff_mm=8.0, resolution=4.0)
+    contours = font.contours_mm("K", p.size_mm, p.bezier_steps)
+    raster = rasterize(contours, p)
+    mask, _used = round_silhouette(raster.mask, p.resolution, p.round_radius)
+    h = height_field(signed_distance(mask, p.resolution), p)
+
+    assert valley_pixels(h, mask, p.resolution) == 0
+
+
+def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> None:
     p = dataclasses.replace(params, puff_mm=3.0)
-    h, _sd, _raster = inflated([square(40.0)], p)
+    h, _sd, _raster = inflated([rect(40.0, 40.0)], p)
 
     assert h.max() == pytest.approx(3.0, abs=0.05)
 
 
-def test_field_sign_follows_the_silhouette(params: BubbleParams, square: SquareFactory) -> None:
-    h, sd, _raster = inflated([square(10.0)], params)
+def test_thin_strokes_are_not_scaled_up_to_the_puff(
+    params: BubbleParams, rect: RectFactory
+) -> None:
+    """`--puff` is a ceiling: a 6 mm stroke stays a 3 mm bubble, not a sausage."""
+    p = dataclasses.replace(params, puff_mm=20.0)
+    h, _sd, _raster = inflated([rect(6.0, 40.0)], p)
+
+    assert h.max() == pytest.approx(3.0, rel=0.15)
+
+
+def test_field_sign_follows_the_silhouette(params: BubbleParams, rect: RectFactory) -> None:
+    h, sd, _raster = inflated([rect(10.0, 10.0)], params)
 
     assert np.all(h[sd < 0] < 0)
     assert np.all(h[sd > 0] >= 0)
-
-
-def test_explicit_roll_saturates_early(params: BubbleParams, square: SquareFactory) -> None:
-    """A short explicit roll is the old behaviour: full thickness a millimetre in,
-    flat from there. Useful for a sharp shoulder, wrong as a default."""
-    base = dataclasses.replace(params, puff_mm=3.0)
-    auto, _sd, raster = inflated([square(20.0)], base)
-    early, _sd2, _raster2 = inflated([square(20.0)], dataclasses.replace(base, roll_mm=1.0))
-
-    probe = raster.to_pixel((2.0, 10.0))  # 2 mm inside a 10 mm half-width stroke
-    assert early[probe[1], probe[0]] == pytest.approx(base.puff_mm, abs=0.1)
-    assert auto[probe[1], probe[0]] < 0.7 * base.puff_mm
-
-
-def test_profiles_are_ordered_by_shoulder_fullness(
-    params: BubbleParams, square: SquareFactory
-) -> None:
-    base = dataclasses.replace(params, puff_mm=20.0)
-    heights = {
-        profile: inflated([square(10.0)], dataclasses.replace(base, profile=profile))[0]
-        for profile in Profile
-    }
-    _h, sd, _raster = inflated([square(10.0)], base)
-    inside = sd > 0
-    assert np.all(heights[Profile.SUPER][inside] >= heights[Profile.SPHERE][inside] - 1e-9)
-    assert np.all(heights[Profile.SPHERE][inside] >= heights[Profile.SMOOTH][inside] - 1e-9)

@@ -31,9 +31,9 @@ FIDELITY_TOLERANCE_MM = 0.15
 """Surface error decimation may add on top of the marching-cubes discretisation."""
 
 DOME_NORMAL_Z = 0.7
-DOME_RIM_MM = 1.0
-"""Which faces count as the inflated top: upward facing, and clear of the rim, where
-the surface follows the base fillet rather than the height field."""
+DOME_CLEARANCE_MM = 0.3
+"""Which faces count as the inflated top: upward facing, and clear of the base fillet,
+which pulls the surface away from the height field near the plate."""
 
 Z_HEADROOM = 1.15
 """Slack above the tallest point, so the isosurface closes instead of being clipped."""
@@ -93,7 +93,7 @@ def build_mesh(
         trimesh.smoothing.filter_taubin(
             mesh, lamb=TAUBIN_LAMB, nu=TAUBIN_NU, iterations=params.smooth_iterations
         )
-    return _decimate(mesh, params.target_faces, height, sd, raster, params)
+    return _decimate(mesh, params.target_faces, height, raster, params)
 
 
 def _base_inset(zs: NDArray[np.float64], radius: float) -> NDArray[np.float64] | None:
@@ -121,9 +121,8 @@ def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:
 def _surface_error(
     mesh: trimesh.Trimesh,
     height: NDArray[np.float64],
-    sd: NDArray[np.float64],
     raster: Raster,
-    rim_mm: float,
+    floor_mm: float,
 ) -> float:
     """Worst gap between the inflated top of `mesh` and the height field it follows."""
     centers = mesh.triangles_center
@@ -139,7 +138,7 @@ def _surface_error(
     )
     target = height[py, px]
 
-    dome = (mesh.face_normals[:, 2] > DOME_NORMAL_Z) & (sd[py, px] > rim_mm)
+    dome = (mesh.face_normals[:, 2] > DOME_NORMAL_Z) & (target > floor_mm)
     if not dome.any():
         return 0.0
     return float(np.abs(centers[dome, 2] - target[dome]).max())
@@ -149,7 +148,6 @@ def _decimate(
     mesh: trimesh.Trimesh,
     target_faces: int,
     height: NDArray[np.float64],
-    sd: NDArray[np.float64],
     raster: Raster,
     params: BubbleParams,
 ) -> trimesh.Trimesh:
@@ -164,8 +162,8 @@ def _decimate(
     if not target_faces or len(mesh.faces) <= target_faces:
         return mesh
 
-    rim = params.base_radius + DOME_RIM_MM
-    budget_error = _surface_error(mesh, height, sd, raster, rim) + FIDELITY_TOLERANCE_MM
+    floor = params.base_radius + DOME_CLEARANCE_MM
+    budget_error = _surface_error(mesh, height, raster, floor) + FIDELITY_TOLERANCE_MM
     for multiplier in DECIMATION_RETRIES:
         budget = int(target_faces * multiplier)
         if budget >= len(mesh.faces):
@@ -181,7 +179,7 @@ def _decimate(
             logger.debug("decimation to %d faces was not watertight, retrying", budget)
             continue
 
-        error = _surface_error(candidate, height, sd, raster, rim)
+        error = _surface_error(candidate, height, raster, floor)
         if error <= budget_error:
             return candidate
         logger.debug("decimation to %d faces was %.2f mm off the surface, retrying", budget, error)

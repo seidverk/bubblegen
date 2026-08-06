@@ -9,7 +9,6 @@ from bubblegen.config import BubbleParams
 from bubblegen.raster import (
     dilate,
     erode,
-    local_thickness,
     rasterize,
     round_silhouette,
     signed_distance,
@@ -131,33 +130,3 @@ def test_signed_distance_signs_and_magnitude(params: BubbleParams, square: Squar
     assert sd[outside[1], outside[0]] == pytest.approx(-3.0, abs=0.4)
     assert sd[raster.mask].min() > 0
     assert sd[~raster.mask].max() < 0
-
-
-def test_local_thickness_finds_the_inscribed_radius(
-    params: BubbleParams, square: SquareFactory
-) -> None:
-    raster = rasterize([square(10.0)], params)
-    sd = signed_distance(raster.mask, params.resolution)
-
-    thickness = local_thickness(sd, params.resolution)
-
-    centre = raster.to_pixel((5.0, 5.0))
-    corner = raster.to_pixel((0.6, 0.6))
-    assert thickness[centre[1], centre[0]] == pytest.approx(5.0, abs=0.6)
-    assert thickness[corner[1], corner[0]] < 0.7 * thickness[centre[1], centre[0]]
-    assert np.all(thickness >= np.clip(sd, 0.0, None) - 1e-9)
-
-
-def test_local_thickness_is_per_stroke(params: BubbleParams, square: SquareFactory) -> None:
-    """Two strokes of different widths must not share one thickness."""
-    thin = square(6.0)
-    fat = square(20.0, offset=10.0)
-    raster = rasterize([thin, fat], params)
-    sd = signed_distance(raster.mask, params.resolution)
-
-    thickness = local_thickness(sd, params.resolution)
-
-    at_thin = raster.to_pixel((3.0, 3.0))
-    at_fat = raster.to_pixel((20.0, 20.0))
-    assert thickness[at_thin[1], at_thin[0]] == pytest.approx(3.0, abs=0.6)
-    assert thickness[at_fat[1], at_fat[0]] == pytest.approx(10.0, abs=0.6)
