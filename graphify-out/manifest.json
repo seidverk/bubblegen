@@ -1,6 +1,6 @@
 {
   ".claude/settings.json": {
-    "mtime": 1786028210.7323723,
+    "mtime": 1786029643.1823094,
     "ast_hash": "e51077b6a7f1f67afc748f1a32a1557d",
     "semantic_hash": ""
   },
@@ -9,19 +9,129 @@
     "ast_hash": "9fd338dcbbcb89b68a8f34914347606a",
     "semantic_hash": ""
   },
-  "bubble_letters.py": {
-    "mtime": 1786027948.9523823,
-    "ast_hash": "15d74c115e393abd74d2079b749d18ea",
-    "semantic_hash": ""
-  },
   "CLAUDE.md": {
     "mtime": 1786028210.7321951,
     "ast_hash": "82efb97a359f5c7290bf2513d14686be",
     "semantic_hash": ""
   },
-  "requirements.txt": {
-    "mtime": 1786028087.3468966,
-    "ast_hash": "7bde4ace2dd549914085d1dd62d04a59",
+  "pyproject.toml": {
+    "mtime": 1786029259.1679535,
+    "ast_hash": "eb8ddf431537b3277dc24daa42c89164",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/__init__.py": {
+    "mtime": 1786028918.0604877,
+    "ast_hash": "c8ffa1e517d9fbbd2021ea8b5612dfa2",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/__main__.py": {
+    "mtime": 1786028919.4289181,
+    "ast_hash": "5194821f8346980566052e744a944856",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/cli.py": {
+    "mtime": 1786029093.9841893,
+    "ast_hash": "830426efdebaf105c5b48d0c42988a44",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/config.py": {
+    "mtime": 1786029025.290308,
+    "ast_hash": "587d9f469c708cd608f0392bc1d6579e",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/errors.py": {
+    "mtime": 1786028778.022755,
+    "ast_hash": "f37798395112ef87f510606db212c55b",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/fonts.py": {
+    "mtime": 1786029569.3146577,
+    "ast_hash": "b95c6db68ab0b1cd44e51316cf6e7f4f",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/hole.py": {
+    "mtime": 1786029230.9383862,
+    "ast_hash": "0dfa32671b030c868b04f39ecd05daaa",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/inflate.py": {
+    "mtime": 1786028846.3221564,
+    "ast_hash": "f78fb59eb95583c68ab07a6e1e715b93",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/mesh.py": {
+    "mtime": 1786029548.629716,
+    "ast_hash": "20410b7b1ff74f71e29b6986a8a15077",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/pipeline.py": {
+    "mtime": 1786029093.982859,
+    "ast_hash": "3e070d0136b92a08dc5e376cf29331d3",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/raster.py": {
+    "mtime": 1786029224.089081,
+    "ast_hash": "3c61a6a0cb10af65706f3c362c08fd37",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1786028604.4835448,
+    "ast_hash": "d51fa1f17e2e27d7b9a057ca497787b8",
+    "semantic_hash": ""
+  },
+  "tests/test_cli.py": {
+    "mtime": 1786029093.98293,
+    "ast_hash": "5a5950c7a00db4e947c4a0f113c8c228",
+    "semantic_hash": ""
+  },
+  "tests/test_config.py": {
+    "mtime": 1786029220.479317,
+    "ast_hash": "9905b649df078c42c779f3906365b21a",
+    "semantic_hash": ""
+  },
+  "tests/test_fonts.py": {
+    "mtime": 1786028581.0772207,
+    "ast_hash": "86af5d00f7e45dc49bf331a826cd1b52",
+    "semantic_hash": ""
+  },
+  "tests/test_hole.py": {
+    "mtime": 1786029104.403721,
+    "ast_hash": "0651e3cc00793a1b016a57cd68accd55",
+    "semantic_hash": ""
+  },
+  "tests/test_inflate.py": {
+    "mtime": 1786029093.9844766,
+    "ast_hash": "e9bbb85de390546aab51de6b26e20a72",
+    "semantic_hash": ""
+  },
+  "tests/test_mesh.py": {
+    "mtime": 1786029502.012949,
+    "ast_hash": "8601d0db7a81366e10a1383c8a4ce92f",
+    "semantic_hash": ""
+  },
+  "tests/test_pipeline.py": {
+    "mtime": 1786029536.9341142,
+    "ast_hash": "465cff4394c12109d18deea079bad7b8",
+    "semantic_hash": ""
+  },
+  "tests/test_raster.py": {
+    "mtime": 1786029093.98386,
+    "ast_hash": "17f8ea72b34ddd3adf88302218bf937a",
+    "semantic_hash": ""
+  },
+  ".pre-commit-config.yaml": {
+    "mtime": 1786029640.670632,
+    "ast_hash": "a9dd1780acece363c966aba8726f445b",
+    "semantic_hash": ""
+  },
+  "CHANGELOG.md": {
+    "mtime": 1786029601.5736015,
+    "ast_hash": "7c520be4363a76cd88232874ae3eef61",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1786028954.9841707,
+    "ast_hash": "e4596581f0e80d2f05c16fad48577ceb",
     "semantic_hash": ""
   }
 }
