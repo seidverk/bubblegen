@@ -4,6 +4,24 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-08-06
+
+### Fixed
+
+- Silhouette rounding erased accents. One radius was applied to the whole glyph, and a radius
+  the body of an `Ö` takes erodes the dots of its umlaut away completely, so `Ö` came out as
+  `O` and `Á` as `A`. Each connected piece is now rounded with its own radius, backed off
+  only as far as that piece needs.
+- The thickness a letter can hold was reported from its thinnest piece, which for `Á` or `Í`
+  is the accent. An accent is a small piece and is meant to stay thin, so the figure now comes
+  from the body of the glyph.
+
+### Added
+
+- `Sniglet-ExtraBold` and `Modak` to `make fonts`: both draw the pinhole counters and rounded
+  shoulders that read as inflated, and both hold a thicker even tube across the Icelandic
+  alphabet than anything else tried (25 mm and 23 mm at `--size 80`).
+
 ## [0.7.0] - 2026-08-06
 
 ### Fixed

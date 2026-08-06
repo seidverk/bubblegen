@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
+from scipy import ndimage
 
 from bubblegen.config import BubbleParams
 from bubblegen.raster import (
@@ -19,7 +20,7 @@ from bubblegen.raster import (
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
-    from conftest import SquareFactory
+    from conftest import RectFactory, SquareFactory
 
 
 def test_mask_area_matches_contour_area(params: BubbleParams, square: SquareFactory) -> None:
@@ -122,6 +123,32 @@ def test_rounding_keeps_an_aperture_open(
 
     mouth = raster.to_pixel((30.0, 20.0))
     assert not rounded[mouth[1], mouth[0]]
+
+
+def test_rounding_keeps_the_accents(params: BubbleParams, rect: RectFactory) -> None:
+    """The dots of an umlaut are small pieces of their own. A radius the body can take
+    erodes them away entirely, and Ö comes out as O."""
+    p = dataclasses.replace(params, puff_mm=20.0)  # a 9 mm rounding radius
+    raster = rasterize([rect(40.0, 50.0), rect(8.0, 8.0, x=6.0, y=56.0)], p)
+
+    rounded, _used = round_silhouette(raster.mask, p.resolution, p.round_radius)
+
+    assert ndimage.label(rounded)[1] == ndimage.label(raster.mask)[1]
+
+
+def test_each_piece_is_rounded_as_much_as_it_can_take(
+    params: BubbleParams, rect: RectFactory
+) -> None:
+    """Backing the whole glyph off to what its smallest dot can take would leave the
+    body barely rounded, so each piece gets its own radius."""
+    p = dataclasses.replace(params, puff_mm=20.0)
+    raster = rasterize([rect(40.0, 50.0), rect(8.0, 8.0, x=6.0, y=56.0)], p)
+
+    rounded, used = round_silhouette(raster.mask, p.resolution, p.round_radius)
+
+    body_corner = raster.to_pixel((1.0, 1.0))
+    assert used == pytest.approx(p.round_radius)  # the body took the full radius
+    assert not rounded[body_corner[1], body_corner[0]]  # and its corners are gone
 
 
 def test_dilating_an_empty_mask_keeps_it_empty(params: BubbleParams) -> None:

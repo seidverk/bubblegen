@@ -100,16 +100,31 @@ def _membrane(mask: Mask, px_per_mm: float) -> tuple[Field, Field, float]:
 
         axis = coarse & medial_axis(coarse)
         crest = _spread(thickness, axis, 1.0 / spacing) if axis.any() else thickness.copy()
-        if axis.any():
+        body = axis & _largest_piece(coarse)
+        if body.any():
             # the tenth percentile, not the minimum: the centre line runs out to the tip
             # of every stroke, where the tube is meant to round off anyway
-            limit = PUFF_SLACK * float(np.percentile(thickness[axis], NECK_PERCENTILE))
+            limit = PUFF_SLACK * float(np.percentile(thickness[body], NECK_PERCENTILE))
 
     full_thickness = _upsample(thickness, mask.shape)
     # the two fields are interpolated apart, and a crest below the surface it measures
     # would push the letter past the thickness that was asked for
     full_crest = np.maximum(_upsample(crest, mask.shape), full_thickness)
     return full_thickness, np.maximum(full_crest, CREST_FLOOR_MM), limit
+
+
+def _largest_piece(mask: Mask) -> Mask:
+    """The glyph's body, without its accents.
+
+    An acute or a dot is a small piece of its own: it is meant to stay thin, and letting
+    it speak for the letter would report a thickness far below what the body can hold.
+    """
+    labels, count = ndimage.label(mask)
+    if count <= 1:
+        return mask
+    sizes = np.bincount(labels.ravel())
+    sizes[0] = 0
+    return np.asarray(labels == int(np.argmax(sizes)))
 
 
 def _spread(thickness: Field, axis: Mask, px_per_mm: float) -> Field:

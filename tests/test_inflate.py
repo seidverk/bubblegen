@@ -106,6 +106,18 @@ def test_the_reported_limit_is_the_thickness_that_comes_out_even(
     assert ring_spread(greedy, raster) > 0.15
 
 
+def test_the_limit_ignores_accents(params: BubbleParams, rect: RectFactory) -> None:
+    """An acute or a dot is a small piece of its own and has to stay thin. It must not
+    drag down the thickness reported for the letter it sits over."""
+    body_only = rasterize([rect(30.0, 40.0)], params)
+    with_accent = rasterize([rect(30.0, 40.0), rect(6.0, 6.0, x=12.0, y=48.0)], params)
+
+    plain = uniform_limit(signed_distance(body_only.mask, params.resolution), params)
+    accented = uniform_limit(signed_distance(with_accent.mask, params.resolution), params)
+
+    assert accented == pytest.approx(plain, rel=0.1)
+
+
 def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> None:
     p = dataclasses.replace(params, puff_mm=3.0)
     h, _sd, _raster = inflated([rect(40.0, 40.0)], p)

@@ -69,17 +69,26 @@ Bubble letters need heavy fonts: thickness is capped at the stroke half-width, s
 weight at 60 mm gives you a 4 mm bubble no matter what `--puff` says. Every cap and every
 reduced rounding radius is logged, so you always know when the font is the limit.
 
-`make fonts` fetches four SIL Open Font License faces into `fonts/` (gitignored):
+`make fonts` fetches six SIL Open Font License faces into `fonts/` (gitignored). The last
+column is the thickest even tube the whole Icelandic alphabet holds at `--size 80`, measured
+per font: that is the `--puff` to use for a matching set.
 
-| File | Character coverage | Look |
-| --- | --- | --- |
-| `Nunito-Black.ttf` | Latin, Latin Ext, Cyrillic | rounded, the safest default |
-| `TitanOne-Regular.ttf` | Latin, Latin Ext | very fat, cartoon |
-| `LilitaOne-Regular.ttf` | Latin, Latin Ext | tall, condensed |
-| `Fredoka-Bold.ttf` | Latin, Latin Ext | soft, playful |
+| File | Coverage | Look | Even tube |
+| --- | --- | --- | --- |
+| `Sniglet-ExtraBold.ttf` | Latin, Latin Ext | roundest, counters shrink to pinholes | 25 mm |
+| `Modak-Regular.ttf` | Latin, Latin Ext, Devanagari | fattest strokes, tiny counters | 23 mm |
+| `TitanOne-Regular.ttf` | Latin, Latin Ext | cartoon, larger counters | 20 mm |
+| `LilitaOne-Regular.ttf` | Latin, Latin Ext | tall and condensed | 14 mm |
+| `Gluten-Black.ttf` | Latin, Latin Ext | lovely `A`, but its `Æ` is a hairline | 5 mm |
+| `Nunito-Black.ttf` | Latin, Latin Ext, Cyrillic | the only one with Cyrillic | 6 mm |
 
-Any other TTF/OTF works. Variable fonts are read at their default location, which is usually
-a light weight — pin a heavy instance first (see `scripts/fetch_fonts.py`).
+Two things decide that number: how fat the strokes are, and whether any one letter has a thin
+section the rest do not. Gluten Black draws the best single `A` of the six and still ends up
+last, because `Æ` joins its two halves with a hairline. Fonts with steady, generous strokes
+win.
+
+Any other TTF/OTF works. Variable fonts are read at their default location, which is usually a
+light weight - pin a heavy instance first (see `scripts/fetch_fonts.py`).
 
 ## Usage
 

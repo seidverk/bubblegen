@@ -20,12 +20,15 @@ GOOGLE_FONTS = "https://raw.githubusercontent.com/google/fonts/main"
 FONTS_DIR = Path(__file__).resolve().parent.parent / "fonts"
 
 STATIC = [
+    "ofl/sniglet/Sniglet-ExtraBold.ttf",
+    "ofl/modak/Modak-Regular.ttf",
     "ofl/titanone/TitanOne-Regular.ttf",
     "ofl/lilitaone/LilitaOne-Regular.ttf",
 ]
 
 # (source path, output name, axis location) - Nunito also covers Cyrillic
 VARIABLE = [
+    ("ofl/gluten/Gluten%5Bslnt,wght%5D.ttf", "Gluten-Black.ttf", {"wght": 900, "slnt": 0}),
     ("ofl/nunito/Nunito%5Bwght%5D.ttf", "Nunito-Black.ttf", {"wght": 900}),
     ("ofl/fredoka/Fredoka%5Bwdth,wght%5D.ttf", "Fredoka-Bold.ttf", {"wght": 700, "wdth": 125}),
 ]

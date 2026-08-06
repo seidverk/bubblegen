@@ -129,18 +129,36 @@ def enclosed_gaps(mask: Mask) -> int:
 def round_silhouette(mask: Mask, px_per_mm: float, radius: float) -> tuple[Mask, float]:
     """Round the outline by as much as the glyph tolerates.
 
-    Erosion deletes every stroke thinner than twice the radius, so one radius cannot
-    serve both a fat O and a hairline. The requested radius is therefore backed off
-    until the glyph keeps its counters, its strokes and most of its area.
+    Every piece of the glyph is rounded on its own. Erosion deletes anything thinner
+    than twice the radius, so a radius the body of an Ö takes would wipe out the dots
+    of its umlaut, and backing the whole glyph off to what the dots can take would
+    leave the body barely rounded.
 
-    Returns the rounded mask and the radius actually used (0 if none survived).
+    Returns the rounded mask and the radius the body of the glyph ended up with.
     """
-    counters = enclosed_gaps(mask)
-    area = mask.sum()
+    labels, count = ndimage.label(mask)
+    if count <= 1:
+        return _round_piece(mask, px_per_mm, radius)
+
+    rounded = np.zeros_like(mask)
+    body = int(np.argmax(np.bincount(labels.ravel())[1:])) + 1
+    body_radius = 0.0
+    for piece in range(1, count + 1):
+        piece_rounded, used = _round_piece(labels == piece, px_per_mm, radius)
+        rounded |= piece_rounded
+        if piece == body:
+            body_radius = used
+    return rounded, body_radius
+
+
+def _round_piece(piece: Mask, px_per_mm: float, radius: float) -> tuple[Mask, float]:
+    """Round one connected piece, backing the radius off until the piece survives it."""
+    counters = enclosed_gaps(piece)
+    area = piece.sum()
 
     attempt = radius
     while attempt >= MIN_ROUND_MM:
-        rounded = soften(mask, px_per_mm, attempt)
+        rounded = soften(piece, px_per_mm, attempt)
         if (
             rounded.any()
             and enclosed_gaps(rounded) == counters
@@ -149,7 +167,7 @@ def round_silhouette(mask: Mask, px_per_mm: float, radius: float) -> tuple[Mask,
             return rounded, attempt
         attempt *= ROUND_BACKOFF
 
-    return mask, 0.0
+    return piece, 0.0
 
 
 def signed_distance(mask: Mask, px_per_mm: float) -> Field:
