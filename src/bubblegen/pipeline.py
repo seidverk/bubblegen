@@ -10,10 +10,10 @@ from typing import TYPE_CHECKING
 
 import trimesh
 
-from bubblegen.errors import BubbleGenError, MeshError
+from bubblegen.errors import BubbleGenError
 from bubblegen.inflate import height_field
 from bubblegen.mesh import build_mesh
-from bubblegen.raster import Raster, rasterize, signed_distance, soften
+from bubblegen.raster import Field, Raster, rasterize, round_silhouette, signed_distance
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
@@ -24,9 +24,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 _PLAIN_NAME = re.compile(r"[A-Za-z0-9]")
-
-MIN_MASK_RETENTION = 0.5
-"""Below this share of surviving glyph area the rounding radius is clearly too large."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,35 +54,45 @@ def slug(char: str) -> str:
     return f"U{ord(char):04X}"
 
 
-def _round_silhouette(raster: Raster, char: str, params: BubbleParams) -> Raster:
-    """Round the outline, and complain when the radius eats the strokes themselves.
+def _rounded(raster: Raster, char: str, params: BubbleParams) -> Raster:
+    """Round the silhouette as far as this particular glyph allows.
 
-    Rounding erodes by `round_radius`, so a radius wider than half a stroke deletes
-    that stroke. Light fonts at a large puff hit this easily.
+    `--round` is an upper bound, not a promise: a radius that fits a fat O fills the
+    counter of an R, so it is backed off per letter and the choice is logged.
     """
-    mask = soften(raster.mask, params.resolution, params.round_radius)
-    if not mask.any():
-        raise MeshError(
-            f"a {params.round_radius:.1f} mm rounding radius erased {char!r}; "
-            f"lower --round or --puff, or raise --size"
-        )
-
-    kept = mask.sum() / raster.mask.sum()
-    if kept < MIN_MASK_RETENTION:
+    mask, used = round_silhouette(raster.mask, params.resolution, params.round_radius)
+    if used < params.round_radius:
         logger.warning(
-            "%r: rounding removed %.0f%% of the glyph, lower --round or --puff",
+            "%r: --round %.1f mm would deform the glyph, using %.1f mm",
             char,
-            100 * (1 - kept),
+            params.round_radius,
+            used,
         )
     return raster.with_mask(mask)
+
+
+def _report_puff_cap(sd: Field, char: str, params: BubbleParams) -> None:
+    """Say so when the stroke, not `--puff`, is what sets the thickness."""
+    deepest = float(sd.max())
+    capped = params.puff_for(deepest)
+    if capped < params.puff_mm:
+        logger.warning(
+            "%r: strokes are %.1f mm wide, so --puff %.1f mm is capped at %.1f mm; "
+            "use a heavier font or a larger --size for a fatter bubble",
+            char,
+            2 * deepest,
+            params.puff_mm,
+            capped,
+        )
 
 
 def build_letter(font: Font, char: str, params: BubbleParams) -> LetterMesh:
     """Run the whole pipeline for one character."""
     contours = font.contours_mm(char, params.size_mm, params.bezier_steps)
 
-    raster = _round_silhouette(rasterize(contours, params), char, params)
+    raster = _rounded(rasterize(contours, params), char, params)
     sd = signed_distance(raster.mask, params.resolution)
+    _report_puff_cap(sd, char, params)
     mesh = build_mesh(height_field(sd, params), raster, params)
 
     # drop to z = 0 so it lands on the build plate

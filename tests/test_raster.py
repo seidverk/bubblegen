@@ -6,7 +6,14 @@ import numpy as np
 import pytest
 
 from bubblegen.config import BubbleParams
-from bubblegen.raster import dilate, erode, rasterize, signed_distance, soften
+from bubblegen.raster import (
+    dilate,
+    erode,
+    rasterize,
+    round_silhouette,
+    signed_distance,
+    soften,
+)
 
 if TYPE_CHECKING:
     from conftest import SquareFactory
@@ -57,6 +64,42 @@ def test_soften_rounds_corners_but_keeps_the_body(
     assert not rounded[corner[1], corner[0]]
     assert rounded[centre[1], centre[0]]
     assert rounded.sum() > 0.85 * raster.mask.sum()
+
+
+def test_rounding_keeps_the_requested_radius_when_it_fits(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    raster = rasterize([square(20.0)], params)
+
+    rounded, used = round_silhouette(raster.mask, params.resolution, 2.0)
+
+    assert used == 2.0
+    assert rounded.sum() > 0.9 * raster.mask.sum()
+
+
+def test_rounding_backs_off_rather_than_filling_a_counter(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    """Closing bridges any gap narrower than its radius, which would swallow the
+    counters of O, R and the aperture of G."""
+    raster = rasterize([square(20.0), square(4.0, offset=8.0)], params)
+
+    rounded, used = round_silhouette(raster.mask, params.resolution, 4.0)
+
+    counter = raster.to_pixel((10.0, 10.0))
+    assert used < 2.0
+    assert not rounded[counter[1], counter[0]]
+
+
+def test_rounding_backs_off_rather_than_erasing_a_thin_stroke(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    raster = rasterize([square(1.5)], params)
+
+    rounded, used = round_silhouette(raster.mask, params.resolution, 3.0)
+
+    assert rounded.any()
+    assert used < 3.0
 
 
 def test_dilating_an_empty_mask_keeps_it_empty(params: BubbleParams) -> None:

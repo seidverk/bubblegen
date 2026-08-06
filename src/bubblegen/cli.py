@@ -37,17 +37,23 @@ def build_parser() -> argparse.ArgumentParser:
     shape = parser.add_argument_group("shape")
     shape.add_argument("--size", type=float, default=defaults.size_mm, help="cap height in mm")
     shape.add_argument(
-        "--puff", type=float, default=defaults.puff_mm, help="max half-thickness in mm"
+        "--puff",
+        type=float,
+        default=defaults.puff_mm,
+        help="thickness in mm, capped per letter at the stroke half-width",
     )
     shape.add_argument(
-        "--roll", type=float, default=None, help="edge rounding distance in mm [default: puff]"
+        "--roll",
+        type=float,
+        default=None,
+        help="edge rounding distance in mm [default: the glyph half-width]",
     )
     shape.add_argument(
         "--round",
         dest="round_r",
         type=float,
         default=None,
-        help="silhouette rounding radius in mm [default: 0.45*puff]",
+        help="max silhouette rounding radius in mm [default: 0.45*puff]",
     )
     shape.add_argument("--dome", type=float, default=defaults.dome, help="extra centre bulge, 0..1")
     shape.add_argument(

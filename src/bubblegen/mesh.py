@@ -24,8 +24,16 @@ TAUBIN_LAMB = 0.5
 TAUBIN_NU = -0.53
 """Taubin pair: shrink then unshrink, so smoothing keeps the volume."""
 
-DECIMATION_RETRIES = (1.0, 1.5, 2.0)
-"""Face budget multipliers tried in order when decimation breaks watertightness."""
+DECIMATION_RETRIES = (1.0, 2.0, 4.0)
+"""Face budget multipliers tried in order when a tighter budget damages the surface."""
+
+FIDELITY_TOLERANCE_MM = 0.15
+"""Surface error decimation may add on top of the marching-cubes discretisation."""
+
+DOME_NORMAL_Z = 0.7
+DOME_HEIGHT_SHARE = 0.25
+"""Which faces count as the inflated top: upward facing and away from the rim, where
+the height field falls off a cliff and says nothing about fidelity."""
 
 Z_HEADROOM = 1.15
 """Slack above the tallest point, so the isosurface closes instead of being clipped."""
@@ -78,7 +86,7 @@ def build_mesh(
         trimesh.smoothing.filter_taubin(
             mesh, lamb=TAUBIN_LAMB, nu=TAUBIN_NU, iterations=params.smooth_iterations
         )
-    return _decimate(mesh, params.target_faces)
+    return _decimate(mesh, params.target_faces, height, raster)
 
 
 def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:
@@ -91,27 +99,64 @@ def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:
     mesh.remove_unreferenced_vertices()
 
 
-def _decimate(mesh: trimesh.Trimesh, target_faces: int) -> trimesh.Trimesh:
+def _surface_error(mesh: trimesh.Trimesh, height: NDArray[np.float64], raster: Raster) -> float:
+    """Worst gap between the inflated top of `mesh` and the height field it follows."""
+    centers = mesh.triangles_center
+    px = np.clip(
+        ((centers[:, 0] - raster.origin[0]) * raster.px_per_mm - 0.5).round().astype(int),
+        0,
+        height.shape[1] - 1,
+    )
+    py = np.clip(
+        ((centers[:, 1] - raster.origin[1]) * raster.px_per_mm - 0.5).round().astype(int),
+        0,
+        height.shape[0] - 1,
+    )
+    target = height[py, px]
+
+    dome = (mesh.face_normals[:, 2] > DOME_NORMAL_Z) & (target > DOME_HEIGHT_SHARE * height.max())
+    if not dome.any():
+        return 0.0
+    return float(np.abs(centers[dome, 2] - target[dome]).max())
+
+
+def _decimate(
+    mesh: trimesh.Trimesh,
+    target_faces: int,
+    height: NDArray[np.float64],
+    raster: Raster,
+) -> trimesh.Trimesh:
     """Marching cubes is very dense; trim it to keep STL files sane.
 
-    Decimation can still break manifoldness on tight geometry, so each cleaned
-    candidate is verified and retried with a looser budget before giving up on the
-    (valid) dense mesh.
+    Quadric decimation is happy to collapse a whole strip of a straight stroke into
+    one plate: the error metric sees a developable surface as free to flatten, and the
+    letter prints low-poly. So every candidate is checked against the height field it
+    should follow, and against watertightness, before it is allowed to replace the
+    dense mesh.
     """
     if not target_faces or len(mesh.faces) <= target_faces:
         return mesh
 
+    budget_error = _surface_error(mesh, height, raster) + FIDELITY_TOLERANCE_MM
     for multiplier in DECIMATION_RETRIES:
         budget = int(target_faces * multiplier)
+        if budget >= len(mesh.faces):
+            break
         try:
             candidate = mesh.simplify_quadric_decimation(face_count=budget)
         except Exception as exc:  # optional decimation backend missing
             logger.warning("decimation unavailable, keeping dense mesh: %s", exc)
             return mesh
-        _drop_degenerate_faces(candidate)
-        if candidate.is_watertight:
-            return candidate
-        logger.debug("decimation to %d faces was not watertight, retrying", budget)
 
-    logger.warning("decimation kept breaking the mesh, keeping the dense version")
+        _drop_degenerate_faces(candidate)
+        if not candidate.is_watertight:
+            logger.debug("decimation to %d faces was not watertight, retrying", budget)
+            continue
+
+        error = _surface_error(candidate, height, raster)
+        if error <= budget_error:
+            return candidate
+        logger.debug("decimation to %d faces was %.2f mm off the surface, retrying", budget, error)
+
+    logger.warning("no face budget kept the surface, keeping %d triangles", len(mesh.faces))
     return mesh

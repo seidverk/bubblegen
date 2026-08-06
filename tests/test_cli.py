@@ -29,7 +29,7 @@ def test_flags_map_onto_params() -> None:
     assert params.puff_mm == 3.0
     assert params.profile is Profile.SMOOTH
     assert params.dome == 0.2
-    assert params.roll == 3.0
+    assert params.roll_mm is None
 
 
 def test_run_writes_an_stl(font_path: Path, tmp_path: Path) -> None:

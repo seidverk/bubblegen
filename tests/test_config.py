@@ -5,8 +5,12 @@ import pytest
 from bubblegen.config import BubbleParams, Profile
 
 
-def test_roll_defaults_to_puff() -> None:
-    assert BubbleParams(puff_mm=7.0).roll == 7.0
+def test_roll_defaults_to_the_glyph_half_width() -> None:
+    assert BubbleParams(puff_mm=7.0).roll_for(15.8) == 15.8
+
+
+def test_automatic_roll_has_a_floor() -> None:
+    assert BubbleParams().roll_for(0.0) > 0.0
 
 
 def test_round_radius_defaults_to_fraction_of_puff() -> None:
@@ -15,7 +19,7 @@ def test_round_radius_defaults_to_fraction_of_puff() -> None:
 
 def test_explicit_roll_and_round_win() -> None:
     p = BubbleParams(puff_mm=7.0, roll_mm=2.0, round_mm=0.5)
-    assert (p.roll, p.round_radius) == (2.0, 0.5)
+    assert (p.roll_for(15.8), p.round_radius) == (2.0, 0.5)
 
 
 def test_margin_covers_puff_and_rounding() -> None:

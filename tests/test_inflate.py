@@ -16,6 +16,49 @@ def sd() -> NDArray[np.float64]:
     return np.linspace(-2.0, 6.0, 201)
 
 
+def test_automatic_roll_spans_the_whole_stroke(sd: NDArray[np.float64]) -> None:
+    """Without an explicit roll the peak must sit at the deepest point only: a fixed
+    roll shorter than the stroke leaves a flat plateau, which reads as an extrusion."""
+    p = BubbleParams(puff_mm=2.0, roll_mm=None, dome=0.0)
+
+    h = height_field(sd, p)
+
+    assert h.max() == pytest.approx(p.puff_mm)
+    plateau = (h >= p.puff_mm - 1e-9).sum()
+    assert plateau == 1
+    assert h[sd >= sd.max() / 2].min() < p.puff_mm
+
+
+def test_thickness_is_capped_by_the_stroke_width() -> None:
+    """A peak taller than the stroke half-width is a tube, not a bubble."""
+    thin = np.linspace(-2.0, 2.0, 101)
+    p = BubbleParams(puff_mm=10.0, dome=0.0)
+
+    assert height_field(thin, p).max() == pytest.approx(2.0, rel=0.02)
+
+
+def test_thick_strokes_keep_the_requested_puff() -> None:
+    fat = np.linspace(-2.0, 20.0, 201)
+    p = BubbleParams(puff_mm=5.0, dome=0.0)
+
+    assert height_field(fat, p).max() == pytest.approx(5.0)
+
+
+def test_dome_counts_towards_the_cap() -> None:
+    thin = np.linspace(-2.0, 3.0, 101)
+    p = BubbleParams(puff_mm=10.0, dome=0.5)
+
+    assert height_field(thin, p).max() == pytest.approx(3.0, rel=0.02)
+
+
+def test_explicit_roll_saturates_early(sd: NDArray[np.float64]) -> None:
+    p = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.0)
+
+    h = height_field(sd, p)
+
+    assert (h >= p.puff_mm - 1e-9).sum() > 1
+
+
 def test_full_thickness_reached_beyond_the_roll(sd: NDArray[np.float64]) -> None:
     p = BubbleParams(puff_mm=2.0, roll_mm=1.0, dome=0.0)
     assert height_field(sd, p).max() == pytest.approx(p.puff_mm)

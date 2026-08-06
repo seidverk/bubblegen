@@ -17,7 +17,3 @@ class GlyphNotFoundError(BubbleGenError):
 
 class EmptyGlyphError(BubbleGenError):
     """The glyph exists but has no outline (space, control character)."""
-
-
-class MeshError(BubbleGenError):
-    """A mesh operation failed or produced unusable geometry."""

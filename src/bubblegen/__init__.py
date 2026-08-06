@@ -10,7 +10,6 @@ from bubblegen.errors import (
     EmptyGlyphError,
     FontError,
     GlyphNotFoundError,
-    MeshError,
 )
 from bubblegen.fonts import Font
 from bubblegen.pipeline import LetterMesh, build_alphabet, build_letter, export_stl
@@ -28,7 +27,6 @@ __all__ = [
     "FontError",
     "GlyphNotFoundError",
     "LetterMesh",
-    "MeshError",
     "Profile",
     "__version__",
     "build_alphabet",

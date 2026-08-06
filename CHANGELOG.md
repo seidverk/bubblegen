@@ -4,6 +4,37 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-06
+
+Letters that actually read as bubbles. Three shaping defects, all visible in print.
+
+### Fixed
+
+- Silhouette rounding filled counters and bridged apertures: `R` printed as a blob with a
+  notch and `G` lost its aperture, because closing with `0.45 * puff` (5.4 mm at
+  `--puff 12`) bridges every gap narrower than its radius. The radius is now backed off per
+  letter until the glyph keeps its counters, its strokes and roughly its area, and the value
+  used is logged.
+- Straight letters printed as extrusions with a chamfer: `--roll` defaulted to `--puff`, so
+  any stroke wider than `2 * puff` got a flat plateau across its middle (18-23% of the area
+  for TitanOne at 80 mm). The roll now follows each glyph's own half-width, putting the peak
+  at the centre of the stroke.
+- Light fonts inflated into tubes: thickness is now capped per letter at the stroke
+  half-width, so a peak can never exceed half the width it sits on. DejaVu Sans at
+  `--size 60 --puff 8` was 2.2 times taller than wide. The cap is logged.
+- Letters with straight strokes printed low-poly: quadric decimation treats the
+  developable surface of a straight stroke as free to flatten and collapsed whole strips
+  into plates (single dome facets of 69 mm2 on `I` and 264 mm2 on `R`, up to 1.4 mm off the
+  intended surface). Every candidate is now checked against the height field it should
+  follow and rejected if it adds more than 0.15 mm of error, so `I` and `R` keep 160k
+  triangles instead of shipping as polyhedra.
+- A face budget at or above the dense triangle count crashed `fast-simplification`, which
+  surfaced as a misleading "decimation unavailable" warning.
+
+### Removed
+
+- `MeshError`, which nothing raises now that rounding backs off instead of failing.
+
 ## [0.2.0] - 2026-08-06
 
 Wall letters, not keyrings: one shape mode, flat bottom always.

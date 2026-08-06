@@ -20,6 +20,16 @@ if TYPE_CHECKING:
 Mask = NDArray[np.bool_]
 Field = NDArray[np.float64]
 
+ROUND_BACKOFF = 0.7
+"""Factor the rounding radius shrinks by when the glyph cannot take it."""
+
+MIN_ROUND_MM = 0.2
+"""Below this the rounding is invisible; give up instead of iterating."""
+
+MIN_AREA_RATIO = 0.75
+MAX_AREA_RATIO = 1.15
+"""Rounding trims tips and fills inner corners; more than this is damage."""
+
 
 @dataclass(frozen=True, slots=True)
 class Raster:
@@ -104,6 +114,44 @@ def soften(mask: Mask, px_per_mm: float, radius: float) -> Mask:
         return mask
     closed = erode(dilate(mask, px_per_mm, radius), px_per_mm, radius)
     return dilate(erode(closed, px_per_mm, radius), px_per_mm, radius)
+
+
+def enclosed_gaps(mask: Mask) -> int:
+    """Count background regions fully enclosed by the glyph: its counters."""
+    labels, count = ndimage.label(~mask)
+    if count == 0:
+        return 0
+    border = np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]])
+    reaches_outside = set(np.unique(border).tolist())
+    return sum(1 for label in range(1, count + 1) if label not in reaches_outside)
+
+
+def round_silhouette(mask: Mask, px_per_mm: float, radius: float) -> tuple[Mask, float]:
+    """Round the outline by as much as the glyph tolerates.
+
+    Closing bridges every gap narrower than its radius and erosion deletes every
+    stroke thinner than twice it, so one radius cannot serve both a fat O and the
+    counter of an R. The requested radius is therefore backed off until the glyph
+    keeps its counters, its strokes and roughly its area.
+
+    Returns the rounded mask and the radius actually used (0 if none survived).
+    """
+    counters = enclosed_gaps(mask)
+    area = mask.sum()
+
+    attempt = radius
+    while attempt >= MIN_ROUND_MM:
+        rounded = soften(mask, px_per_mm, attempt)
+        grown = rounded.sum() / area
+        if (
+            rounded.any()
+            and enclosed_gaps(rounded) == counters
+            and MIN_AREA_RATIO <= grown <= MAX_AREA_RATIO
+        ):
+            return rounded, attempt
+        attempt *= ROUND_BACKOFF
+
+    return mask, 0.0
 
 
 def signed_distance(mask: Mask, px_per_mm: float) -> Field:

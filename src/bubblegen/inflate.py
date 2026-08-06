@@ -31,14 +31,16 @@ def height_field(sd: Field, params: BubbleParams) -> Field:
     Outside the glyph the field keeps the (negative) distance, so the isosurface
     at 0 closes exactly on the silhouette.
     """
-    t = np.clip(sd / max(params.roll, 1e-6), 0.0, 1.0)
+    deep = np.clip(sd, 0.0, None)
+    deepest = float(deep.max())
+    puff = params.puff_for(deepest)
+
+    t = np.clip(sd / params.roll_for(deepest), 0.0, 1.0)
     edge = _EDGE_PROFILES[params.profile](t)
-    h = params.puff_mm * edge
+    h = puff * edge
 
     if params.dome > 0.0:
         # gentle global bulge: proportional to how deep inside the stroke we are
-        deep = np.clip(sd, 0.0, None)
-        deepest = deep.max() or 1.0
-        h = h + params.puff_mm * params.dome * edge * (deep / deepest)
+        h = h + puff * params.dome * edge * (deep / (deepest or 1.0))
 
     return np.asarray(np.where(sd > 0, h, sd), dtype=np.float64)

@@ -6,7 +6,6 @@ from pathlib import Path
 import pytest
 
 from bubblegen.config import BubbleParams
-from bubblegen.errors import MeshError
 from bubblegen.fonts import Font
 from bubblegen.pipeline import build_alphabet, build_letter, export_stl, slug
 
@@ -36,7 +35,28 @@ def test_bottom_is_a_flat_plate(font: Font, params: BubbleParams) -> None:
 
     assert len(bottom) > 0
     assert bottom[:, 2].max() == pytest.approx(0.0, abs=0.01)
-    assert letter.extents[2] == pytest.approx(params.puff_mm * (1 + params.dome), abs=0.4)
+    assert 0.0 < letter.extents[2] <= params.puff_mm * (1 + params.dome) + 0.05
+
+
+def test_thickness_reaches_the_requested_puff_on_fat_strokes(font: Font) -> None:
+    p = BubbleParams(
+        size_mm=60.0, puff_mm=3.0, dome=0.2, resolution=4.0, z_steps=32, target_faces=0
+    )
+
+    letter = build_letter(font, "I", p)
+
+    assert letter.extents[2] == pytest.approx(p.puff_mm * (1 + p.dome), abs=0.3)
+
+
+def test_capped_thickness_is_reported(
+    font: Font, params: BubbleParams, caplog: pytest.LogCaptureFixture
+) -> None:
+    p = dataclasses.replace(params, puff_mm=6.0)
+
+    with caplog.at_level("WARNING"):
+        build_letter(font, "I", p)
+
+    assert "is capped at" in caplog.text
 
 
 def test_decimation_meets_the_face_budget(font: Font) -> None:
@@ -58,23 +78,39 @@ def test_decimation_meets_the_face_budget(font: Font) -> None:
     assert letter.is_watertight
 
 
-def test_oversized_rounding_is_reported(
+def test_decimation_never_flattens_the_dome(font: Font) -> None:
+    """Quadric decimation collapses whole strips of a straight stroke into plates,
+    which prints as a low-poly letter. Fidelity has to win over the face budget."""
+    p = BubbleParams(
+        size_mm=40.0, puff_mm=4.0, resolution=4.0, smooth_iterations=0, target_faces=3_000
+    )
+
+    mesh = build_letter(font, "H", p).mesh
+    dome = mesh.area_faces[mesh.face_normals[:, 2] > 0.7]
+
+    assert dome.max() < 1.0  # mm2; dense faces are ~0.04, plates are tens
+
+
+def test_oversized_rounding_is_backed_off_and_reported(
     font: Font, params: BubbleParams, caplog: pytest.LogCaptureFixture
 ) -> None:
-    """A rounding radius wider than half a stroke eats the stroke; that must be loud."""
-    p = dataclasses.replace(params, round_mm=1.1)
+    """A radius wider than half a stroke would erase it, so it must be reduced."""
+    p = dataclasses.replace(params, round_mm=4.0)
 
     with caplog.at_level("WARNING"):
-        build_letter(font, "O", p)
+        letter = build_letter(font, "I", p)
 
-    assert "rounding removed" in caplog.text
+    assert letter.is_watertight
+    assert "would deform the glyph" in caplog.text
 
 
-def test_rounding_that_erases_the_glyph_raises(font: Font, params: BubbleParams) -> None:
-    p = dataclasses.replace(params, round_mm=1.2)
+def test_rounding_keeps_the_counter_of_a_letter(font: Font, params: BubbleParams) -> None:
+    """An 'O' with its counter filled would print as a blob."""
+    p = dataclasses.replace(params, size_mm=40.0, puff_mm=6.0)
 
-    with pytest.raises(MeshError, match="erased"):
-        build_letter(font, "I", p)
+    letter = build_letter(font, "O", p)
+
+    assert letter.mesh.euler_number == 0  # a torus, not a disc
 
 
 def test_alphabet_skips_whitespace_and_unmapped_glyphs(font: Font, params: BubbleParams) -> None:

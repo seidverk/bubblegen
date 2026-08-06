@@ -18,9 +18,9 @@ bubblegen --font fonts/Nunito-Black.ttf --chars "ABC" --size 60 --puff 8
 glyph outline (fontTools)
   -> flattened contours          bezier sampling
   -> raster mask                 even-odd winding, so counters stay open
-  -> silhouette rounding         morphological closing + opening
+  -> silhouette rounding         closing + opening, backed off to keep counters
   -> signed distance field (mm)  scipy EDT
-  -> height profile h(d)         the inflation
+  -> height profile h(d)         the inflation, capped by the stroke width
   -> 3D scalar field  f = min(h(x,y) - z, z)    solid between the plate and h
   -> marching cubes              scikit-image
   -> Taubin smoothing            volume-preserving, unlike Laplacian
@@ -56,8 +56,9 @@ bubblegen --font fonts/Nunito-Black.ttf --chars "ABC"
 
 ## Fonts
 
-Bubble letters need heavy fonts. The rounding step erodes by roughly half a stroke width, so
-a Regular weight dissolves — you get a warning, or an error if nothing survives.
+Bubble letters need heavy fonts: thickness is capped at the stroke half-width, so a Regular
+weight at 60 mm gives you a 4 mm bubble no matter what `--puff` says. Every cap and every
+reduced rounding radius is logged, so you always know when the font is the limit.
 
 `make fonts` fetches four SIL Open Font License faces into `fonts/` (gitignored):
 
@@ -77,8 +78,8 @@ a light weight — pin a heavy instance first (see `scripts/fetch_fonts.py`).
 # Icelandic alphabet, 60 mm tall
 uv run bubblegen --font fonts/Nunito-Black.ttf --chars "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ"
 
-# a name for the wall, fatter and more balloon-like
-uv run bubblegen --font fonts/TitanOne-Regular.ttf --chars "IGOR" --size 80 --puff 12 --dome 0.35
+# a name for the wall, fat and balloon-like
+uv run bubblegen --font fonts/TitanOne-Regular.ttf --chars "IGOR" --size 80 --puff 14 --dome 0.35
 
 # fast preview, then final quality
 uv run bubblegen --font fonts/Nunito-Black.ttf --chars "A" --res 3 --zsteps 32 --smooth 0
@@ -96,10 +97,10 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--chars` | required | Characters to generate, e.g. `"ABCÞÐÆ"` |
 | `--out` | `out` | Output directory |
 | `--size` | `60` | Cap height in mm; shared by every letter so an alphabet stays consistent |
-| `--puff` | `7` | Thickness at the centre of a stroke in mm; the dome adds to it |
-| `--roll` | `puff` | Distance over which the edge rounds up to full thickness. Smaller means a sharper shoulder |
-| `--round` | `0.45*puff` | Silhouette rounding radius. This is what turns sharp glyph corners into bubble corners |
-| `--dome` | `0.15` | Extra centre bulge, `0..1`. Peak height is `puff * (1 + dome)` |
+| `--puff` | `7` | Thickness at the centre of a stroke in mm, dome included. An upper bound: capped per letter at the stroke half-width |
+| `--roll` | stroke | Distance over which the edge rounds up to full thickness. Follows each glyph's half-width unless set; a fixed value shorter than the stroke leaves a flat plateau |
+| `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Backed off per letter so counters and thin strokes survive |
+| `--dome` | `0.15` | Extra centre bulge, `0..1`. Peak height is `puff * (1 + dome)`, capped by the stroke |
 | `--profile` | `sphere` | Edge roll shape: `sphere` (pillow), `smooth` (balloon), `super` (fuller shoulder) |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
@@ -110,16 +111,22 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 
 ### Tuning notes
 
-- Letters look under-inflated: raise `--puff`, or lower `--roll` so full thickness is reached
-  sooner.
+- "strokes are 8.4 mm wide, so --puff 8.0 mm is capped at 3.7 mm": the font is too light for
+  the thickness you asked for. Use a heavier font, raise `--size`, or accept the thinner
+  bubble. A peak taller than half the stroke width would print as a tube.
+- "--round 5.4 mm would deform the glyph, using 3.8 mm": the radius would have filled a
+  counter or eaten a stroke, so it was reduced for that letter. Set `--round` explicitly to
+  silence it.
+- Letters look under-inflated: raise `--puff`, and use a font with fatter strokes so the cap
+  does not bite.
+- Flat plateau on straight letters: you set `--roll` shorter than the stroke half-width.
+  Unset it and the roll follows the stroke.
 - Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`.
-- Thin strokes fuse together: lower `--round`.
-- "rounding removed 61% of the glyph": `--round` is wider than half a stroke. Lower `--round`
-  or `--puff`, raise `--size`, or use a heavier font.
 - Facets or steps visible on the surface: raise `--res` and `--zsteps` before raising
   `--smooth`; smoothing cannot add detail that was never sampled.
-- `--faces` is a target, not a cap. If the budget breaks manifoldness the next looser budget
-  is used, so a letter can come out above the number you asked for.
+- `--faces` is a target, not a cap. Each candidate is measured against the surface it should
+  follow and rejected if decimation adds more than 0.15 mm of error, so letters with straight
+  strokes keep more triangles than you asked for. Lower `--res` if you need smaller files.
 
 ## Printing
 
@@ -147,7 +154,7 @@ for letter in build_alphabet(font, "IGOR", params):
 
 `BubbleParams` is frozen and validated on construction, so bad values fail fast rather than
 producing a broken mesh. `build_letter` raises `BubbleGenError` subclasses
-(`GlyphNotFoundError`, `EmptyGlyphError`, `MeshError`); `build_alphabet` logs and skips them.
+(`GlyphNotFoundError`, `EmptyGlyphError`); `build_alphabet` logs and skips them.
 
 ## Layout
 

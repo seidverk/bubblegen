@@ -8,6 +8,9 @@ from enum import StrEnum
 ROUND_FACTOR = 0.45
 """Silhouette rounding radius as a fraction of puff, when not given explicitly."""
 
+MIN_ROLL_MM = 0.1
+"""Floor for the automatic roll, so a hairline glyph cannot divide by zero."""
+
 
 class Profile(StrEnum):
     """Shape of the edge roll — how the surface climbs from 0 to full thickness."""
@@ -29,10 +32,18 @@ class BubbleParams:
     """Cap height. Every letter shares this scale, so an alphabet stays consistent."""
 
     puff_mm: float = 7.0
-    """Thickness at the centre of a stroke; the dome adds to it."""
+    """Thickness at the centre of a stroke, dome included.
+
+    An upper bound: it is capped per glyph by the stroke half-width, because a bubble
+    taller than half its width reads as a tube.
+    """
 
     roll_mm: float | None = None
-    """Distance over which the edge rounds up to full thickness. Defaults to puff."""
+    """Distance over which the edge rounds up to full thickness.
+
+    Left unset it follows each glyph's own half-width, so the peak sits at the middle
+    of the stroke and nothing flattens into a plateau.
+    """
 
     round_mm: float | None = None
     """Silhouette rounding radius. Defaults to ROUND_FACTOR * puff."""
@@ -90,9 +101,23 @@ class BubbleParams:
         if value < 0:
             raise ValueError(f"{name} must not be negative, got {value}")
 
-    @property
-    def roll(self) -> float:
-        return self.puff_mm if self.roll_mm is None else self.roll_mm
+    def puff_for(self, deepest_mm: float) -> float:
+        """Thickness for a glyph whose deepest point is `deepest_mm` in.
+
+        Capped so the peak (puff plus dome) never exceeds the stroke half-width: a
+        light font at a large puff would otherwise inflate into sausages.
+        """
+        return min(self.puff_mm, deepest_mm / (1.0 + self.dome))
+
+    def roll_for(self, deepest_mm: float) -> float:
+        """Edge roll distance for a glyph whose deepest point is `deepest_mm` in.
+
+        A fixed roll shorter than the stroke leaves the middle of the stroke flat, so
+        straight letters read as extrusions with a chamfer rather than as bubbles.
+        """
+        if self.roll_mm is not None:
+            return self.roll_mm
+        return max(deepest_mm, MIN_ROLL_MM)
 
     @property
     def round_radius(self) -> float:
