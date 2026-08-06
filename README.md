@@ -2,11 +2,14 @@
 
 Parametric inflated "bubble" letters from any TTF/OTF font, exported as watertight STL.
 
-Everything is procedural. No manual sculpting, no per-letter fixes: point it at a font, give it
-a string, get a printable mesh per character.
+Every letter is puffed on top and flat on the bottom: it prints face-up without supports
+and hangs flush against a wall.
+
+Everything is procedural. No manual sculpting, no per-letter fixes: point it at a font, give
+it a string, get a printable mesh per character.
 
 ```
-bubblegen --font DejaVuSans.ttf --chars "ABC" --size 60 --puff 8 --flat-back
+bubblegen --font fonts/Nunito-Black.ttf --chars "ABC" --size 60 --puff 8
 ```
 
 ## How it works
@@ -18,14 +21,14 @@ glyph outline (fontTools)
   -> silhouette rounding         morphological closing + opening
   -> signed distance field (mm)  scipy EDT
   -> height profile h(d)         the inflation
-  -> 3D scalar field  f = h(x,y) - |z|
+  -> 3D scalar field  f = min(h(x,y) - z, z)    solid between the plate and h
   -> marching cubes              scikit-image
   -> Taubin smoothing            volume-preserving, unlike Laplacian
   -> decimation + watertight STL
 ```
 
 The signed distance field is what makes this work: thickness is a function of distance to the
-letter's edge, so every stroke inflates evenly and holes in the glyph inflate inward.
+letter's edge, so every stroke inflates evenly and counters inflate inward.
 
 ## Install
 
@@ -35,36 +38,51 @@ Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 git clone https://github.com/ingvarch/bubble-alphabet-is
 cd bubble-alphabet-is
 uv sync
+make fonts   # four heavy display fonts into fonts/
 ```
 
 Run without installing anything globally:
 
 ```fish
-uv run bubblegen --font /path/to/font.ttf --chars "ABC"
+uv run bubblegen --font fonts/Nunito-Black.ttf --chars "ABC"
 ```
 
 Install as a standalone tool:
 
 ```fish
 uv tool install .
-bubblegen --font /path/to/font.ttf --chars "ABC"
+bubblegen --font fonts/Nunito-Black.ttf --chars "ABC"
 ```
+
+## Fonts
+
+Bubble letters need heavy fonts. The rounding step erodes by roughly half a stroke width, so
+a Regular weight dissolves — you get a warning, or an error if nothing survives.
+
+`make fonts` fetches four SIL Open Font License faces into `fonts/` (gitignored):
+
+| File | Character coverage | Look |
+| --- | --- | --- |
+| `Nunito-Black.ttf` | Latin, Latin Ext, Cyrillic | rounded, the safest default |
+| `TitanOne-Regular.ttf` | Latin, Latin Ext | very fat, cartoon |
+| `LilitaOne-Regular.ttf` | Latin, Latin Ext | tall, condensed |
+| `Fredoka-Bold.ttf` | Latin, Latin Ext | soft, playful |
+
+Any other TTF/OTF works. Variable fonts are read at their default location, which is usually
+a light weight — pin a heavy instance first (see `scripts/fetch_fonts.py`).
 
 ## Usage
 
 ```fish
-# Icelandic alphabet, 60 mm tall, printable without supports
-uv run bubblegen --font Inter.ttf --chars "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ" --flat-back
+# Icelandic alphabet, 60 mm tall
+uv run bubblegen --font fonts/Nunito-Black.ttf --chars "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ"
 
-# keyring charms: smaller, thinner, with a 4 mm hole
-uv run bubblegen --font Inter.ttf --chars "IGOR" --size 35 --puff 4 --hole 4
-
-# fat and balloon-like
-uv run bubblegen --font Inter.ttf --chars "OK" --puff 10 --dome 0.35 --profile smooth
+# a name for the wall, fatter and more balloon-like
+uv run bubblegen --font fonts/TitanOne-Regular.ttf --chars "IGOR" --size 80 --puff 12 --dome 0.35
 
 # fast preview, then final quality
-uv run bubblegen --font Inter.ttf --chars "A" --res 3 --zsteps 32 --smooth 0
-uv run bubblegen --font Inter.ttf --chars "A" --res 8 --zsteps 96 --faces 80000
+uv run bubblegen --font fonts/Nunito-Black.ttf --chars "A" --res 3 --zsteps 32 --smooth 0
+uv run bubblegen --font fonts/Nunito-Black.ttf --chars "A" --res 8 --zsteps 96 --faces 80000
 ```
 
 Output lands in `--out` (default `out/`) as `bubble_A.stl`. Characters outside `[A-Za-z0-9]`
@@ -78,18 +96,15 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--chars` | required | Characters to generate, e.g. `"ABCÞÐÆ"` |
 | `--out` | `out` | Output directory |
 | `--size` | `60` | Cap height in mm; shared by every letter so an alphabet stays consistent |
-| `--puff` | `7` | Max half-thickness in mm. Total thickness is `2*puff`, or `puff` with `--flat-back` |
+| `--puff` | `7` | Thickness at the centre of a stroke in mm; the dome adds to it |
 | `--roll` | `puff` | Distance over which the edge rounds up to full thickness. Smaller means a sharper shoulder |
 | `--round` | `0.45*puff` | Silhouette rounding radius. This is what turns sharp glyph corners into bubble corners |
-| `--dome` | `0.15` | Extra centre bulge, `0..1`. `0` keeps the top flat |
+| `--dome` | `0.15` | Extra centre bulge, `0..1`. Peak height is `puff * (1 + dome)` |
 | `--profile` | `sphere` | Edge roll shape: `sphere` (pillow), `smooth` (balloon), `super` (fuller shoulder) |
-| `--flat-back` | off | Flat bottom at `z = 0`. Prints with zero supports |
-| `--hole` | `0` | Keyring hole diameter in mm |
-| `--hole-wall` | `2` | Minimum material left around the hole |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
 | `--smooth` | `12` | Taubin smoothing passes |
-| `--faces` | `40000` | Triangle budget after decimation. `0` keeps the dense mesh |
+| `--faces` | `40000` | Triangle target after decimation. `0` keeps the dense mesh |
 | `--bezier-steps` | `24` | Line segments per bezier when flattening the outline |
 | `-v` / `-q` | | More or less logging |
 
@@ -99,16 +114,21 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
   sooner.
 - Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`.
 - Thin strokes fuse together: lower `--round`.
+- "rounding removed 61% of the glyph": `--round` is wider than half a stroke. Lower `--round`
+  or `--puff`, raise `--size`, or use a heavier font.
 - Facets or steps visible on the surface: raise `--res` and `--zsteps` before raising
   `--smooth`; smoothing cannot add detail that was never sampled.
-- No room reported for the keyring hole: the stroke is thinner than `hole/2 + hole-wall`.
-  Raise `--size`, or lower `--hole` / `--hole-wall`.
+- `--faces` is a target, not a cap. If the budget breaks manifoldness the next looser budget
+  is used, so a letter can come out above the number you asked for.
 
 ## Printing
 
-`--flat-back` gives a flat bottom, so letters print face-up with no supports and no brim
-fiddling. Meshes are exported watertight and resting on `z = 0`, in millimetres, so slicers
-need no scaling. For two-sided pillows (no `--flat-back`) expect supports or a raft.
+The bottom is a flat plate at `z = 0`, so letters print face-up with no supports and no brim
+fiddling. Meshes are watertight and in millimetres, so slicers need no scaling.
+
+For hanging: the flat back takes double-sided foam tape or mounting strips directly. Letters
+above roughly 80 mm are worth printing hollow (a few perimeters, low infill) to keep the
+weight off the tape.
 
 ## Library use
 
@@ -117,8 +137,8 @@ from pathlib import Path
 
 from bubblegen import BubbleParams, Font, Profile, build_alphabet, export_stl
 
-font = Font.load("Inter.ttf")
-params = BubbleParams(size_mm=40, puff_mm=5, dome=0.3, profile=Profile.SMOOTH, flat_back=True)
+font = Font.load("fonts/Nunito-Black.ttf")
+params = BubbleParams(size_mm=40, puff_mm=5, dome=0.3, profile=Profile.SMOOTH)
 
 for letter in build_alphabet(font, "IGOR", params):
     print(letter.char, letter.extents, letter.is_watertight)
@@ -137,11 +157,12 @@ src/bubblegen/
   fonts.py      outline extraction, bezier flattening, mm scaling
   raster.py     contours -> mask -> signed distance field
   inflate.py    signed distance -> half-thickness
-  hole.py       keyring hole placement and boolean drilling
-  mesh.py       marching cubes, cleanup, decimation, smoothing
+  mesh.py       marching cubes, cleanup, smoothing, decimation
   pipeline.py   character -> LetterMesh -> STL
   cli.py        argument parsing and logging
-tests/          one module per source module
+scripts/
+  fetch_fonts.py  downloads and pins the fonts used by `make fonts`
+tests/            one module per source module
 ```
 
 ## Development
@@ -159,4 +180,5 @@ Tests use DejaVu Sans, which ships with matplotlib, so no font assets are needed
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). Fonts downloaded by `make fonts` are under the SIL Open Font
+License and are not part of this repository.

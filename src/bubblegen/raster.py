@@ -79,14 +79,16 @@ def rasterize(contours: Sequence[Contour], params: BubbleParams) -> Raster:
 
 
 def dilate(mask: Mask, px_per_mm: float, radius: float) -> Mask:
-    if radius <= 0:
+    # a distance transform needs something to measure against: with no foreground
+    # (or, below, no background) scipy returns garbage rather than an empty result
+    if radius <= 0 or not mask.any():
         return mask
     outside: Field = ndimage.distance_transform_edt(~mask) / px_per_mm
     return mask | (outside <= radius)
 
 
 def erode(mask: Mask, px_per_mm: float, radius: float) -> Mask:
-    if radius <= 0:
+    if radius <= 0 or mask.all():
         return mask
     inside: Field = ndimage.distance_transform_edt(mask) / px_per_mm
     return inside > radius

@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from bubblegen.config import BubbleParams
+from bubblegen.errors import MeshError
 from bubblegen.fonts import Font
 from bubblegen.pipeline import build_alphabet, build_letter, export_stl, slug
 
@@ -29,13 +30,13 @@ def test_letter_reports_mesh_stats(font: Font, params: BubbleParams) -> None:
     assert letter.is_watertight is True
 
 
-def test_hole_is_drilled_when_requested(font: Font, params: BubbleParams) -> None:
-    p = dataclasses.replace(params, size_mm=40.0, hole_mm=2.0, hole_wall_mm=0.5)
+def test_bottom_is_a_flat_plate(font: Font, params: BubbleParams) -> None:
+    letter = build_letter(font, "I", params)
+    bottom = letter.mesh.vertices[letter.mesh.vertices[:, 2] < 0.01]
 
-    solid = build_letter(font, "I", dataclasses.replace(p, hole_mm=0.0))
-    drilled = build_letter(font, "I", p)
-
-    assert drilled.mesh.volume < solid.mesh.volume
+    assert len(bottom) > 0
+    assert bottom[:, 2].max() == pytest.approx(0.0, abs=0.01)
+    assert letter.extents[2] == pytest.approx(params.puff_mm * (1 + params.dome), abs=0.4)
 
 
 def test_decimation_meets_the_face_budget(font: Font) -> None:
@@ -46,7 +47,6 @@ def test_decimation_meets_the_face_budget(font: Font) -> None:
         size_mm=45.0,
         puff_mm=6.0,
         dome=0.4,
-        flat_back=True,
         resolution=5.0,
         smooth_iterations=0,
         target_faces=budget,
@@ -56,6 +56,25 @@ def test_decimation_meets_the_face_budget(font: Font) -> None:
 
     assert letter.face_count <= budget
     assert letter.is_watertight
+
+
+def test_oversized_rounding_is_reported(
+    font: Font, params: BubbleParams, caplog: pytest.LogCaptureFixture
+) -> None:
+    """A rounding radius wider than half a stroke eats the stroke; that must be loud."""
+    p = dataclasses.replace(params, round_mm=1.1)
+
+    with caplog.at_level("WARNING"):
+        build_letter(font, "O", p)
+
+    assert "rounding removed" in caplog.text
+
+
+def test_rounding_that_erases_the_glyph_raises(font: Font, params: BubbleParams) -> None:
+    p = dataclasses.replace(params, round_mm=1.2)
+
+    with pytest.raises(MeshError, match="erased"):
+        build_letter(font, "I", p)
 
 
 def test_alphabet_skips_whitespace_and_unmapped_glyphs(font: Font, params: BubbleParams) -> None:

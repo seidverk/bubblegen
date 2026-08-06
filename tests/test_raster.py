@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from bubblegen.config import BubbleParams
-from bubblegen.raster import rasterize, signed_distance, soften
+from bubblegen.raster import dilate, erode, rasterize, signed_distance, soften
 
 if TYPE_CHECKING:
     from conftest import SquareFactory
@@ -57,6 +57,24 @@ def test_soften_rounds_corners_but_keeps_the_body(
     assert not rounded[corner[1], corner[0]]
     assert rounded[centre[1], centre[0]]
     assert rounded.sum() > 0.85 * raster.mask.sum()
+
+
+def test_dilating_an_empty_mask_keeps_it_empty(params: BubbleParams) -> None:
+    """scipy's EDT has no background to measure against, so this needs its own guard."""
+    empty = np.zeros((20, 20), dtype=bool)
+    assert not dilate(empty, params.resolution, 2.0).any()
+
+
+def test_eroding_a_full_mask_keeps_it_full(params: BubbleParams) -> None:
+    full = np.ones((20, 20), dtype=bool)
+    assert erode(full, params.resolution, 2.0).all()
+
+
+def test_soften_erases_a_stroke_thinner_than_the_radius(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    thin = rasterize([square(1.0)], params).mask
+    assert not soften(thin, params.resolution, 3.0).any()
 
 
 def test_signed_distance_signs_and_magnitude(params: BubbleParams, square: SquareFactory) -> None:

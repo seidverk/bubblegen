@@ -1,4 +1,4 @@
-"""Height field to a watertight triangle mesh."""
+"""Height field to a watertight triangle mesh with a flat, printable bottom."""
 
 from __future__ import annotations
 
@@ -30,27 +30,29 @@ DECIMATION_RETRIES = (1.0, 1.5, 2.0)
 Z_HEADROOM = 1.15
 """Slack above the tallest point, so the isosurface closes instead of being clipped."""
 
-FLAT_BACK_DEPTH = 0.6
-"""How far below z = 0 the grid extends when the back is flat."""
+PLATE_DEPTH = 0.6
+"""How far below the plate the grid extends, so the flat bottom closes cleanly."""
 
 
 def build_mesh(
     height: NDArray[np.float64], raster: Raster, params: BubbleParams
 ) -> trimesh.Trimesh:
-    """Marching-cubes the height field, then clean, decimate and smooth it."""
+    """Marching-cubes the height field, then clean, smooth and decimate it.
+
+    The result is solid between z = 0 and z = h(x, y): a flat bottom that prints
+    without supports and hangs flush against a wall.
+    """
     px_mm = raster.px_per_mm
-    puff = params.puff_mm
     # the dome pushes the peak above puff, so the grid has to follow it
-    z1 = puff * (1.0 + params.dome) * Z_HEADROOM
-    z0 = -FLAT_BACK_DEPTH * puff if params.flat_back else -z1
+    z1 = params.puff_mm * (1.0 + params.dome) * Z_HEADROOM
+    z0 = -PLATE_DEPTH * params.puff_mm
 
     zs = np.linspace(z0, z1, params.z_steps)
     dz = float(zs[1] - zs[0])
 
     h = height[:, :, None]
     z = zs[None, None, :]
-    # flat back: solid between z = 0 and z = h, support-free. otherwise: symmetric pillow.
-    field = np.minimum(h - z, z) if params.flat_back else h - np.abs(z)
+    field = np.minimum(h - z, z)
 
     field = np.pad(field, 1, mode="constant", constant_values=OUTSIDE_VALUE)
     verts, faces, _normals, _values = measure.marching_cubes(
@@ -70,12 +72,13 @@ def build_mesh(
     _drop_degenerate_faces(mesh)
     mesh.fix_normals()
 
-    mesh = _decimate(mesh, params.target_faces)
+    # smoothing runs before decimation: Taubin diverges on the irregular triangles
+    # decimation leaves behind, which collapses the letter instead of rounding it
     if params.smooth_iterations > 0:
         trimesh.smoothing.filter_taubin(
             mesh, lamb=TAUBIN_LAMB, nu=TAUBIN_NU, iterations=params.smooth_iterations
         )
-    return mesh
+    return _decimate(mesh, params.target_faces)
 
 
 def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:

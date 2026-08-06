@@ -1,16 +1,16 @@
 # Graph Report - bubble-alphabet-is  (2026-08-06)
 
 ## Corpus Check
-- 26 files · ~6,827 words
+- 25 files · ~7,178 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 237 nodes · 488 edges · 12 communities (10 shown, 2 thin omitted)
-- Extraction: 81% EXTRACTED · 19% INFERRED · 0% AMBIGUOUS · INFERRED: 91 edges (avg confidence: 0.77)
+- 238 nodes · 480 edges · 13 communities (11 shown, 2 thin omitted)
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8ad7da4a`
+- Built from commit: `ad959168`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -27,17 +27,18 @@
 - [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
 - [[_COMMUNITY_Community 11|Community 11]]
+- [[_COMMUNITY_Community 12|Community 12]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `BubbleParams` - 60 edges
-2. `Font` - 30 edges
+1. `BubbleParams` - 57 edges
+2. `Font` - 32 edges
 3. `build_letter()` - 19 edges
 4. `FlattenPen` - 15 edges
 5. `build_mesh()` - 15 edges
 6. `rasterize()` - 15 edges
 7. `puffed_square()` - 15 edges
-8. `square()` - 12 edges
-9. `sdf_of_square()` - 12 edges
+8. `LetterMesh` - 13 edges
+9. `square()` - 12 edges
 10. `height_field()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -45,60 +46,64 @@
   tests/test_cli.py → src/bubblegen/cli.py
 - `test_explicit_roll_and_round_win()` --calls--> `BubbleParams`  [INFERRED]
   tests/test_config.py → src/bubblegen/config.py
-- `test_hole_radius_is_half_the_diameter()` --calls--> `BubbleParams`  [INFERRED]
-  tests/test_config.py → src/bubblegen/config.py
 - `test_invalid_values_rejected()` --calls--> `BubbleParams`  [INFERRED]
   tests/test_config.py → src/bubblegen/config.py
 - `test_margin_covers_puff_and_rounding()` --calls--> `BubbleParams`  [INFERRED]
+  tests/test_config.py → src/bubblegen/config.py
+- `test_params_are_immutable()` --calls--> `BubbleParams`  [INFERRED]
   tests/test_config.py → src/bubblegen/config.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (12 total, 2 thin omitted)
+## Communities (13 total, 2 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
 Nodes (35): Any, BasePen, Exception, BubbleGenError, EmptyGlyphError, FontError, GlyphNotFoundError, MeshError (+27 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.10
-Nodes (27): Mask, drill_hole(), find_hole_center(), float64, NDArray, Trimesh, Keyring hole: where to put it, and how to drill it., Hole centre in mm that still leaves `hole_wall_mm` of material, or None. (+19 more)
+Cohesion: 0.33
+Nodes (6): font(), font_path(), params(), Path, Shared fixtures. DejaVu Sans ships with matplotlib, so tests need no font assets, Small and coarse: keeps meshing tests in the millisecond range.
 
 ### Community 2 - "Community 2"
-Cohesion: 0.11
-Nodes (22): build_alphabet(), build_letter(), export_stl(), LetterMesh, Path, End-to-end: character in, printable mesh out., One finished letter, resting on z = 0., Filename-safe name for a character. (+14 more)
+Cohesion: 0.18
+Nodes (8): export_stl(), LetterMesh, Path, Write the letter as `bubble_<name>.stl` and return the path., One finished letter, resting on z = 0., Filename-safe name for a character., slug(), test_slug()
 
 ### Community 3 - "Community 3"
-Cohesion: 0.13
-Nodes (20): ArgumentParser, CaptureFixture, Namespace, build_parser(), _configure_logging(), main(), params_from_args(), Command line entry point. (+12 more)
+Cohesion: 0.16
+Nodes (16): ArgumentParser, CaptureFixture, Namespace, build_parser(), _configure_logging(), main(), params_from_args(), Command line entry point. (+8 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.13
-Nodes (14): BubbleParams, Blank border around the glyph so inflation and rounding never clip., Geometry and sampling parameters for one batch of letters.      Distances are mi, params(), Small and coarse: keeps meshing tests in the millisecond range., test_explicit_roll_and_round_win(), test_hole_radius_is_half_the_diameter(), test_invalid_values_rejected() (+6 more)
+Cohesion: 0.10
+Nodes (28): LogCaptureFixture, BubbleParams, Blank border around the glyph so inflation and rounding never clip., Geometry and sampling parameters for one batch of letters.      Distances are mi, build_alphabet(), build_letter(), Run the whole pipeline for one character., Build every character, skipping whitespace and glyphs the font cannot supply. (+20 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.20
-Nodes (19): build_mesh(), _decimate(), _drop_degenerate_faces(), float64, NDArray, Trimesh, Height field to a watertight triangle mesh., Marching-cubes the height field, then clean, decimate and smooth it. (+11 more)
+Cohesion: 0.10
+Nodes (30): Profile, All tunables in one immutable, validated object., Shape of the edge roll — how the surface climbs from 0 to full thickness., build_mesh(), _decimate(), _drop_degenerate_faces(), float64, NDArray (+22 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.21
-Nodes (18): Contour, rasterize(), Rasterize contours (in mm) to a boolean mask with a blank margin., font(), font_path(), Path, SquareFactory, Shared fixtures. DejaVu Sans ships with matplotlib, so tests need no font assets (+10 more)
+Cohesion: 0.15
+Nodes (26): Mask, dilate(), erode(), Contour, Field, rasterize(), Signed distance in mm: positive inside the glyph, negative outside., Rasterize contours (in mm) to a boolean mask with a blank margin. (+18 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.28
 Nodes (13): height_field(), Field, The inflation itself: signed distance in, half-thickness out., Half-thickness h(x, y) in mm from the signed distance field.      Outside the gl, float64, NDArray, One-dimensional signed distance ramp: outside, edge roll, deep interior., sd() (+5 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.17
-Nodes (11): bubblegen, Development, How it works, Install, Layout, Library use, License, Options (+3 more)
+Cohesion: 0.15
+Nodes (12): bubblegen, Development, Fonts, How it works, Install, Layout, Library use, License (+4 more)
 
 ### Community 9 - "Community 9"
-Cohesion: 0.40
-Nodes (4): [0.1.0] - 2026-08-06, Added, Changelog, Fixed
+Cohesion: 0.22
+Nodes (8): [0.1.0] - 2026-08-06, [0.2.0] - 2026-08-06, Added, Added, Changelog, Fixed, Fixed, Removed
+
+### Community 12 - "Community 12"
+Cohesion: 0.80
+Nodes (4): download(), main(), pin_instance(), Path
 
 ## Knowledge Gaps
-- **13 isolated node(s):** `bubblegen`, `Added`, `Fixed`, `graphify`, `How it works` (+8 more)
+- **17 isolated node(s):** `bubblegen`, `Removed`, `Added`, `Fixed`, `Added` (+12 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -106,16 +111,16 @@ Nodes (4): [0.1.0] - 2026-08-06, Added, Changelog, Fixed
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `BubbleParams` connect `Community 4` to `Community 1`, `Community 2`, `Community 3`, `Community 5`, `Community 6`, `Community 7`?**
-  _High betweenness centrality (0.348) - this node is a cross-community bridge._
-- **Why does `Font` connect `Community 0` to `Community 2`?**
-  _High betweenness centrality (0.192) - this node is a cross-community bridge._
-- **Why does `build_letter()` connect `Community 2` to `Community 0`, `Community 1`, `Community 4`, `Community 5`, `Community 6`, `Community 7`?**
-  _High betweenness centrality (0.092) - this node is a cross-community bridge._
-- **Are the 16 inferred relationships involving `BubbleParams` (e.g. with `LetterMesh` and `Raster`) actually correct?**
-  _`BubbleParams` has 16 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.313) - this node is a cross-community bridge._
+- **Why does `Font` connect `Community 0` to `Community 2`, `Community 4`?**
+  _High betweenness centrality (0.206) - this node is a cross-community bridge._
+- **Are the 15 inferred relationships involving `BubbleParams` (e.g. with `LetterMesh` and `Raster`) actually correct?**
+  _`BubbleParams` has 15 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 4 inferred relationships involving `Font` (e.g. with `EmptyGlyphError` and `FontError`) actually correct?**
   _`Font` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 13 inferred relationships involving `build_letter()` (e.g. with `drill_hole()` and `find_hole_center()`) actually correct?**
-  _`build_letter()` has 13 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 12 inferred relationships involving `build_letter()` (e.g. with `height_field()` and `build_mesh()`) actually correct?**
+  _`build_letter()` has 12 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `FlattenPen` (e.g. with `EmptyGlyphError` and `FontError`) actually correct?**
   _`FlattenPen` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 6 inferred relationships involving `build_mesh()` (e.g. with `build_letter()` and `test_decimation_reduces_faces_and_keeps_it_closed()`) actually correct?**
+  _`build_mesh()` has 6 INFERRED edges - model-reasoned connections that need verification._

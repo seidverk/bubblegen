@@ -178,3 +178,6 @@ pyrightconfig.json
 # bubblegen generated meshes
 out/
 *.stl
+
+# downloaded fonts (see make fonts)
+fonts/

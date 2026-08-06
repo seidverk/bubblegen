@@ -10,11 +10,10 @@ from typing import TYPE_CHECKING
 
 import trimesh
 
-from bubblegen.errors import BubbleGenError
-from bubblegen.hole import drill_hole, find_hole_center
+from bubblegen.errors import BubbleGenError, MeshError
 from bubblegen.inflate import height_field
 from bubblegen.mesh import build_mesh
-from bubblegen.raster import rasterize, signed_distance, soften
+from bubblegen.raster import Raster, rasterize, signed_distance, soften
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
@@ -25,6 +24,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 _PLAIN_NAME = re.compile(r"[A-Za-z0-9]")
+
+MIN_MASK_RETENTION = 0.5
+"""Below this share of surviving glyph area the rounding radius is clearly too large."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,23 +57,36 @@ def slug(char: str) -> str:
     return f"U{ord(char):04X}"
 
 
+def _round_silhouette(raster: Raster, char: str, params: BubbleParams) -> Raster:
+    """Round the outline, and complain when the radius eats the strokes themselves.
+
+    Rounding erodes by `round_radius`, so a radius wider than half a stroke deletes
+    that stroke. Light fonts at a large puff hit this easily.
+    """
+    mask = soften(raster.mask, params.resolution, params.round_radius)
+    if not mask.any():
+        raise MeshError(
+            f"a {params.round_radius:.1f} mm rounding radius erased {char!r}; "
+            f"lower --round or --puff, or raise --size"
+        )
+
+    kept = mask.sum() / raster.mask.sum()
+    if kept < MIN_MASK_RETENTION:
+        logger.warning(
+            "%r: rounding removed %.0f%% of the glyph, lower --round or --puff",
+            char,
+            100 * (1 - kept),
+        )
+    return raster.with_mask(mask)
+
+
 def build_letter(font: Font, char: str, params: BubbleParams) -> LetterMesh:
     """Run the whole pipeline for one character."""
     contours = font.contours_mm(char, params.size_mm, params.bezier_steps)
 
-    raster = rasterize(contours, params)
-    raster = raster.with_mask(soften(raster.mask, params.resolution, params.round_radius))
+    raster = _round_silhouette(rasterize(contours, params), char, params)
     sd = signed_distance(raster.mask, params.resolution)
-
-    center = None
-    if params.hole_mm > 0:
-        center = find_hole_center(sd, raster, params)
-        if center is None:
-            logger.warning("%r: no room for a %.1f mm hole, skipping it", char, params.hole_mm)
-
     mesh = build_mesh(height_field(sd, params), raster, params)
-    if center is not None:
-        mesh = drill_hole(mesh, center, params)
 
     # drop to z = 0 so it lands on the build plate
     mesh.apply_translation([0, 0, -mesh.bounds[0][2]])

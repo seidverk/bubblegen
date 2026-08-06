@@ -22,13 +22,13 @@ def test_help_exits_cleanly(capsys: pytest.CaptureFixture[str]) -> None:
 
 def test_flags_map_onto_params() -> None:
     args = build_parser().parse_args(
-        ["--font", "f.ttf", "--chars", "AB", "--puff", "3", "--profile", "smooth", "--flat-back"]
+        ["--font", "f.ttf", "--chars", "AB", "--puff", "3", "--profile", "smooth", "--dome", "0.2"]
     )
     params = params_from_args(args)
 
     assert params.puff_mm == 3.0
     assert params.profile is Profile.SMOOTH
-    assert params.flat_back is True
+    assert params.dome == 0.2
     assert params.roll == 3.0
 
 

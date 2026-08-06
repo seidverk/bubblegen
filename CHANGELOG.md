@@ -4,6 +4,32 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-06
+
+Wall letters, not keyrings: one shape mode, flat bottom always.
+
+### Removed
+
+- The keyring hole (`--hole`, `--hole-wall`, `bubblegen.hole`).
+- The two-sided pillow mode (`--flat-back`). A flat bottom at `z = 0` is now the only
+  output, since that is what hangs on a wall and prints without supports.
+
+### Added
+
+- `make fonts` and `scripts/fetch_fonts.py`: downloads four heavy OFL display fonts into
+  `fonts/`, pinning variable fonts to their heaviest instance.
+- A warning when silhouette rounding removes more than half the glyph, and a `MeshError`
+  when it erases the glyph completely, instead of exporting a near-empty mesh.
+
+### Fixed
+
+- Taubin smoothing ran after decimation and diverged on the irregular triangles decimation
+  leaves behind: letters collapsed instead of rounding. Nunito Black at `--puff 8` lost half
+  its volume (8598 -> 4359 mm3) and 13 mm of height. Smoothing now runs while the mesh is
+  still dense.
+- `dilate` on an empty mask returned a filled mask (scipy's EDT has no background to measure
+  against), so a rounding radius that erased the glyph produced a solid slab.
+
 ## [0.1.0] - 2026-08-06
 
 First packaged release. The single `bubble_letters.py` script became the `bubblegen`

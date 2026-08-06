@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 UV ?= uv
 
-.PHONY: help sync test cov lint fix check hooks run clean
+.PHONY: help sync fonts test cov lint fix check hooks run clean
 
 help: ## list available targets
 	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -9,6 +9,9 @@ help: ## list available targets
 
 sync: ## create .venv and install dev dependencies
 	$(UV) sync
+
+fonts: ## download heavy display fonts into fonts/ (gitignored)
+	$(UV) run python scripts/fetch_fonts.py
 
 test: ## run the test suite
 	$(UV) run pytest

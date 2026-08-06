@@ -29,7 +29,7 @@ class BubbleParams:
     """Cap height. Every letter shares this scale, so an alphabet stays consistent."""
 
     puff_mm: float = 7.0
-    """Max half-thickness. Total thickness is 2*puff, or puff with `flat_back`."""
+    """Thickness at the centre of a stroke; the dome adds to it."""
 
     roll_mm: float | None = None
     """Distance over which the edge rounds up to full thickness. Defaults to puff."""
@@ -41,14 +41,6 @@ class BubbleParams:
     """Extra centre bulge as a fraction of puff. 0 keeps the top flat."""
 
     profile: Profile = Profile.SPHERE
-    flat_back: bool = False
-    """Flat bottom at z = 0: prints without supports."""
-
-    hole_mm: float = 0.0
-    """Keyring hole diameter. 0 disables the hole."""
-
-    hole_wall_mm: float = 2.0
-    """Minimum material left around the hole."""
 
     resolution: float = 5.0
     """Raster pixels per mm. Drives both quality and cost quadratically."""
@@ -81,8 +73,6 @@ class BubbleParams:
             self._require_positive("roll_mm", self.roll_mm)
         if self.round_mm is not None:
             self._require_non_negative("round_mm", self.round_mm)
-        self._require_non_negative("hole_mm", self.hole_mm)
-        self._require_non_negative("hole_wall_mm", self.hole_wall_mm)
         self._require_non_negative("smooth_iterations", self.smooth_iterations)
         self._require_non_negative("target_faces", self.target_faces)
         if not 0.0 <= self.dome <= 1.0:
@@ -107,10 +97,6 @@ class BubbleParams:
     @property
     def round_radius(self) -> float:
         return ROUND_FACTOR * self.puff_mm if self.round_mm is None else self.round_mm
-
-    @property
-    def hole_radius(self) -> float:
-        return self.hole_mm / 2.0
 
     @property
     def margin(self) -> float:

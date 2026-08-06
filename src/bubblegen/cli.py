@@ -22,7 +22,10 @@ logger = logging.getLogger("bubblegen")
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="bubblegen",
-        description="Generate inflated 'bubble' letter STLs from any TTF/OTF font.",
+        description=(
+            "Generate inflated 'bubble' letter STLs from any TTF/OTF font: "
+            "puffed on top, flat on the bottom, ready to print and hang."
+        ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     defaults = BubbleParams()
@@ -53,20 +56,6 @@ def build_parser() -> argparse.ArgumentParser:
         choices=list(Profile),
         default=defaults.profile,
         help="edge roll shape",
-    )
-    shape.add_argument(
-        "--flat-back", action="store_true", help="flat bottom, prints with zero supports"
-    )
-
-    hole = parser.add_argument_group("keyring hole")
-    hole.add_argument(
-        "--hole", type=float, default=defaults.hole_mm, help="hole diameter in mm (0 = none)"
-    )
-    hole.add_argument(
-        "--hole-wall",
-        type=float,
-        default=defaults.hole_wall_mm,
-        help="minimum material around the hole in mm",
     )
 
     quality = parser.add_argument_group("quality and cost")
@@ -105,9 +94,6 @@ def params_from_args(args: argparse.Namespace) -> BubbleParams:
         round_mm=args.round_r,
         dome=args.dome,
         profile=args.profile,
-        flat_back=args.flat_back,
-        hole_mm=args.hole,
-        hole_wall_mm=args.hole_wall,
         resolution=args.res,
         z_steps=args.zsteps,
         smooth_iterations=args.smooth,

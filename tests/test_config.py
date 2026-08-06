@@ -18,10 +18,6 @@ def test_explicit_roll_and_round_win() -> None:
     assert (p.roll, p.round_radius) == (2.0, 0.5)
 
 
-def test_hole_radius_is_half_the_diameter() -> None:
-    assert BubbleParams(hole_mm=4.0).hole_radius == 2.0
-
-
 def test_margin_covers_puff_and_rounding() -> None:
     p = BubbleParams(puff_mm=2.0, roll_mm=2.0, round_mm=1.0)
     assert p.margin == pytest.approx(2.0 * 1.5 + 1.0 * 2.5 + 1.0)
@@ -45,8 +41,6 @@ def test_unknown_profile_rejected() -> None:
         {"round_mm": -0.5},
         {"dome": -0.1},
         {"dome": 1.5},
-        {"hole_mm": -1.0},
-        {"hole_wall_mm": -1.0},
         {"resolution": 0.0},
         {"z_steps": 1},
         {"smooth_iterations": -1},
