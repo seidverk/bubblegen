@@ -4,6 +4,23 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-08-06
+
+### Fixed
+
+- `S`, `C` and `G` came out as blobs. Silhouette rounding did a morphological closing
+  before the opening, and closing bridges every gap narrower than its radius: at
+  `--puff 14` that is 6.3 mm, which swallowed both apertures of a fat `S` and grew its area
+  by 10 percent. Rounding is now opening only, so it can never add material. Inner corners
+  are left to the inflation, which rounds them in 3D anyway.
+
+### Added
+
+- `--fullness` (default `4`): shapes the cross-section from a plain semicircle towards a
+  balloon by steepening the flanks and broadening the top, without moving any ridge. The
+  reference for the power is the local ridge height, not the letter's peak, so thin strokes
+  are not stretched up towards the tallest one.
+
 ## [0.5.0] - 2026-08-06
 
 The shape is now solved, not sculpted.

@@ -92,6 +92,31 @@ def test_thin_strokes_are_not_scaled_up_to_the_puff(
     assert h.max() == pytest.approx(3.0, rel=0.15)
 
 
+def test_fullness_steepens_the_flanks_without_moving_the_peak(
+    params: BubbleParams, rect: RectFactory
+) -> None:
+    """A real balloon is fuller than a semicircle: steep sides, broad top. That is what
+    reads as inflated rather than as a plain dome."""
+    lean = dataclasses.replace(params, puff_mm=20.0, fullness=2.0)
+    full = dataclasses.replace(lean, fullness=5.0)
+
+    thin_h, _sd, raster = inflated([rect(30.0, 60.0)], lean)
+    full_h, _sd2, _raster2 = inflated([rect(30.0, 60.0)], full)
+
+    flank = raster.to_pixel((3.0, 30.0))
+    assert full_h[flank[1], flank[0]] > 1.3 * thin_h[flank[1], flank[0]]
+    assert full_h.max() == pytest.approx(thin_h.max(), rel=0.05)
+
+
+def test_fullness_two_is_a_semicircle(params: BubbleParams, rect: RectFactory) -> None:
+    p = dataclasses.replace(params, puff_mm=20.0, fullness=2.0)
+    h, _sd, raster = inflated([rect(20.0, 60.0)], p)
+
+    # a semicircle of radius 10 stands 8.66 mm tall 5 mm in from the edge
+    probe = raster.to_pixel((5.0, 30.0))
+    assert h[probe[1], probe[0]] == pytest.approx(8.66, rel=0.1)
+
+
 def test_field_sign_follows_the_silhouette(params: BubbleParams, rect: RectFactory) -> None:
     h, sd, _raster = inflated([rect(10.0, 10.0)], params)
 

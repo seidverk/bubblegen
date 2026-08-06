@@ -10,6 +10,10 @@ ROUND_FACTOR = 0.45
 BASE_ROUND_FACTOR = 0.25
 """Underside fillet radius as a fraction of puff, when not given explicitly."""
 
+MIN_FULLNESS = 2.0
+MAX_FULLNESS = 8.0
+"""Below 2 the cross-section would dip below a semicircle and read as deflated."""
+
 
 @dataclass(frozen=True, slots=True)
 class BubbleParams:
@@ -31,6 +35,10 @@ class BubbleParams:
 
     round_mm: float | None = None
     """Silhouette rounding radius. Defaults to ROUND_FACTOR * puff."""
+
+    fullness: float = 4.0
+    """How inflated the cross-section looks. 2 is a plain semicircle; higher steepens
+    the flanks and broadens the top, which is what reads as a balloon."""
 
     base_round_mm: float | None = None
     """Fillet radius under the letter. Defaults to BASE_ROUND_FACTOR * puff.
@@ -59,6 +67,10 @@ class BubbleParams:
         self._require_positive("puff_mm", self.puff_mm)
         self._require_positive("resolution", self.resolution)
         self._require_positive("bezier_steps", self.bezier_steps)
+        if not MIN_FULLNESS <= self.fullness <= MAX_FULLNESS:
+            raise ValueError(
+                f"fullness must be within {MIN_FULLNESS}..{MAX_FULLNESS}, got {self.fullness}"
+            )
         if self.round_mm is not None:
             self._require_non_negative("round_mm", self.round_mm)
         if self.base_round_mm is not None:

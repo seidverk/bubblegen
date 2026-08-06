@@ -22,11 +22,19 @@ from numpy.typing import NDArray
 from scipy import ndimage, sparse
 from scipy.sparse.linalg import spsolve
 
+from bubblegen.config import MIN_FULLNESS
+
 if TYPE_CHECKING:
     from bubblegen.config import BubbleParams
     from bubblegen.raster import Mask
 
 Field = NDArray[np.float64]
+
+RIDGE_REACH = 0.75
+"""How far to look for the local ridge height, as a share of the letter's peak."""
+
+RIDGE_BLUR_MM = 1.0
+"""Smoothing of that reference: unsmoothed, its steps show up as creases."""
 
 SOLVE_PX_PER_MM = 2.0
 """Resolution of the membrane solve. The result is smooth, so a coarse grid is plenty
@@ -38,6 +46,7 @@ def height_field(sd: Field, params: BubbleParams) -> Field:
 
     `puff` is a ceiling, not a target: the membrane is never stretched taller than it
     would naturally sit, so a thin stroke stays a thin bubble instead of a sausage.
+    `fullness` then shapes the cross-section from a plain semicircle towards a balloon.
 
     Outside the glyph the field keeps the (negative) distance, so the isosurface at 0
     closes exactly on the silhouette.
@@ -45,9 +54,33 @@ def height_field(sd: Field, params: BubbleParams) -> Field:
     mask = sd > 0
     natural = np.sqrt(2.0 * _deflection(mask, params.resolution))
     peak = float(natural.max())
-    scale = min(1.0, params.puff_mm / peak) if peak > 0 else 0.0
+    if peak <= 0:
+        return np.asarray(np.where(mask, 0.0, sd), dtype=np.float64)
 
-    return np.asarray(np.where(mask, scale * natural, sd), dtype=np.float64)
+    shaped = _fuller(natural, peak, params)
+    h = min(1.0, params.puff_mm / peak) * shaped
+
+    return np.asarray(np.where(mask, h, sd), dtype=np.float64)
+
+
+def _fuller(natural: Field, peak: float, params: BubbleParams) -> Field:
+    """Steepen the flanks and broaden the top without moving any ridge.
+
+    A real balloon holds more material than a semicircle. Raising the profile to a
+    power does that, but the power has to be taken relative to the height the surface
+    reaches *there*: relative to the tallest point of the whole letter, thin strokes
+    would be stretched up towards it and come out as sausages.
+    """
+    if params.fullness <= MIN_FULLNESS:
+        return natural
+
+    reach = max(1, round(RIDGE_REACH * peak * params.resolution))
+    ridge = ndimage.maximum_filter(natural, size=2 * reach + 1)
+    ridge = ndimage.gaussian_filter(ridge, sigma=RIDGE_BLUR_MM * params.resolution)
+    ridge = np.maximum(ridge, natural)  # a reference below the surface makes no sense
+
+    exponent = 2.0 / params.fullness
+    return np.asarray(ridge ** (1.0 - exponent) * natural**exponent, dtype=np.float64)
 
 
 def _deflection(mask: Mask, px_per_mm: float) -> Field:

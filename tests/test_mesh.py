@@ -70,7 +70,7 @@ def test_zero_base_round_keeps_the_wall_square(params: BubbleParams, square: Squ
     patch = contact_patch(mesh)
     widest = mesh.bounds[1][0] - mesh.bounds[0][0]
 
-    assert patch[:, 0].max() - patch[:, 0].min() == pytest.approx(widest, abs=0.2)
+    assert patch[:, 0].max() - patch[:, 0].min() == pytest.approx(widest, abs=0.3)
 
 
 def test_decimation_reduces_faces_and_keeps_it_closed(

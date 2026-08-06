@@ -27,12 +27,7 @@ MIN_ROUND_MM = 0.2
 """Below this the rounding is invisible; give up instead of iterating."""
 
 MIN_AREA_RATIO = 0.75
-MAX_AREA_RATIO = 1.15
-"""Rounding trims tips and fills inner corners; more than this is damage."""
-
-THICKNESS_STEPS = 24
-"""Disk radii probed when measuring local stroke thickness: the step size is the
-quantisation of the result, so too few of them terrace the surface."""
+"""Rounding trims tips; taking off more than this is damage, not rounding."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -109,15 +104,16 @@ def erode(mask: Mask, px_per_mm: float, radius: float) -> Mask:
 
 
 def soften(mask: Mask, px_per_mm: float, radius: float) -> Mask:
-    """Round the silhouette itself — this is what makes letters read as 'bubble'.
+    """Round the sharp outer tips of the silhouette (A apex, W, Ж, Æ).
 
-    Closing (dilate+erode) rounds inner corners and fuses strokes that nearly touch;
-    opening (erode+dilate) rounds the sharp outer tips (A apex, W, Ж, Æ).
+    Opening only: erode, then dilate back. The matching closing would round inner
+    corners too, but it bridges every gap narrower than its radius, which fills the
+    apertures of S, C and G and leaves a blob. Inner corners are left to the inflation,
+    which rounds them in 3D anyway.
     """
     if radius <= 0:
         return mask
-    closed = erode(dilate(mask, px_per_mm, radius), px_per_mm, radius)
-    return dilate(erode(closed, px_per_mm, radius), px_per_mm, radius)
+    return dilate(erode(mask, px_per_mm, radius), px_per_mm, radius)
 
 
 def enclosed_gaps(mask: Mask) -> int:
@@ -133,10 +129,9 @@ def enclosed_gaps(mask: Mask) -> int:
 def round_silhouette(mask: Mask, px_per_mm: float, radius: float) -> tuple[Mask, float]:
     """Round the outline by as much as the glyph tolerates.
 
-    Closing bridges every gap narrower than its radius and erosion deletes every
-    stroke thinner than twice it, so one radius cannot serve both a fat O and the
-    counter of an R. The requested radius is therefore backed off until the glyph
-    keeps its counters, its strokes and roughly its area.
+    Erosion deletes every stroke thinner than twice the radius, so one radius cannot
+    serve both a fat O and a hairline. The requested radius is therefore backed off
+    until the glyph keeps its counters, its strokes and most of its area.
 
     Returns the rounded mask and the radius actually used (0 if none survived).
     """
@@ -146,11 +141,10 @@ def round_silhouette(mask: Mask, px_per_mm: float, radius: float) -> tuple[Mask,
     attempt = radius
     while attempt >= MIN_ROUND_MM:
         rounded = soften(mask, px_per_mm, attempt)
-        grown = rounded.sum() / area
         if (
             rounded.any()
             and enclosed_gaps(rounded) == counters
-            and MIN_AREA_RATIO <= grown <= MAX_AREA_RATIO
+            and rounded.sum() / area >= MIN_AREA_RATIO
         ):
             return rounded, attempt
         attempt *= ROUND_BACKOFF

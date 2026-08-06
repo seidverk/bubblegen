@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "pyproject.toml": {
-    "mtime": 1786035647.9931796,
-    "ast_hash": "b61a488a5dbf7a4648bf9df82569f01c",
+    "mtime": 1786036544.4516935,
+    "ast_hash": "597568611ac3813ee6a3ca76a2aab14a",
     "semantic_hash": ""
   },
   "src/bubblegen/__init__.py": {
@@ -30,13 +30,13 @@
     "semantic_hash": ""
   },
   "src/bubblegen/cli.py": {
-    "mtime": 1786035569.5760713,
-    "ast_hash": "78ac7249674979982c7934f6b8e7481f",
+    "mtime": 1786036227.2140467,
+    "ast_hash": "411b223a83ebdcfdfa5246a57afacac3",
     "semantic_hash": ""
   },
   "src/bubblegen/config.py": {
-    "mtime": 1786035580.3664825,
-    "ast_hash": "9369c65c57e0348a7ee5fea6dfde6dfb",
+    "mtime": 1786036227.2136486,
+    "ast_hash": "f5e248b32df8da5436391bd274da11c3",
     "semantic_hash": ""
   },
   "src/bubblegen/errors.py": {
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "src/bubblegen/inflate.py": {
-    "mtime": 1786035580.3665788,
-    "ast_hash": "a9285640afc16a65fe31925401e13768",
+    "mtime": 1786036385.3806388,
+    "ast_hash": "84e06273f22622a2b964e0889179e136",
     "semantic_hash": ""
   },
   "src/bubblegen/mesh.py": {
@@ -65,13 +65,13 @@
     "semantic_hash": ""
   },
   "src/bubblegen/raster.py": {
-    "mtime": 1786035580.3665915,
-    "ast_hash": "29da65d25a2d17b589131a227836efbe",
+    "mtime": 1786036137.5960262,
+    "ast_hash": "6aa5753bdae3a2cb6b42daed94cbcb2f",
     "semantic_hash": ""
   },
   "tests/conftest.py": {
-    "mtime": 1786035580.366665,
-    "ast_hash": "90f98322de77e80bf374625ac8799edd",
+    "mtime": 1786036093.7340858,
+    "ast_hash": "9c431066b7f8f0f895b758647baffa8b",
     "semantic_hash": ""
   },
   "tests/test_cli.py": {
@@ -90,23 +90,23 @@
     "semantic_hash": ""
   },
   "tests/test_inflate.py": {
-    "mtime": 1786035580.366516,
-    "ast_hash": "600cfc41441bdc63905aa92967441952",
+    "mtime": 1786036469.309806,
+    "ast_hash": "46db69462db0bb79b1f8a3ca52ab0455",
     "semantic_hash": ""
   },
   "tests/test_mesh.py": {
-    "mtime": 1786035533.5317273,
-    "ast_hash": "1b6b1ab1ef6c689f4e97e839b821e941",
+    "mtime": 1786036481.874861,
+    "ast_hash": "0368de513a4fef131d87093231bc076a",
     "semantic_hash": ""
   },
   "tests/test_pipeline.py": {
-    "mtime": 1786035533.531511,
-    "ast_hash": "3e01cd2b9542ac487d96d4d2576ef8f1",
+    "mtime": 1786036469.3096106,
+    "ast_hash": "36e30bb42ad907f5b2eb3445ad503b0c",
     "semantic_hash": ""
   },
   "tests/test_raster.py": {
-    "mtime": 1786035580.3664994,
-    "ast_hash": "c81a77b340daae9244b4f3c078678b93",
+    "mtime": 1786036484.1295242,
+    "ast_hash": "d4f85e5f4bb3aac08c625695d14f62e2",
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
@@ -115,13 +115,13 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1786035647.9929624,
-    "ast_hash": "b696c00f3095d1f1865aa6998bc8b33d",
+    "mtime": 1786036544.451507,
+    "ast_hash": "c15cac179a995f65fe2dbfa58e35b208",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786035647.9926627,
-    "ast_hash": "d305a62581672b5fe559674a8a461bd5",
+    "mtime": 1786036544.4512002,
+    "ast_hash": "f1ee74934b805e725f3ced9091ff77c4",
     "semantic_hash": ""
   },
   "scripts/fetch_fonts.py": {

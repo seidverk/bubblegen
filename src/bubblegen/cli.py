@@ -50,6 +50,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="max silhouette rounding radius in mm [default: 0.45*puff]",
     )
     shape.add_argument(
+        "--fullness",
+        type=float,
+        default=defaults.fullness,
+        help="how inflated the cross-section is: 2 is a semicircle, 8 is a fat balloon",
+    )
+    shape.add_argument(
         "--base-round",
         type=float,
         default=None,
@@ -89,6 +95,7 @@ def params_from_args(args: argparse.Namespace) -> BubbleParams:
         size_mm=args.size,
         puff_mm=args.puff,
         round_mm=args.round_r,
+        fullness=args.fullness,
         base_round_mm=args.base_round,
         resolution=args.res,
         z_steps=args.zsteps,

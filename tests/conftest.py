@@ -65,6 +65,15 @@ def rect() -> RectFactory:
 
 
 @pytest.fixture
+def notched() -> NDArray[np.float64]:
+    """A fat C: 16 mm walls around an 8 mm aperture, like the apertures of S and G."""
+    return np.array(
+        [(0, 0), (40, 0), (40, 16), (15, 16), (15, 24), (40, 24), (40, 40), (0, 40)],
+        dtype=np.float64,
+    )
+
+
+@pytest.fixture
 def elbow() -> NDArray[np.float64]:
     """An L: two 10 mm strokes meeting at a junction, as one contour."""
     return np.array([(0, 0), (40, 0), (40, 10), (10, 10), (10, 40), (0, 40)], dtype=np.float64)

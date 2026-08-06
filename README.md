@@ -18,9 +18,9 @@ bubblegen --font fonts/Nunito-Black.ttf --chars "ABC" --size 60 --puff 8
 glyph outline (fontTools)
   -> flattened contours          bezier sampling
   -> raster mask                 even-odd winding, so counters stay open
-  -> silhouette rounding         closing + opening, backed off to keep counters
+  -> silhouette rounding         opening, backed off to keep counters and strokes
   -> membrane solve              laplace(u) = -1, clamped to the outline
-  -> thickness h = sqrt(2u)      capped by --puff
+  -> thickness h = sqrt(2u)      shaped by --fullness, capped by --puff
   -> 3D scalar field             solid between the plate and h, filleted at the base
   -> marching cubes              scikit-image
   -> Taubin smoothing            volume-preserving, unlike Laplacian
@@ -105,7 +105,8 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--out` | `out` | Output directory |
 | `--size` | `60` | Cap height in mm; shared by every letter so an alphabet stays consistent |
 | `--puff` | `7` | Thickness at the centre of a stroke in mm, dome included. An upper bound: capped per letter at the stroke half-width |
-| `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Backed off per letter so counters and thin strokes survive |
+| `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
+| `--fullness` | `4` | How inflated the cross-section looks. `2` is a plain semicircle; higher steepens the flanks and broadens the top |
 | `--base-round` | `0.25*puff` | Fillet radius under the letter. The contact patch is the outline pulled in by this much; the wall then rolls out to the full silhouette |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
@@ -122,11 +123,14 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 - "--round 5.4 mm would deform the glyph, using 3.8 mm": the radius would have filled a
   counter or eaten a stroke, so it was reduced for that letter. Set `--round` explicitly to
   silence it.
-- Letters look under-inflated: raise `--puff`, and use a font with fatter strokes so the
-  ceiling does not bite. Thickness is bounded by the stroke, not by the flag.
+- Letters look under-inflated: raise `--fullness` towards 6 for a balloon, or raise `--puff`
+  and use a font with fatter strokes so the ceiling does not bite. Thickness is bounded by the
+  stroke, not by the flag.
+- Letters look like slabs: lower `--fullness` towards 2 for a plain pillow.
 - Letters rock on the plate or the fillet is too subtle: tune `--base-round`. `0` gives the
   old square wall, half the puff gives an almost fully rounded underside.
-- Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`.
+- Sharp tips still sharp (`A`, `W`, `Ж`): raise `--round`. It only ever removes material, so
+  the apertures of `S`, `C` and `G` stay open no matter how large it gets.
 - Facets or steps visible on the surface: raise `--res` and `--zsteps` before raising
   `--smooth`; smoothing cannot add detail that was never sampled.
 - `--faces` is a target, not a cap. Each candidate is measured against the surface it should
@@ -152,7 +156,7 @@ from pathlib import Path
 from bubblegen import BubbleParams, Font, build_alphabet, export_stl
 
 font = Font.load("fonts/Nunito-Black.ttf")
-params = BubbleParams(size_mm=40, puff_mm=5, base_round_mm=1.5)
+params = BubbleParams(size_mm=40, puff_mm=5, fullness=5.0, base_round_mm=1.5)
 
 for letter in build_alphabet(font, "IGOR", params):
     print(letter.char, letter.extents, letter.is_watertight)

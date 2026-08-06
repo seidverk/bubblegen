@@ -84,7 +84,7 @@ def test_decimation_never_flattens_the_dome(font: Font) -> None:
     fine, since the surface is ruled there, but a plate is wide in both directions.
     """
     p = BubbleParams(
-        size_mm=40.0, puff_mm=4.0, resolution=4.0, smooth_iterations=0, target_faces=3_000
+        size_mm=60.0, puff_mm=8.0, resolution=4.0, smooth_iterations=0, target_faces=4_000
     )
 
     mesh = build_letter(font, "H", p).mesh
@@ -92,7 +92,7 @@ def test_decimation_never_flattens_the_dome(font: Font) -> None:
     sides = [np.linalg.norm(dome[:, i] - dome[:, i - 1], axis=1) for i in range(3)]
     inradius = 2 * mesh.area_faces[mesh.face_normals[:, 2] > 0.7] / sum(sides)
 
-    assert inradius.max() < 1.0  # mm; the dense mesh sits at 0.08, plates at 2+
+    assert inradius.max() < 1.0  # mm; the dense mesh sits at 0.09, plates at 2.5+
 
 
 def test_oversized_rounding_is_backed_off_and_reported(

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -16,6 +17,8 @@ from bubblegen.raster import (
 )
 
 if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
     from conftest import SquareFactory
 
 
@@ -77,17 +80,13 @@ def test_rounding_keeps_the_requested_radius_when_it_fits(
     assert rounded.sum() > 0.9 * raster.mask.sum()
 
 
-def test_rounding_backs_off_rather_than_filling_a_counter(
-    params: BubbleParams, square: SquareFactory
-) -> None:
-    """Closing bridges any gap narrower than its radius, which would swallow the
-    counters of O, R and the aperture of G."""
+def test_rounding_leaves_a_counter_alone(params: BubbleParams, square: SquareFactory) -> None:
+    """A 4 mm counter inside a fat stroke has to survive a 4 mm rounding radius."""
     raster = rasterize([square(20.0), square(4.0, offset=8.0)], params)
 
-    rounded, used = round_silhouette(raster.mask, params.resolution, 4.0)
+    rounded, _used = round_silhouette(raster.mask, params.resolution, 4.0)
 
     counter = raster.to_pixel((10.0, 10.0))
-    assert used < 2.0
     assert not rounded[counter[1], counter[0]]
 
 
@@ -100,6 +99,29 @@ def test_rounding_backs_off_rather_than_erasing_a_thin_stroke(
 
     assert rounded.any()
     assert used < 3.0
+
+
+def test_rounding_never_adds_material(params: BubbleParams, notched: NDArray[np.float64]) -> None:
+    """Filling in is not rounding: closing bridges the apertures of S, C and G and turns
+    them into blobs, and a merely narrowed aperture changes no topology to check."""
+    p = dataclasses.replace(params, puff_mm=14.0)
+    raster = rasterize([notched], p)
+
+    rounded, _used = round_silhouette(raster.mask, p.resolution, p.round_radius)
+
+    assert rounded.sum() <= raster.mask.sum()
+
+
+def test_rounding_keeps_an_aperture_open(
+    params: BubbleParams, notched: NDArray[np.float64]
+) -> None:
+    p = dataclasses.replace(params, puff_mm=14.0)
+    raster = rasterize([notched], p)
+
+    rounded, _used = round_silhouette(raster.mask, p.resolution, p.round_radius)
+
+    mouth = raster.to_pixel((30.0, 20.0))
+    assert not rounded[mouth[1], mouth[0]]
 
 
 def test_dilating_an_empty_mask_keeps_it_empty(params: BubbleParams) -> None:
