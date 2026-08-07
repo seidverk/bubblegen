@@ -29,10 +29,14 @@ def font(font_path: Path) -> Font:
 
 @pytest.fixture
 def params() -> BubbleParams:
-    """Small and coarse: keeps meshing tests in the millisecond range."""
+    """Small and coarse: keeps meshing tests in the millisecond range.
+
+    evenness is pinned to 0 so tests describe the raw inflation; the ones about
+    evenness itself set it explicitly."""
     return BubbleParams(
         size_mm=15.0,
         puff_mm=2.0,
+        evenness=0.0,
         resolution=4.0,
         z_steps=20,
         smooth_iterations=0,

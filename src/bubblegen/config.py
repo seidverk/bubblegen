@@ -63,6 +63,15 @@ class BubbleParams:
     """Cross-section exponent. 2 is a plain semicircle; higher steepens the flanks
     and flattens the crown into a plateau."""
 
+    evenness: float = 0.5
+    """How far the hills are pressed towards one even tube, 0..1.
+
+    Full inflation follows the local stroke width, so a swelling-and-tapering face
+    rolls in hills along the letter. 0 keeps that free balloon; 1 presses everything
+    down to the thickness the narrowest section holds, which is the even tube
+    `--puff <limit>` would build. It only ever lowers: thin strokes and accents keep
+    their own height."""
+
     base_round_mm: float | None = None
     """Fillet radius under the letter. Defaults to BASE_ROUND_FACTOR * puff, or
     BALLOON_BASE_FACTOR * size without a puff.
@@ -101,6 +110,8 @@ class BubbleParams:
             raise ValueError(
                 f"fullness must be within {MIN_FULLNESS}..{MAX_FULLNESS}, got {self.fullness}"
             )
+        if not 0.0 <= self.evenness <= 1.0:
+            raise ValueError(f"evenness must be within 0..1, got {self.evenness}")
         if self.round_mm is not None:
             self._require_non_negative("round_mm", self.round_mm)
         if self.base_round_mm is not None:

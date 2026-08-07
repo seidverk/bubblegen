@@ -83,7 +83,7 @@ def height_field(sd: Field, params: BubbleParams) -> tuple[Field, Field]:
     neighbours while its own half-width pinches.
     """
     mask = sd > 0
-    natural, crest, _limit = _membrane(mask, params.resolution)
+    natural, crest, limit = _membrane(mask, params.resolution)
     halfwidth = _half_width(sd, mask, params.resolution)
     if natural.max() <= 0:
         return np.asarray(np.where(mask, 0.0, sd), dtype=np.float64), halfwidth
@@ -93,6 +93,12 @@ def height_field(sd: Field, params: BubbleParams) -> tuple[Field, Field]:
     # without a puff the full tube itself is the target
     cap = PUFF_SLACK * crest
     amplitude = cap if params.puff_mm is None else np.minimum(params.puff_mm, cap)
+    if params.evenness > 0 and limit > 0:
+        # press the hills down towards the even tube, in log space so the order of
+        # heights survives; never up, so thin strokes and accents keep their own height
+        tall = amplitude > limit
+        pressed = limit * (amplitude / limit) ** (1.0 - params.evenness)
+        amplitude = np.where(tall, pressed, amplitude)
     h = amplitude * (natural / crest) ** (2.0 / params.fullness)
 
     return np.asarray(np.where(mask, h, sd), dtype=np.float64), halfwidth
@@ -205,7 +211,9 @@ def _crest_line(thickness: Field, mask: Mask, px_per_mm: float) -> Mask:
     inside of every junction, so a pixel only counts if it stands within `RIDGE_SHARE`
     of the tallest point around it.
     """
-    axis: Mask = mask & medial_axis(mask)
+    # pinned rng: medial_axis breaks ties in random order, and a wandering skeleton
+    # makes the same glyph come out a fraction of a millimetre different every run
+    axis: Mask = mask & medial_axis(mask, rng=0)
     if not axis.any():
         return axis
     nearby = ndimage.maximum_filter(thickness, size=int(RIDGE_REACH_MM * px_per_mm) | 1)

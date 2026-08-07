@@ -163,6 +163,55 @@ def test_without_puff_every_stroke_inflates_to_its_own_width(
     assert h[fat[1], fat[0]] == pytest.approx(30.0, rel=0.2)
 
 
+def test_full_evenness_is_the_even_tube_at_the_letters_own_limit(
+    params: BubbleParams, dumbbell: NDArray[np.float64]
+) -> None:
+    """evenness 1 presses every hill down to the thickness the narrowest section holds:
+    the same letter `--puff <limit>` builds, without knowing the limit in advance."""
+    p = dataclasses.replace(params, puff_mm=None)
+    raster = rasterize([dumbbell], p)
+    sd = signed_distance(raster.mask, p.resolution)
+    limit = uniform_limit(sd, p)
+
+    even, _ = height_field(sd, dataclasses.replace(p, puff_mm=limit))
+    tamed, _ = height_field(sd, dataclasses.replace(p, evenness=1.0))
+
+    assert np.allclose(tamed, even, atol=1e-6)
+
+
+def test_evenness_presses_the_hills_down_and_only_down(
+    params: BubbleParams, dumbbell: NDArray[np.float64]
+) -> None:
+    """Halfway evenness sits between the free balloon and the even tube. It only ever
+    lowers: a section already below the letter's limit keeps its own height, so an
+    accent or a thin stroke is never inflated past its width."""
+    p = dataclasses.replace(params, puff_mm=None)
+    raster = rasterize([dumbbell], p)
+    sd = signed_distance(raster.mask, p.resolution)
+    inside = sd > 0
+
+    free, _ = height_field(sd, p)
+    half, _ = height_field(sd, dataclasses.replace(p, evenness=0.5))
+    even, _ = height_field(sd, dataclasses.replace(p, evenness=1.0))
+
+    assert np.all(half[inside] <= free[inside] + 1e-9)
+    assert np.all(half[inside] >= even[inside] - 1e-9)
+    assert half[inside].max() < free[inside].max()
+
+
+def test_evenness_leaves_accents_alone(params: BubbleParams, rect: RectFactory) -> None:
+    p = dataclasses.replace(params, puff_mm=None)
+    contours = [rect(30.0, 40.0), rect(4.0, 4.0, x=12.0, y=48.0)]
+    raster = rasterize(contours, p)
+    sd = signed_distance(raster.mask, p.resolution)
+
+    free, _ = height_field(sd, p)
+    tamed, _ = height_field(sd, dataclasses.replace(p, evenness=0.7))
+
+    dot = raster.to_pixel((14.0, 50.0))
+    assert tamed[dot[1], dot[0]] == pytest.approx(free[dot[1], dot[0]], abs=1e-6)
+
+
 def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> None:
     p = dataclasses.replace(params, puff_mm=3.0)
     h, _sd, _raster = inflated([rect(40.0, 40.0)], p)

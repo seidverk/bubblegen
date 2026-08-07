@@ -38,9 +38,11 @@ any profile built from the distance to the outline gives you instead.
 
 The membrane alone reaches half the stroke width, which reads as flattened, so by default it
 is stretched to a full round tube: every section stands as tall as it is wide, fat lobes
-swell higher than thin waists, and the top is round everywhere. Passing `--puff` caps the
-letter at one even thickness instead, like the tube of a doughnut - consistent across an
-alphabet, but any section wider than the cap gets its crown clipped into a plateau.
+swell higher than thin waists, and the top is round everywhere. On a face whose strokes
+swell and taper that free inflation rolls in hills along the letter, so `--evenness` presses
+them partway back towards one thickness - in log space, and only ever down. Passing `--puff`
+caps the letter at one even thickness instead, like the tube of a doughnut - consistent
+across an alphabet, but any section wider than the cap gets its crown clipped into a plateau.
 
 ## Install
 
@@ -128,6 +130,7 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--puff` | none | Even tube thickness in mm, dome included. Omitted, every stroke inflates to its own width - fat lobes swell higher than thin waists. Given, the whole letter is capped at one thickness, and any section wider than the cap gets a flat crown |
 | `--round` | `0.45*puff`, or `0.175*size` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
 | `--fullness` | `2` | Cross-section exponent. `2` is a plain semicircle; higher steepens the flanks and flattens the crown |
+| `--evenness` | `0.5` | How far the hills of full inflation are pressed towards one even tube. `0` follows the stroke width freely; `1` presses everything down to the thickness the narrowest section holds. Only ever lowers, so thin strokes and accents keep their own height |
 | `--base-round` | `0.5*puff`, or `0.225*size` | Fillet radius under the letter, an upper bound: capped per spot at the local stroke half-width so thin sections keep their footing. Half the thickness makes the cross-section fully round, like the tube of a doughnut; `0` gives a square wall |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
@@ -151,6 +154,9 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
   out even; below it the tube is one thickness all the way round. Without `--puff` the same
   variation is everywhere by design: height follows stroke width, like a balloon.
 - Letters look like slabs: lower `--fullness` towards 2 for a round crown.
+- Hills roll along a letter, an `S` bobbing up and down: that is full inflation following a
+  face whose strokes swell and taper. Raise `--evenness` towards 1 to press them flat, or
+  drop it to 0 for the free balloon.
 - Fonts with steady stroke widths (Nunito Black, Lilita One) take a thicker even tube than
   fonts that swell and taper (TitanOne's `O` is 33 mm at the sides and 14 mm at the top).
 - Ribbing along the walls: raise `--smooth`. It is marching-cubes corrugation on the steep

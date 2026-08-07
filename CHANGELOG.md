@@ -6,6 +6,21 @@ All notable changes to this project are documented here. The format follows
 
 ## [0.11.0] - 2026-08-07
 
+### Added
+
+- `--evenness` (default 0.5): presses the hills of full inflation partway towards one
+  even tube. Full inflation follows the local stroke width, and on a face whose strokes
+  swell and taper that rolls visible hills along a letter. The compression runs in log
+  space towards the thickness the letter's narrowest section holds, and only ever
+  lowers, so thin strokes and accents keep their own height. `0` is the free balloon,
+  `1` is the even tube `--puff <limit>` would build.
+
+### Fixed
+
+- The same glyph came out a fraction of a millimetre different on every run:
+  `medial_axis` breaks ties in random pixel order, so the crest line wandered and the
+  measured limit moved with it. The rng is now pinned and STLs are reproducible.
+
 ### Changed
 
 - Full inflation is the default. `--puff` is now optional: omitted, every stroke inflates

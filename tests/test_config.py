@@ -10,6 +10,7 @@ def test_defaults_are_full_inflation() -> None:
     assert p.puff_mm is None
     assert p.fullness == 2.0
     assert p.size_mm == 80.0
+    assert p.evenness == 0.5
 
 
 def test_radii_derive_from_size_without_puff() -> None:
@@ -45,6 +46,8 @@ def test_margin_covers_puff_and_rounding() -> None:
     [
         {"size_mm": 0.0},
         {"puff_mm": -1.0},
+        {"evenness": -0.1},
+        {"evenness": 1.1},
         {"round_mm": -0.5},
         {"base_round_mm": -1.0},
         {"resolution": 0.0},

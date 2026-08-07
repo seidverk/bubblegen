@@ -56,6 +56,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="cross-section exponent: 2 is a semicircle, higher flattens the crown",
     )
     shape.add_argument(
+        "--evenness",
+        type=float,
+        default=defaults.evenness,
+        help="press the hills towards one even tube: 0 free balloon, 1 fully even",
+    )
+    shape.add_argument(
         "--base-round",
         type=float,
         default=None,
@@ -96,6 +102,7 @@ def params_from_args(args: argparse.Namespace) -> BubbleParams:
         puff_mm=args.puff,
         round_mm=args.round_r,
         fullness=args.fullness,
+        evenness=args.evenness,
         base_round_mm=args.base_round,
         resolution=args.res,
         z_steps=args.zsteps,
