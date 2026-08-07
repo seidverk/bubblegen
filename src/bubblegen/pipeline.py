@@ -96,7 +96,8 @@ def build_letter(font: Font, char: str, params: BubbleParams) -> LetterMesh:
     raster = _rounded(rasterize(contours, params), char, params)
     sd = signed_distance(raster.mask, params.resolution)
     _report_puff_cap(sd, char, params)
-    mesh = build_mesh(height_field(sd, params), sd, raster, params)
+    height, crest = height_field(sd, params)
+    mesh = build_mesh(height, sd, raster, params, crest)
 
     # drop to z = 0 so it lands on the build plate
     mesh.apply_translation([0, 0, -mesh.bounds[0][2]])

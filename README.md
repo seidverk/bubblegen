@@ -118,7 +118,7 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--puff` | `7` | Thickness at the centre of a stroke in mm, dome included. An upper bound: capped per letter at the stroke half-width |
 | `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
 | `--fullness` | `4` | How inflated the cross-section looks. `2` is a plain semicircle; higher steepens the flanks and broadens the top |
-| `--base-round` | `0.5*puff` | Fillet radius under the letter. Half the thickness makes the cross-section fully round, like the tube of a doughnut; `0` gives a square wall |
+| `--base-round` | `0.5*puff` | Fillet radius under the letter, an upper bound: capped per spot at the local stroke half-width so thin sections keep their footing. Half the thickness makes the cross-section fully round, like the tube of a doughnut; `0` gives a square wall |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
 | `--smooth` | `40` | Taubin smoothing passes. Marching cubes corrugates a steep flank and the shading turns that into ribbing along the wall; this irons it out at about half a percent of volume |
@@ -158,9 +158,10 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 ## Printing
 
 The bottom is flat at `z = 0`, so letters print face-up with no supports and no brim fiddling.
-The outline curves down into it, so the contact patch is smaller than the silhouette by
-`--base-round`; that is the point, but it also means a slightly smaller first layer. Meshes are
-watertight and in millimetres, so slicers need no scaling.
+The outline curves down into it through a fillet capped at 45°, so the contact patch is smaller
+than the silhouette by roughly `0.59 * --base-round`; that is the point, but it also means a
+slightly smaller first layer. Meshes are watertight and in millimetres, so slicers need no
+scaling.
 
 For hanging: the flat back takes double-sided foam tape or mounting strips directly. Letters
 above roughly 80 mm are worth printing hollow (a few perimeters, low infill) to keep the

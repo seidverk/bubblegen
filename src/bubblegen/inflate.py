@@ -48,6 +48,13 @@ its thickest at all, and taking those pixels for crests raises a pimple there.""
 CREST_FLOOR_MM = 1e-6
 """Keeps the division by the crest height defined on a hairline glyph."""
 
+RIDGE_SEPARATION_PX = 3.0
+"""How far apart two nearest-boundary points must land for the pixel between them to
+count as a ridge of `sd`."""
+
+HALFWIDTH_SLOPE = 0.5
+"""Steepest climb the half-width map may take, per millimetre."""
+
 
 def uniform_limit(sd: Field, params: BubbleParams) -> float:
     """Thickest even tube this glyph can hold, in mm.
@@ -60,8 +67,8 @@ def uniform_limit(sd: Field, params: BubbleParams) -> float:
     return limit
 
 
-def height_field(sd: Field, params: BubbleParams) -> Field:
-    """Thickness h(x, y) in mm, from the membrane deflection over the silhouette.
+def height_field(sd: Field, params: BubbleParams) -> tuple[Field, Field]:
+    """Thickness h(x, y) and the geometric half-width map, both in mm.
 
     `puff` is honoured up to the width of the stroke it sits on, so a thin stroke can
     become a round tube but never a sausage. `fullness` then shapes the cross-section
@@ -69,18 +76,93 @@ def height_field(sd: Field, params: BubbleParams) -> Field:
 
     Outside the glyph the field keeps the (negative) distance, so the isosurface at 0
     closes exactly on the silhouette.
+
+    The half-width is `sd` carried across from the full medial axis, and is what the
+    base fillet has to respect: eroding past it lifts the stroke off the plate. The
+    crest cannot stand in for it, because a waist keeps the tall crest of its fat
+    neighbours while its own half-width pinches.
     """
     mask = sd > 0
     natural, crest, _limit = _membrane(mask, params.resolution)
+    halfwidth = _half_width(sd, mask, params.resolution)
     if natural.max() <= 0:
-        return np.asarray(np.where(mask, 0.0, sd), dtype=np.float64)
+        return np.asarray(np.where(mask, 0.0, sd), dtype=np.float64), halfwidth
 
     # the membrane alone stops at half the stroke width, so reaching a full round tube
     # means stretching it - never further, or the letter stands taller than it is wide
     amplitude = np.minimum(params.puff_mm, PUFF_SLACK * crest)
     h = amplitude * (natural / crest) ** (2.0 / params.fullness)
 
-    return np.asarray(np.where(mask, h, sd), dtype=np.float64)
+    return np.asarray(np.where(mask, h, sd), dtype=np.float64), halfwidth
+
+
+def _half_width(sd: Field, mask: Mask, px_per_mm: float) -> Field:
+    """The local stroke half-width: `sd` on its ridges, carried across the glyph.
+
+    The ridges come from the boundary feature transform, not the medial axis: the
+    skeleton keeps homotopy, so it never enters a shelf that tapers off a fat body,
+    and the shelf would read as fat and be eroded off the plate.
+
+    The carried map is then pressed under a cone envelope, because the erosion built
+    from it must not vary faster than the printer can staircase: a cliff in the map
+    tilts the fillet and a whole shelf of a layer arrives with nothing below it.
+    """
+    ridge = _sd_ridge(sd, mask)
+    if not ridge.any():
+        return np.zeros_like(sd)
+    nearest = ndimage.distance_transform_edt(~ridge, return_distances=False, return_indices=True)
+    lifted = np.asarray(sd[tuple(nearest)])
+    return _cone_floor(lifted, HALFWIDTH_SLOPE / px_per_mm)
+
+
+def _sd_ridge(sd: Field, mask: Mask) -> Mask:
+    """Pixels whose neighbours answer to a different stretch of the outline.
+
+    On a ridge of `sd` the nearest boundary point flips from one side of the stroke
+    to the other, so the feature transform jumps; in smooth wall it creeps.
+    """
+    feature = np.asarray(
+        ndimage.distance_transform_edt(mask, return_distances=False, return_indices=True),
+        dtype=np.float64,
+    )
+    separation = np.zeros(sd.shape)
+    for axis in (1, 2):
+        for shift in (1, -1):
+            rolled = np.roll(feature, shift, axis=axis)
+            jump = np.hypot(feature[0] - rolled[0], feature[1] - rolled[1])
+            separation = np.maximum(separation, jump)
+    return np.asarray(mask & (separation > RIDGE_SEPARATION_PX))
+
+
+def _cone_floor(field: Field, slope_per_px: float) -> Field:
+    """The tightest map under `field` that climbs no faster than `slope_per_px`.
+
+    Two chamfer sweeps, as for a distance transform: each pass folds in the
+    neighbours above (or below) and then scans along the row, so every pixel ends up
+    at min over q of `field[q] + slope * distance(p, q)`.
+    """
+    straight, diagonal = slope_per_px, slope_per_px * np.sqrt(2.0)
+    ramp = straight * np.arange(field.shape[1])
+
+    def scan(row: NDArray[np.float64]) -> NDArray[np.float64]:
+        row = np.minimum.accumulate(row - ramp) + ramp
+        rev = row[::-1]
+        rev = np.minimum.accumulate(rev - ramp) + ramp
+        return np.asarray(rev[::-1])
+
+    def fold(row: NDArray[np.float64], prev: NDArray[np.float64]) -> NDArray[np.float64]:
+        row = np.minimum(row, prev + straight)
+        row[1:] = np.minimum(row[1:], prev[:-1] + diagonal)
+        row[:-1] = np.minimum(row[:-1], prev[1:] + diagonal)
+        return scan(row)
+
+    out = field.copy()
+    out[0] = scan(out[0])
+    for y in range(1, out.shape[0]):
+        out[y] = fold(out[y], out[y - 1])
+    for y in range(out.shape[0] - 2, -1, -1):
+        out[y] = fold(out[y], out[y + 1])
+    return out
 
 
 def _membrane(mask: Mask, px_per_mm: float) -> tuple[Field, Field, float]:

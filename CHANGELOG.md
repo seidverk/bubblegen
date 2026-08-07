@@ -4,6 +4,31 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-08-07
+
+### Fixed
+
+- The second layer printed on air. The base fillet was a quarter circle tangent to the
+  plate, so the wall left the plate horizontally: on the default alphabet the layer-2
+  outline stood up to 2 mm outside layer 1, past any nozzle. The arc now stops at its
+  45° tangent point and continues to the plate as a straight chamfer, which caps the
+  step between layers at the layer height. The contact patch erodes by
+  `(2 - sqrt(2)) * base-round` instead of the full radius.
+- Whole sections started mid-air. An erosion wider than a stroke's half-width lifts that
+  stroke off the plate entirely (the crossbar region of `A`, the shelf under the opening
+  of `G`), so the fillet radius is now capped at the local half-width. The half-width is
+  `sd` on its ridges - found through the boundary feature transform, since the medial
+  axis skeleton never enters a shelf tapering off a fat body - carried across the glyph,
+  and pressed under a cone envelope so the erosion never climbs faster than 0.5 mm/mm:
+  a cliff in that map tilts the fillet and sweeps a layer front sideways over nothing.
+- Smoothing undid the printable base. Unweighted Taubin passes roll the contact edge
+  over until the first layers overhang past 45° again, so smoothing now fades to zero
+  at the plate over the two grid cells the roll actually reaches; a straight chamfer is
+  stationary under Taubin, so the rest of it can smooth freely.
+
+Across the regenerated alphabet the worst layer-on-layer step at the base is 0.24 mm at
+0.2 mm layers, down from 2.0 mm (and 5.0 mm on `G` mid-fix).
+
 ## [0.9.0] - 2026-08-06
 
 ### Fixed

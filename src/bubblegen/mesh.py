@@ -47,12 +47,14 @@ def build_mesh(
     sd: NDArray[np.float64],
     raster: Raster,
     params: BubbleParams,
+    halfwidth: NDArray[np.float64],
 ) -> trimesh.Trimesh:
     """Marching-cubes the height field, then clean, smooth and decimate it.
 
     The result is solid between the plate and z = h(x, y), with the outline curving
     down into a flat contact patch: it prints without supports and hangs flush against
-    a wall, without the hard right-angle edge of a plain extrusion.
+    a wall, without the hard right-angle edge of a plain extrusion. The fillet radius
+    is capped at the local stroke half-width, so no stroke is eroded off the plate.
     """
     px_mm = raster.px_per_mm
     z1 = params.puff_mm * Z_HEADROOM
@@ -65,9 +67,9 @@ def build_mesh(
     z = zs[None, None, :]
     field = np.minimum(h - z, z)
 
-    inset = _base_inset(zs, params.base_radius)
+    inset = _base_inset(zs, np.minimum(params.base_radius, halfwidth))
     if inset is not None:
-        field = np.minimum(field, sd[:, :, None] - inset[None, None, :])
+        field = np.minimum(field, sd[:, :, None] - inset)
 
     field = np.pad(field, 1, mode="constant", constant_values=OUTSIDE_VALUE)
     verts, faces, _normals, _values = measure.marching_cubes(
@@ -90,22 +92,55 @@ def build_mesh(
     # smoothing runs before decimation: Taubin diverges on the irregular triangles
     # decimation leaves behind, which collapses the letter instead of rounding it
     if params.smooth_iterations > 0:
-        trimesh.smoothing.filter_taubin(
-            mesh, lamb=TAUBIN_LAMB, nu=TAUBIN_NU, iterations=params.smooth_iterations
-        )
+        _smooth_keeping_base(mesh, params, dz)
     return _decimate(mesh, params.target_faces, height, raster, params)
 
 
-def _base_inset(zs: NDArray[np.float64], radius: float) -> NDArray[np.float64] | None:
-    """How far the outline is pulled in at each height, as a quarter-circle fillet.
+def _base_inset(
+    zs: NDArray[np.float64], radius: float | NDArray[np.float64]
+) -> NDArray[np.float64] | None:
+    """How far the outline is pulled in at each height: fillet arc into a 45° chamfer.
 
-    `radius` at the plate, nothing from `radius` upwards: the contact patch is the
-    silhouette eroded by `radius`, and the wall rolls out to the full silhouette.
+    The arc rolls out to the full silhouette at `radius` height, but a full quarter
+    circle would leave the plate horizontally and layers near the plate would print
+    on air. So below the 45° tangent point the profile continues as a straight
+    chamfer: the contact patch is the silhouette eroded by (2 - sqrt(2)) * radius.
+
+    `radius` may be a per-pixel map; the result then broadcasts to (y, x, z).
     """
-    if radius <= 0:
+    r = np.asarray(radius, dtype=np.float64)
+    if np.all(r <= 0):
         return None
-    rise = np.clip(radius - zs, 0.0, radius)
-    return np.asarray(radius - np.sqrt(np.clip(radius**2 - rise**2, 0.0, None)))
+    if r.ndim:
+        r = r[:, :, None]
+    z = np.clip(zs, 0.0, r)
+    rise = r - z
+    arc = r - np.sqrt(np.clip(r**2 - rise**2, 0.0, None))
+    z45 = r * (1.0 - np.sqrt(0.5))
+    chamfer = 2.0 * z45 - z
+    return np.asarray(np.where(z < z45, chamfer, arc))
+
+
+def _smooth_keeping_base(mesh: trimesh.Trimesh, params: BubbleParams, dz: float) -> None:
+    """Taubin smoothing, faded to nothing at the plate.
+
+    Smoothing exists to iron ribbing out of the walls; the base is smooth by
+    construction, and unweighted passes roll the contact edge over until the first
+    layers overhang past 45° again. A straight chamfer is stationary under Taubin,
+    so only the corner at the plate needs pinning: the fade spans the couple of grid
+    cells the roll actually reaches.
+    """
+    ramp = 2.0 * dz if params.base_radius > 0 else 0.0
+    weight = np.clip(mesh.vertices[:, 2] / ramp, 0.0, 1.0)[:, None] if ramp > 0 else np.float64(1.0)
+    laplacian = trimesh.smoothing.laplacian_calculation(mesh)
+    vertices = mesh.vertices.copy().view(np.ndarray)
+    for index in range(params.smooth_iterations):
+        dot = laplacian.dot(vertices) - vertices
+        if index % 2 == 0:
+            vertices += TAUBIN_LAMB * weight * dot
+        else:
+            vertices -= TAUBIN_NU * weight * dot
+    mesh.vertices = vertices
 
 
 def _drop_degenerate_faces(mesh: trimesh.Trimesh) -> None:

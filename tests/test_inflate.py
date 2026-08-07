@@ -23,7 +23,24 @@ def inflated(
 ) -> tuple[NDArray[np.float64], NDArray[np.float64], Raster]:
     raster = rasterize(contours, params)
     sd = signed_distance(raster.mask, params.resolution)
-    return height_field(sd, params), sd, raster
+    h, _crest = height_field(sd, params)
+    return h, sd, raster
+
+
+def test_the_half_width_map_has_no_cliffs(
+    params: BubbleParams, dumbbell: NDArray[np.float64]
+) -> None:
+    """A steep half-width gradient tilts the base erosion, and the layer fronts of
+    the fillet sweep sideways faster than a printer can staircase. The map may climb
+    no faster than half a millimetre per millimetre."""
+    raster = rasterize([dumbbell], params)
+    sd = signed_distance(raster.mask, params.resolution)
+
+    _h, halfwidth = height_field(sd, params)
+
+    for axis in (0, 1):
+        slope = np.abs(np.diff(halfwidth, axis=axis)) * params.resolution
+        assert float(slope.max()) <= 0.5 * 1.05
 
 
 def ring_spread(h: NDArray[np.float64], raster: Raster) -> float:
@@ -100,8 +117,8 @@ def test_the_reported_limit_is_the_thickness_that_comes_out_even(
     sd = signed_distance(raster.mask, params.resolution)
 
     limit = uniform_limit(sd, params)
-    even = height_field(sd, dataclasses.replace(params, puff_mm=limit))
-    greedy = height_field(sd, dataclasses.replace(params, puff_mm=limit * 2.0))
+    even, _ = height_field(sd, dataclasses.replace(params, puff_mm=limit))
+    greedy, _ = height_field(sd, dataclasses.replace(params, puff_mm=limit * 2.0))
 
     assert ring_spread(even, raster) < 0.1
     assert ring_spread(greedy, raster) > 0.15

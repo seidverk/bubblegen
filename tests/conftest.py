@@ -74,6 +74,28 @@ def uneven_ring() -> list[NDArray[np.float64]]:
 
 
 @pytest.fixture
+def dumbbell() -> NDArray[np.float64]:
+    """Two fat pads joined by a short 8 mm neck: a waist the crest line skips."""
+    return np.array(
+        [
+            (0, 0),
+            (18, 0),
+            (18, 6),
+            (22, 6),
+            (22, 0),
+            (40, 0),
+            (40, 20),
+            (22, 20),
+            (22, 14),
+            (18, 14),
+            (18, 20),
+            (0, 20),
+        ],
+        dtype=np.float64,
+    )
+
+
+@pytest.fixture
 def notched() -> NDArray[np.float64]:
     """A fat C: 16 mm walls around an 8 mm aperture, like the apertures of S and G."""
     return np.array(
