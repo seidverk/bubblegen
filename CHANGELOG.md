@@ -8,14 +8,23 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- `--evenness` (default 0.5): presses the hills of full inflation partway towards one
-  even tube. Full inflation follows the local stroke width, and on a face whose strokes
-  swell and taper that rolls visible hills along a letter. The compression runs in log
-  space towards the thickness the letter's narrowest section holds, and only ever
-  lowers, so thin strokes and accents keep their own height. `0` is the free balloon,
-  `1` is the even tube `--puff <limit>` would build.
+- `--inflate` (default 1.5): how hard the membrane is blown up, as a share of a full
+  round tube. `2` stands as tall as the stroke is wide; `1.5` is the reference balloon
+  look - clearly inflated, never bulbous. It scales the whole letter smoothly, so
+  unlike a clamp or a compression it can never crease the surface.
+- `--evenness` (default 0): presses the hills of inflation partway towards one even
+  tube. Inflation follows the local stroke width, and on a face whose strokes swell
+  and taper that rolls visible hills along a letter. The compression runs in log space
+  towards the thickness the letter's narrowest section holds, and only ever lowers, so
+  thin strokes and accents keep their own height. `0` is the free balloon, `1` is the
+  even tube `--puff <limit>` would build.
 
 ### Fixed
+
+- The bottom edge came out as a ragged fringe: smoothing faded to nothing at the plate
+  to keep the first layers printable, and the raw marching-cubes jitter survived
+  there. Smoothing is now pinned only vertically at the plate and stays at full
+  strength in its plane, which cleans the base outline and can never lift it.
 
 - The same glyph came out a fraction of a millimetre different on every run:
   `medial_axis` breaks ties in random pixel order, so the crest line wandered and the
@@ -31,7 +40,8 @@ All notable changes to this project are documented here. The format follows
   levelled its whole crest into a plain.
 - Default `--fullness` is 2 (a semicircular cross-section) instead of 4; higher values
   steepen the flanks but flatten the crown, they do not make the letter rounder.
-- Default `--size` is 80 mm.
+- Default `--size` is 100 mm, and the default base fillet without `--puff` is
+  `0.12 * size`: a small smooth roll into the plate instead of a doughnut underside.
 - Without `--puff` the rounding radius, base fillet and raster margin derive from
   `--size` (0.175, 0.225 and 0.75 of it) instead of the thickness cap.
 - The marching-cubes z grid spans the actual peak of the height field instead of

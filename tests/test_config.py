@@ -5,18 +5,19 @@ import pytest
 from bubblegen.config import BubbleParams
 
 
-def test_defaults_are_full_inflation() -> None:
+def test_defaults_are_the_reference_balloon() -> None:
     p = BubbleParams()
     assert p.puff_mm is None
     assert p.fullness == 2.0
-    assert p.size_mm == 80.0
-    assert p.evenness == 0.5
+    assert p.size_mm == 100.0
+    assert p.evenness == 0.0
+    assert p.inflate == 1.5
 
 
 def test_radii_derive_from_size_without_puff() -> None:
     p = BubbleParams(size_mm=80.0)
     assert p.round_radius == pytest.approx(14.0)
-    assert p.base_radius == pytest.approx(18.0)
+    assert p.base_radius == pytest.approx(9.6)
 
 
 def test_margin_covers_inflation_without_puff() -> None:
@@ -48,6 +49,8 @@ def test_margin_covers_puff_and_rounding() -> None:
         {"puff_mm": -1.0},
         {"evenness": -0.1},
         {"evenness": 1.1},
+        {"inflate": 0.0},
+        {"inflate": 2.1},
         {"round_mm": -0.5},
         {"base_round_mm": -1.0},
         {"resolution": 0.0},

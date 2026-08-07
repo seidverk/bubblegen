@@ -37,6 +37,7 @@ def params() -> BubbleParams:
         size_mm=15.0,
         puff_mm=2.0,
         evenness=0.0,
+        inflate=2.0,
         resolution=4.0,
         z_steps=20,
         smooth_iterations=0,

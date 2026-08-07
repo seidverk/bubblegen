@@ -56,6 +56,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="cross-section exponent: 2 is a semicircle, higher flattens the crown",
     )
     shape.add_argument(
+        "--inflate",
+        type=float,
+        default=defaults.inflate,
+        help="share of a full round tube: 2 as tall as the stroke is wide, 1 bare membrane",
+    )
+    shape.add_argument(
         "--evenness",
         type=float,
         default=defaults.evenness,
@@ -103,6 +109,7 @@ def params_from_args(args: argparse.Namespace) -> BubbleParams:
         round_mm=args.round_r,
         fullness=args.fullness,
         evenness=args.evenness,
+        inflate=args.inflate,
         base_round_mm=args.base_round,
         resolution=args.res,
         z_steps=args.zsteps,

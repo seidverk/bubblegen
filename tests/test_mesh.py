@@ -100,6 +100,41 @@ def test_mesh_z_range_follows_the_field_not_the_puff(
     assert mesh.bounds[1][2] == pytest.approx(height.max(), abs=0.8)
 
 
+def base_ring_roughness(mesh: trimesh.Trimesh) -> float:
+    """Mean second difference of the outline through the base chamfer: the jitter the
+    eye reads as a ragged bottom edge."""
+    section = mesh.section(plane_origin=[0, 0, 0.3], plane_normal=[0, 0, 1])
+    assert section is not None
+    ring = np.asarray(section.discrete[0])[:, :2]
+    centre = ring.mean(axis=0)
+    radius = np.hypot(*(ring - centre).T)
+    return float(np.abs(np.diff(radius, 2)).mean())
+
+
+def test_smoothing_cleans_the_base_edge_without_lifting_it(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    """Smoothing used to fade to nothing at the plate, leaving the raw marching-cubes
+    jitter as a ragged fringe on the bottom edge. It must clean the outline in the
+    plane of the plate while never lifting the flat bottom off it."""
+    p = dataclasses.replace(params, base_round_mm=1.5, smooth_iterations=40)
+    angle = np.radians(30.0)
+    spin = np.array(
+        [[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]
+    )
+    tilted = square(10.0) @ spin.T  # diagonal edges: the base staircase worst case
+    raster = rasterize([tilted], p)
+    sd = signed_distance(raster.mask, p.resolution)
+    height, crest = height_field(sd, p)
+
+    rough = build_mesh(height, sd, raster, dataclasses.replace(p, smooth_iterations=0), crest)
+    smooth = build_mesh(height, sd, raster, p, crest)
+
+    assert smooth.is_watertight
+    assert smooth.bounds[0][2] == pytest.approx(0.0, abs=1e-6)
+    assert base_ring_roughness(smooth) < 0.7 * base_ring_roughness(rough)
+
+
 def test_the_underside_is_filleted_into_a_smaller_flat_patch(
     params: BubbleParams, square: SquareFactory
 ) -> None:

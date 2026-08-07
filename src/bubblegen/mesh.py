@@ -127,16 +127,22 @@ def _base_inset(
 
 
 def _smooth_keeping_base(mesh: trimesh.Trimesh, params: BubbleParams, dz: float) -> None:
-    """Taubin smoothing, faded to nothing at the plate.
+    """Taubin smoothing, vertically pinned at the plate but free in its plane.
 
-    Smoothing exists to iron ribbing out of the walls; the base is smooth by
-    construction, and unweighted passes roll the contact edge over until the first
-    layers overhang past 45° again. A straight chamfer is stationary under Taubin,
-    so only the corner at the plate needs pinning: the fade spans the couple of grid
-    cells the roll actually reaches.
+    Smoothing exists to iron ribbing out of the walls. Unweighted passes roll the
+    contact edge over until the first layers overhang past 45° again, so the vertical
+    component fades to nothing over the couple of grid cells the roll reaches. The
+    in-plane component stays at full strength all the way down: it is what cleans the
+    marching-cubes jitter off the bottom edge, and it cannot lift anything.
     """
     ramp = 2.0 * dz if params.base_radius > 0 else 0.0
-    weight = np.clip(mesh.vertices[:, 2] / ramp, 0.0, 1.0)[:, None] if ramp > 0 else np.float64(1.0)
+    weight: NDArray[np.float64] | np.float64
+    if ramp > 0:
+        vertical = np.clip(mesh.vertices[:, 2] / ramp, 0.0, 1.0)
+        ones = np.ones_like(vertical)
+        weight = np.column_stack([ones, ones, vertical])
+    else:
+        weight = np.float64(1.0)
     laplacian = trimesh.smoothing.laplacian_calculation(mesh)
     vertices = mesh.vertices.copy().view(np.ndarray)
     for index in range(params.smooth_iterations):

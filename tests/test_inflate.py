@@ -163,6 +163,21 @@ def test_without_puff_every_stroke_inflates_to_its_own_width(
     assert h[fat[1], fat[0]] == pytest.approx(30.0, rel=0.2)
 
 
+def test_inflate_scales_the_membrane(params: BubbleParams, rect: RectFactory) -> None:
+    """`--inflate` is the share of a full round tube, applied smoothly everywhere:
+    1.5 stands exactly three quarters as tall as 2.0 at every point."""
+    full = dataclasses.replace(params, puff_mm=None)
+    lean = dataclasses.replace(full, inflate=1.5)
+
+    h_full, _sd, raster = inflated([rect(12.0, 60.0)], full)
+    h_lean, _sd2, _raster2 = inflated([rect(12.0, 60.0)], lean)
+
+    mid = raster.to_pixel((6.0, 30.0))
+    edge = raster.to_pixel((2.0, 30.0))
+    for px, py in (mid, edge):
+        assert h_lean[py, px] == pytest.approx(0.75 * h_full[py, px], rel=0.01)
+
+
 def test_full_evenness_is_the_even_tube_at_the_letters_own_limit(
     params: BubbleParams, dumbbell: NDArray[np.float64]
 ) -> None:

@@ -88,16 +88,19 @@ def height_field(sd: Field, params: BubbleParams) -> tuple[Field, Field]:
     if natural.max() <= 0:
         return np.asarray(np.where(mask, 0.0, sd), dtype=np.float64), halfwidth
 
-    # the membrane alone stops at half the stroke width, so reaching a full round tube
-    # means stretching it - never further, or the letter stands taller than it is wide;
-    # without a puff the full tube itself is the target
-    cap = PUFF_SLACK * crest
-    amplitude = cap if params.puff_mm is None else np.minimum(params.puff_mm, cap)
-    if params.evenness > 0 and limit > 0:
+    # the membrane alone stops at half the stroke width, so `inflate` stretches it -
+    # at most to PUFF_SLACK, or the letter stands taller than it is wide
+    if params.puff_mm is None:
+        amplitude = params.inflate * crest
+        ref = limit * params.inflate / PUFF_SLACK
+    else:
+        amplitude = np.minimum(params.puff_mm, PUFF_SLACK * crest)
+        ref = limit
+    if params.evenness > 0 and ref > 0:
         # press the hills down towards the even tube, in log space so the order of
         # heights survives; never up, so thin strokes and accents keep their own height
-        tall = amplitude > limit
-        pressed = limit * (amplitude / limit) ** (1.0 - params.evenness)
+        tall = amplitude > ref
+        pressed = ref * (amplitude / ref) ** (1.0 - params.evenness)
         amplitude = np.where(tall, pressed, amplitude)
     h = amplitude * (natural / crest) ** (2.0 / params.fullness)
 
