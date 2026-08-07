@@ -12,6 +12,8 @@ it a string, get a printable mesh per character.
 bubblegen --font fonts/Nunito-Black.ttf --chars "ABC" --size 60 --puff 8
 ```
 
+![Bubble letters K, X, S and A in Bambu Studio, generated from Sniglet ExtraBold at 80 mm with a 22 mm puff](docs/slicer-preview.png)
+
 ## How it works
 
 ```
@@ -86,6 +88,11 @@ Two things decide that number: how fat the strokes are, and whether any one lett
 section the rest do not. Gluten Black draws the best single `A` of the six and still ends up
 last, because `Æ` joins its two halves with a hairline. Fonts with steady, generous strokes
 win.
+
+My personal pick is `Sniglet-ExtraBold`: it holds the thickest even tube of the six, its
+counters shrink to pinholes that read as truly inflated, and it is the face in the screenshot
+above and behind every letter in this repository - the whole Icelandic alphabet comes out at
+`--size 80 --puff 22` without a single warning.
 
 Any other TTF/OTF works. Variable fonts are read at their default location, which is usually a
 light weight - pin a heavy instance first (see `scripts/fetch_fonts.py`).
@@ -199,6 +206,7 @@ src/bubblegen/
   cli.py        argument parsing and logging
 scripts/
   fetch_fonts.py  downloads and pins the fonts used by `make fonts`
+docs/             screenshots for this README
 tests/            one module per source module
 ```
 
