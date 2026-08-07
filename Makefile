@@ -1,7 +1,10 @@
 .DEFAULT_GOAL := help
 UV ?= uv
 
-.PHONY: help sync fonts test cov lint fix check hooks run clean
+.PHONY: help sync fonts test cov lint fix check hooks run gen clean
+
+GEN_FONT ?= fonts/Sniglet-ExtraBold.ttf
+GEN_CHARS ?= AÁBCDÐEÉFGHIÍJKLMNOÓPQRSTUÚVWXYÝZÞÆÖ
 
 help: ## list available targets
 	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -35,6 +38,12 @@ hooks: ## install the pre-commit hooks
 
 run: ## generate letters, e.g. make run FONT=Inter.ttf CHARS=ABC
 	$(UV) run bubblegen --font $(FONT) --chars $(CHARS)
+
+$(GEN_FONT): ## fetched on demand: gen needs its font present
+	$(UV) run python scripts/fetch_fonts.py
+
+gen: $(GEN_FONT) ## the reference alphabet: Sniglet, Icelandic + English chars, default balloon parameters
+	$(UV) run bubblegen --font $(GEN_FONT) --chars "$(GEN_CHARS)"
 
 clean: ## remove caches, build artifacts and generated meshes
 	rm -rf .mypy_cache .ruff_cache .pytest_cache .coverage build dist out
