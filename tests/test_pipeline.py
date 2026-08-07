@@ -36,6 +36,7 @@ def test_bottom_is_a_flat_plate(font: Font, params: BubbleParams) -> None:
 
     assert len(bottom) > 0
     assert bottom[:, 2].max() == pytest.approx(0.0, abs=0.01)
+    assert params.puff_mm is not None
     assert 0.0 < letter.extents[2] <= params.puff_mm + 0.05
 
 
@@ -58,6 +59,19 @@ def test_a_puff_the_glyph_cannot_hold_is_reported(
         build_letter(font, "I", p)
 
     assert "narrowest section holds" in caplog.text
+
+
+def test_without_puff_nothing_is_reported_as_capped(
+    font: Font, params: BubbleParams, caplog: pytest.LogCaptureFixture
+) -> None:
+    """Full inflation has no cap to overshoot, so the neck warning must stay silent."""
+    p = dataclasses.replace(params, puff_mm=None)
+
+    with caplog.at_level("WARNING"):
+        letter = build_letter(font, "I", p)
+
+    assert letter.is_watertight
+    assert "narrowest section" not in caplog.text
 
 
 def test_decimation_meets_the_face_budget(font: Font) -> None:

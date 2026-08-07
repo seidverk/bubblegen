@@ -89,8 +89,10 @@ def height_field(sd: Field, params: BubbleParams) -> tuple[Field, Field]:
         return np.asarray(np.where(mask, 0.0, sd), dtype=np.float64), halfwidth
 
     # the membrane alone stops at half the stroke width, so reaching a full round tube
-    # means stretching it - never further, or the letter stands taller than it is wide
-    amplitude = np.minimum(params.puff_mm, PUFF_SLACK * crest)
+    # means stretching it - never further, or the letter stands taller than it is wide;
+    # without a puff the full tube itself is the target
+    cap = PUFF_SLACK * crest
+    amplitude = cap if params.puff_mm is None else np.minimum(params.puff_mm, cap)
     h = amplitude * (natural / crest) ** (2.0 / params.fullness)
 
     return np.asarray(np.where(mask, h, sd), dtype=np.float64), halfwidth

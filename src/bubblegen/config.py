@@ -27,6 +27,12 @@ MIN_FULLNESS = 2.0
 MAX_FULLNESS = 8.0
 """Below 2 the cross-section would dip below a semicircle and read as deflated."""
 
+BALLOON_ROUND_FACTOR = 0.175
+BALLOON_BASE_FACTOR = 0.225
+BALLOON_MARGIN_FACTOR = 0.75
+"""Size-relative stand-ins for the puff-derived radii and margin when `--puff` is not
+given: without a cap there is no single thickness to derive them from."""
+
 
 @dataclass(frozen=True, slots=True)
 class BubbleParams:
@@ -36,25 +42,30 @@ class BubbleParams:
     STLs drop straight into a slicer.
     """
 
-    size_mm: float = 60.0
+    size_mm: float = 80.0
     """Cap height. Every letter shares this scale, so an alphabet stays consistent."""
 
-    puff_mm: float = 7.0
-    """Thickness at the centre of a stroke.
+    puff_mm: float | None = None
+    """Even-tube thickness cap at the centre of a stroke.
 
-    An upper bound: each stroke is capped at its own width, past which the letter
-    would stand taller than it is wide. See PUFF_SLACK.
+    None inflates every stroke to a full round tube: the height follows the local
+    stroke width, as on a real balloon, and no plateau is clipped into the top. A
+    number caps the whole letter at one thickness; each stroke still stops at its
+    own width, past which the letter would stand taller than it is wide. See
+    PUFF_SLACK.
     """
 
     round_mm: float | None = None
-    """Silhouette rounding radius. Defaults to ROUND_FACTOR * puff."""
+    """Silhouette rounding radius. Defaults to ROUND_FACTOR * puff, or
+    BALLOON_ROUND_FACTOR * size without a puff."""
 
-    fullness: float = 4.0
-    """How inflated the cross-section looks. 2 is a plain semicircle; higher steepens
-    the flanks and broadens the top, which is what reads as a balloon."""
+    fullness: float = 2.0
+    """Cross-section exponent. 2 is a plain semicircle; higher steepens the flanks
+    and flattens the crown into a plateau."""
 
     base_round_mm: float | None = None
-    """Fillet radius under the letter. Defaults to BASE_ROUND_FACTOR * puff.
+    """Fillet radius under the letter. Defaults to BASE_ROUND_FACTOR * puff, or
+    BALLOON_BASE_FACTOR * size without a puff.
 
     The bottom stays flat and printable, but the outline curves down into it instead of
     meeting the plate at a right angle.
@@ -82,7 +93,8 @@ class BubbleParams:
 
     def __post_init__(self) -> None:
         self._require_positive("size_mm", self.size_mm)
-        self._require_positive("puff_mm", self.puff_mm)
+        if self.puff_mm is not None:
+            self._require_positive("puff_mm", self.puff_mm)
         self._require_positive("resolution", self.resolution)
         self._require_positive("bezier_steps", self.bezier_steps)
         if not MIN_FULLNESS <= self.fullness <= MAX_FULLNESS:
@@ -110,15 +122,23 @@ class BubbleParams:
 
     @property
     def round_radius(self) -> float:
-        return ROUND_FACTOR * self.puff_mm if self.round_mm is None else self.round_mm
+        if self.round_mm is not None:
+            return self.round_mm
+        if self.puff_mm is not None:
+            return ROUND_FACTOR * self.puff_mm
+        return BALLOON_ROUND_FACTOR * self.size_mm
 
     @property
     def base_radius(self) -> float:
         if self.base_round_mm is not None:
             return self.base_round_mm
-        return BASE_ROUND_FACTOR * self.puff_mm
+        if self.puff_mm is not None:
+            return BASE_ROUND_FACTOR * self.puff_mm
+        return BALLOON_BASE_FACTOR * self.size_mm
 
     @property
     def margin(self) -> float:
         """Blank border around the glyph so inflation and rounding never clip."""
-        return self.puff_mm * 1.5 + self.round_radius * 2.5 + 1.0
+        if self.puff_mm is not None:
+            return self.puff_mm * 1.5 + self.round_radius * 2.5 + 1.0
+        return BALLOON_MARGIN_FACTOR * self.size_mm + self.round_radius * 2.5 + 1.0

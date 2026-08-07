@@ -149,6 +149,20 @@ def test_concave_corners_do_not_grow_pimples(
     assert ndimage.label(at_full_height)[1] <= 2
 
 
+def test_without_puff_every_stroke_inflates_to_its_own_width(
+    params: BubbleParams, rect: RectFactory
+) -> None:
+    """No cap means a full round tube everywhere: the height follows the local stroke
+    width, as on a real balloon, and no plateau is clipped into the top."""
+    p = dataclasses.replace(params, puff_mm=None)
+    h, _sd, raster = inflated([rect(12.0, 60.0), rect(30.0, 60.0, x=20.0)], p)
+
+    thin = raster.to_pixel((6.0, 30.0))
+    fat = raster.to_pixel((35.0, 30.0))
+    assert h[thin[1], thin[0]] == pytest.approx(12.0, rel=0.2)
+    assert h[fat[1], fat[0]] == pytest.approx(30.0, rel=0.2)
+
+
 def test_puff_caps_the_thickness(params: BubbleParams, rect: RectFactory) -> None:
     p = dataclasses.replace(params, puff_mm=3.0)
     h, _sd, _raster = inflated([rect(40.0, 40.0)], p)

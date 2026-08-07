@@ -9,7 +9,7 @@ Everything is procedural. No manual sculpting, no per-letter fixes: point it at 
 it a string, get a printable mesh per character.
 
 ```
-bubblegen --font fonts/Nunito-Black.ttf --chars "ABC" --size 60 --puff 8
+bubblegen --font fonts/Sniglet-ExtraBold.ttf --chars "ABC"
 ```
 
 ![Bubble letters K, X, S and A in Bambu Studio, generated from Sniglet ExtraBold at 80 mm with a 22 mm puff](docs/slicer-preview.png)
@@ -23,7 +23,7 @@ glyph outline (fontTools)
   -> silhouette rounding         opening, backed off to keep counters and strokes
   -> membrane solve              laplace(u) = -1, clamped to the outline
   -> crest over the centre line  the height each section can hold
-  -> thickness                   one tube for the letter: --puff, --fullness
+  -> thickness                   full round tube, or one even tube: --puff, --fullness
   -> 3D scalar field             solid between the plate and h, filleted at the base
   -> marching cubes              scikit-image
   -> Taubin smoothing            volume-preserving, unlike Laplacian
@@ -36,10 +36,11 @@ outline says, and `sqrt(2u)` is the thickness. Because the solution is smooth ev
 there is no ridge down the centre line and no crease radiating from a corner, which is what
 any profile built from the distance to the outline gives you instead.
 
-That membrane follows the local stroke width, though, and a doughnut does not: its tube is one
-thickness however its outline wanders. So the height is measured against the crest the
-membrane reaches over the nearest centre line and then set to `--puff` everywhere, which is
-what keeps the thin waist of an `S` from being pinched into a groove.
+The membrane alone reaches half the stroke width, which reads as flattened, so by default it
+is stretched to a full round tube: every section stands as tall as it is wide, fat lobes
+swell higher than thin waists, and the top is round everywhere. Passing `--puff` caps the
+letter at one even thickness instead, like the tube of a doughnut - consistent across an
+alphabet, but any section wider than the cap gets its crown clipped into a plateau.
 
 ## Install
 
@@ -73,7 +74,8 @@ reduced rounding radius is logged, so you always know when the font is the limit
 
 `make fonts` fetches six SIL Open Font License faces into `fonts/` (gitignored). The last
 column is the thickest even tube the whole Icelandic alphabet holds at `--size 80`, measured
-per font: that is the `--puff` to use for a matching set.
+per font: that is the `--puff` to use if you want a matching even-thickness set instead of
+the default full inflation.
 
 | File | Coverage | Look | Even tube |
 | --- | --- | --- | --- |
@@ -90,9 +92,10 @@ last, because `Æ` joins its two halves with a hairline. Fonts with steady, gene
 win.
 
 My personal pick is `Sniglet-ExtraBold`: it holds the thickest even tube of the six, its
-counters shrink to pinholes that read as truly inflated, and it is the face in the screenshot
-above and behind every letter in this repository - the whole Icelandic alphabet comes out at
-`--size 80 --puff 22` without a single warning.
+counters shrink to pinholes that read as truly inflated, and it is the face behind every
+letter in this repository. The recommended parameters are simply the defaults - `--size 80`
+and no `--puff` - which inflate every stroke fully: the Icelandic alphabet comes out between
+33 mm (`B`) and 54 mm (`Æ`) thick, each letter as fat as its own strokes allow.
 
 Any other TTF/OTF works. Variable fonts are read at their default location, which is usually a
 light weight - pin a heavy instance first (see `scripts/fetch_fonts.py`).
@@ -100,15 +103,15 @@ light weight - pin a heavy instance first (see `scripts/fetch_fonts.py`).
 ## Usage
 
 ```fish
-# Icelandic alphabet, 60 mm tall
-uv run bubblegen --font fonts/Nunito-Black.ttf --chars "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ"
+# Icelandic alphabet, 80 mm tall, fully inflated
+uv run bubblegen --font fonts/Sniglet-ExtraBold.ttf --chars "AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ"
 
-# a name for the wall, doughnut-fat: 18 mm is the most this font holds evenly at 80 mm
+# a name for the wall with one even thickness: 18 mm is the most this font holds at 80 mm
 uv run bubblegen --font fonts/TitanOne-Regular.ttf --chars "IGOR" --size 80 --puff 18
 
 # fast preview, then final quality
-uv run bubblegen --font fonts/Nunito-Black.ttf --chars "A" --res 3 --zsteps 32 --smooth 0
-uv run bubblegen --font fonts/Nunito-Black.ttf --chars "A" --res 8 --zsteps 96 --faces 80000
+uv run bubblegen --font fonts/Sniglet-ExtraBold.ttf --chars "A" --res 3 --zsteps 32 --smooth 0
+uv run bubblegen --font fonts/Sniglet-ExtraBold.ttf --chars "A" --res 8 --zsteps 96 --faces 80000
 ```
 
 Output lands in `--out` (default `out/`) as `bubble_A.stl`. Characters outside `[A-Za-z0-9]`
@@ -121,11 +124,11 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--font` | required | Path to a `.ttf` or `.otf` |
 | `--chars` | required | Characters to generate, e.g. `"ABCÞÐÆ"` |
 | `--out` | `out` | Output directory |
-| `--size` | `60` | Cap height in mm; shared by every letter so an alphabet stays consistent |
-| `--puff` | `7` | Thickness at the centre of a stroke in mm, dome included. An upper bound: capped per letter at the stroke half-width |
-| `--round` | `0.45*puff` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
-| `--fullness` | `4` | How inflated the cross-section looks. `2` is a plain semicircle; higher steepens the flanks and broadens the top |
-| `--base-round` | `0.5*puff` | Fillet radius under the letter, an upper bound: capped per spot at the local stroke half-width so thin sections keep their footing. Half the thickness makes the cross-section fully round, like the tube of a doughnut; `0` gives a square wall |
+| `--size` | `80` | Cap height in mm; shared by every letter so an alphabet stays consistent |
+| `--puff` | none | Even tube thickness in mm, dome included. Omitted, every stroke inflates to its own width - fat lobes swell higher than thin waists. Given, the whole letter is capped at one thickness, and any section wider than the cap gets a flat crown |
+| `--round` | `0.45*puff`, or `0.175*size` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
+| `--fullness` | `2` | Cross-section exponent. `2` is a plain semicircle; higher steepens the flanks and flattens the crown |
+| `--base-round` | `0.5*puff`, or `0.225*size` | Fillet radius under the letter, an upper bound: capped per spot at the local stroke half-width so thin sections keep their footing. Half the thickness makes the cross-section fully round, like the tube of a doughnut; `0` gives a square wall |
 | `--res` | `5` | Raster pixels per mm. Cost grows quadratically |
 | `--zsteps` | `64` | Vertical samples for marching cubes |
 | `--smooth` | `40` | Taubin smoothing passes. Marching cubes corrugates a steep flank and the shading turns that into ribbing along the wall; this irons it out at about half a percent of volume |
@@ -141,12 +144,13 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 - "--round 5.4 mm would deform the glyph, using 3.8 mm": the radius would have filled a
   counter or eaten a stroke, so it was reduced for that letter. Set `--round` explicitly to
   silence it.
-- Letters look flattened: raise `--puff` until the log stops telling you the narrowest
-  section holds less. `--fullness` towards 6 steepens the flanks on top of that.
+- Letters look flattened, or a flat plateau sits on top of the wide parts: that is `--puff`
+  clipping sections wider than the cap. Raise it, or drop it entirely for full inflation.
 - A notch across the thin part of an `O`, `G` or `S`: `--puff` is past what that section can
   hold, so the wide parts went higher and it did not. The warning prints the value that comes
-  out even; below it the tube is one thickness all the way round.
-- Letters look like slabs: lower `--fullness` towards 2 for a plain pillow.
+  out even; below it the tube is one thickness all the way round. Without `--puff` the same
+  variation is everywhere by design: height follows stroke width, like a balloon.
+- Letters look like slabs: lower `--fullness` towards 2 for a round crown.
 - Fonts with steady stroke widths (Nunito Black, Lilita One) take a thicker even tube than
   fonts that swell and taper (TitanOne's `O` is 33 mm at the sides and 14 mm at the top).
 - Ribbing along the walls: raise `--smooth`. It is marching-cubes corrugation on the steep
@@ -181,8 +185,8 @@ from pathlib import Path
 
 from bubblegen import BubbleParams, Font, build_alphabet, export_stl
 
-font = Font.load("fonts/Nunito-Black.ttf")
-params = BubbleParams(size_mm=40, puff_mm=5, fullness=5.0, base_round_mm=1.5)
+font = Font.load("fonts/Sniglet-ExtraBold.ttf")
+params = BubbleParams(size_mm=40, base_round_mm=1.5)  # no puff_mm: full inflation
 
 for letter in build_alphabet(font, "IGOR", params):
     print(letter.char, letter.extents, letter.is_watertight)

@@ -86,6 +86,20 @@ def test_mesh_is_watertight_and_sits_on_the_plate(
     assert extents[1] == pytest.approx(10.0, abs=0.8)
 
 
+def test_mesh_z_range_follows_the_field_not_the_puff(
+    params: BubbleParams, square: SquareFactory
+) -> None:
+    """The z grid must span the actual field: an uncapped letter has no numeric puff
+    to size it from, and a capped one wastes layers above its peak."""
+    p = dataclasses.replace(params, puff_mm=None)
+    height, sd, raster, crest = puffed_square(square, p)
+
+    mesh = build_mesh(height, sd, raster, p, crest)
+
+    assert mesh.is_watertight
+    assert mesh.bounds[1][2] == pytest.approx(height.max(), abs=0.8)
+
+
 def test_the_underside_is_filleted_into_a_smaller_flat_patch(
     params: BubbleParams, square: SquareFactory
 ) -> None:

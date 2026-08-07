@@ -40,26 +40,26 @@ def build_parser() -> argparse.ArgumentParser:
         "--puff",
         type=float,
         default=defaults.puff_mm,
-        help="thickness in mm, capped per letter at the stroke half-width",
+        help="even tube thickness in mm; omit to inflate every stroke to its own width",
     )
     shape.add_argument(
         "--round",
         dest="round_r",
         type=float,
         default=None,
-        help="max silhouette rounding radius in mm [default: 0.45*puff]",
+        help="max silhouette rounding radius in mm [default: 0.45*puff, or 0.175*size]",
     )
     shape.add_argument(
         "--fullness",
         type=float,
         default=defaults.fullness,
-        help="how inflated the cross-section is: 2 is a semicircle, 8 is a fat balloon",
+        help="cross-section exponent: 2 is a semicircle, higher flattens the crown",
     )
     shape.add_argument(
         "--base-round",
         type=float,
         default=None,
-        help="underside fillet radius in mm [default: 0.25*puff]",
+        help="underside fillet radius in mm [default: 0.5*puff, or 0.225*size]",
     )
 
     quality = parser.add_argument_group("quality and cost")

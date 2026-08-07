@@ -77,6 +77,8 @@ def _rounded(raster: Raster, char: str, params: BubbleParams) -> Raster:
 
 def _report_puff_cap(sd: Field, char: str, params: BubbleParams) -> None:
     """Say so when the glyph, not `--puff`, is what sets the thickness."""
+    if params.puff_mm is None:
+        return
     limit = uniform_limit(sd, params)
     if params.puff_mm > limit * NECK_TOLERANCE:
         logger.warning(

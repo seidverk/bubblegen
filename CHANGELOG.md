@@ -4,6 +4,24 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-08-07
+
+### Changed
+
+- Full inflation is the default. `--puff` is now optional: omitted, every stroke inflates
+  to a full round tube whose height follows the local stroke width, like a balloon. The
+  old behaviour - one even thickness with wide sections clipped flat at the cap - remains
+  available by passing `--puff N`. The clipping was why wide letters printed with a flat
+  plateau on top: at `--size 80` a Sniglet lobe holds a 37 mm tube, and any smaller cap
+  levelled its whole crest into a plain.
+- Default `--fullness` is 2 (a semicircular cross-section) instead of 4; higher values
+  steepen the flanks but flatten the crown, they do not make the letter rounder.
+- Default `--size` is 80 mm.
+- Without `--puff` the rounding radius, base fillet and raster margin derive from
+  `--size` (0.175, 0.225 and 0.75 of it) instead of the thickness cap.
+- The marching-cubes z grid spans the actual peak of the height field instead of
+  `--puff`, so vertical resolution no longer depends on how the thickness was specified.
+
 ## [0.10.0] - 2026-08-07
 
 ### Fixed

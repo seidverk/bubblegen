@@ -39,7 +39,11 @@ Z_HEADROOM = 1.15
 """Slack above the tallest point, so the isosurface closes instead of being clipped."""
 
 PLATE_DEPTH = 0.6
-"""How far below the plate the grid extends, so the flat bottom closes cleanly."""
+"""How far below the plate the grid extends, as a share of the peak height, so the
+flat bottom closes cleanly."""
+
+MIN_PEAK_MM = 0.1
+"""Keeps the z grid non-degenerate on a glyph that inflates to nothing."""
 
 
 def build_mesh(
@@ -57,8 +61,9 @@ def build_mesh(
     is capped at the local stroke half-width, so no stroke is eroded off the plate.
     """
     px_mm = raster.px_per_mm
-    z1 = params.puff_mm * Z_HEADROOM
-    z0 = -PLATE_DEPTH * params.puff_mm
+    peak = max(float(height.max()), MIN_PEAK_MM)
+    z1 = peak * Z_HEADROOM
+    z0 = -PLATE_DEPTH * peak
 
     zs = np.linspace(z0, z1, params.z_steps)
     dz = float(zs[1] - zs[0])
