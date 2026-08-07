@@ -38,7 +38,7 @@ any profile built from the distance to the outline gives you instead.
 
 The membrane alone reaches half the stroke width, which reads as flattened, so `--inflate`
 stretches it - smoothly, everywhere at once, so the result stays as seamless as the membrane
-itself. `2` is a full round tube, as tall as the stroke is wide; the default `1.5` is the
+itself. `2` is a full round tube, as tall as the stroke is wide; the default `1.4` is the
 balloon look: clearly inflated, never bulbous, fat lobes swelling gently above thin waists.
 `--evenness` can press those swells towards one thickness, and `--puff` caps the letter at
 one even thickness outright, like the tube of a doughnut - consistent across an alphabet,
@@ -96,8 +96,8 @@ win.
 My personal pick is `Sniglet-ExtraBold`: it holds the thickest even tube of the six, its
 counters shrink to pinholes that read as truly inflated, and it is the face behind every
 letter in this repository. The recommended parameters are simply the defaults - `--size 100`
-and no `--puff` - the balloon look: the Icelandic alphabet comes out between 31 mm (`B`)
-and 51 mm (`Æ`) thick, each letter as fat as its own strokes carry it.
+and no `--puff` - the balloon look: the Icelandic alphabet comes out between 29 mm (`B`)
+and 47 mm (`Æ`) thick, each letter as fat as its own strokes carry it.
 
 Any other TTF/OTF works. Variable fonts are read at their default location, which is usually a
 light weight - pin a heavy instance first (see `scripts/fetch_fonts.py`).
@@ -127,7 +127,7 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--chars` | required | Characters to generate, e.g. `"ABCÞÐÆ"` |
 | `--out` | `out` | Output directory |
 | `--size` | `100` | Cap height in mm; shared by every letter so an alphabet stays consistent |
-| `--inflate` | `1.5` | How hard the membrane is blown up, as a share of a full round tube. `2` stands as tall as the stroke is wide (a doughnut); `1` is the bare membrane at half that. Scales the letter smoothly, so it never creases |
+| `--inflate` | `1.4` | How hard the membrane is blown up, as a share of a full round tube. `2` stands as tall as the stroke is wide (a doughnut); `1` is the bare membrane at half that. Scales the letter smoothly, so it never creases |
 | `--puff` | none | Even tube thickness in mm, dome included. Omitted, thickness follows the local stroke width scaled by `--inflate`. Given, the whole letter is capped at one thickness, and any section wider than the cap gets a flat crown |
 | `--round` | `0.45*puff`, or `0.175*size` | Silhouette rounding radius, an upper bound. Rounds outer tips only, never fills a gap, and is backed off per letter so counters and thin strokes survive |
 | `--fullness` | `2` | Cross-section exponent. `2` is a plain semicircle; higher steepens the flanks and flattens the crown |
@@ -158,7 +158,7 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 - Hills roll along a letter, an `S` bobbing up and down: inflation follows a face whose
   strokes swell and taper. Lower `--inflate` first - it scales the hills down with the
   letter and never creases; `--evenness` towards 1 presses them flat if that is not enough.
-- The whole letter is too fat or too thin: tune `--inflate`. `1.5` is the balloon look,
+- The whole letter is too fat or too thin: tune `--inflate`. `1.4` is the balloon look,
   `2` a full doughnut tube, towards `1` a shallow pillow.
 - Fonts with steady stroke widths (Nunito Black, Lilita One) take a thicker even tube than
   fonts that swell and taper (TitanOne's `O` is 33 mm at the sides and 14 mm at the top).

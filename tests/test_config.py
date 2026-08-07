@@ -11,7 +11,7 @@ def test_defaults_are_the_reference_balloon() -> None:
     assert p.fullness == 2.0
     assert p.size_mm == 100.0
     assert p.evenness == 0.0
-    assert p.inflate == 1.5
+    assert p.inflate == 1.4
 
 
 def test_radii_derive_from_size_without_puff() -> None:

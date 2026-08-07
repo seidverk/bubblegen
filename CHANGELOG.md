@@ -8,8 +8,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- `--inflate` (default 1.5): how hard the membrane is blown up, as a share of a full
-  round tube. `2` stands as tall as the stroke is wide; `1.5` is the reference balloon
+- `--inflate` (default 1.4): how hard the membrane is blown up, as a share of a full
+  round tube. `2` stands as tall as the stroke is wide; `1.4` is the reference balloon
   look - clearly inflated, never bulbous. It scales the whole letter smoothly, so
   unlike a clamp or a compression it can never crease the surface.
 - `--evenness` (default 0): presses the hills of inflation partway towards one even

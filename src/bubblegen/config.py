@@ -72,11 +72,11 @@ class BubbleParams:
     only ever lowers, and its boundary can read as a crease, so prefer a lower
     `inflate` when the letter merely looks too fat."""
 
-    inflate: float = 1.5
+    inflate: float = 1.4
     """How hard the membrane is blown up when `--puff` is not given.
 
     The share of a full round tube: 2 stands as tall as the stroke is wide (a
-    doughnut), 1 is the bare membrane at half that. 1.5 is the reference balloon:
+    doughnut), 1 is the bare membrane at half that. 1.4 is the reference balloon:
     clearly inflated, never bulbous. Scales the whole letter smoothly, so hills
     shrink with it."""
 
