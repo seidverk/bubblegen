@@ -119,9 +119,7 @@ def test_smoothing_cleans_the_base_edge_without_lifting_it(
     plane of the plate while never lifting the flat bottom off it."""
     p = dataclasses.replace(params, base_round_mm=1.5, smooth_iterations=40)
     angle = np.radians(30.0)
-    spin = np.array(
-        [[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]
-    )
+    spin = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
     tilted = square(10.0) @ spin.T  # diagonal edges: the base staircase worst case
     raster = rasterize([tilted], p)
     sd = signed_distance(raster.mask, p.resolution)

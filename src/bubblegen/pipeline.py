@@ -14,12 +14,14 @@ from bubblegen.errors import BubbleGenError
 from bubblegen.inflate import height_field, uniform_limit
 from bubblegen.mesh import build_mesh
 from bubblegen.raster import Field, Raster, rasterize, round_silhouette, signed_distance
+from bubblegen.tweaks import apply_tweaks
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator
 
     from bubblegen.config import BubbleParams
     from bubblegen.fonts import Font
+    from bubblegen.tweaks import Tweaks
 
 logger = logging.getLogger(__name__)
 
@@ -91,9 +93,14 @@ def _report_puff_cap(sd: Field, char: str, params: BubbleParams) -> None:
         )
 
 
-def build_letter(font: Font, char: str, params: BubbleParams) -> LetterMesh:
+def build_letter(
+    font: Font, char: str, params: BubbleParams, tweaks: Tweaks | None = None
+) -> LetterMesh:
     """Run the whole pipeline for one character."""
     contours = font.contours_mm(char, params.size_mm, params.bezier_steps)
+    ops = tweaks.get(char) if tweaks else None
+    if ops:
+        contours = apply_tweaks(contours, ops)
 
     raster = _rounded(rasterize(contours, params), char, params)
     sd = signed_distance(raster.mask, params.resolution)
@@ -106,13 +113,15 @@ def build_letter(font: Font, char: str, params: BubbleParams) -> LetterMesh:
     return LetterMesh(char=char, mesh=mesh)
 
 
-def build_alphabet(font: Font, chars: Iterable[str], params: BubbleParams) -> Iterator[LetterMesh]:
+def build_alphabet(
+    font: Font, chars: Iterable[str], params: BubbleParams, tweaks: Tweaks | None = None
+) -> Iterator[LetterMesh]:
     """Build every character, skipping whitespace and glyphs the font cannot supply."""
     for char in chars:
         if char.isspace():
             continue
         try:
-            yield build_letter(font, char, params)
+            yield build_letter(font, char, params, tweaks)
         except BubbleGenError as exc:
             logger.warning("skip %r: %s", char, exc)
 

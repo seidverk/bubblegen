@@ -181,3 +181,6 @@ out/
 
 # downloaded fonts (see make fonts)
 fonts/
+
+.DS_store
+

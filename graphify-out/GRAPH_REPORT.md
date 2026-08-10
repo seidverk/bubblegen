@@ -1,16 +1,16 @@
-# Graph Report - bubblegen  (2026-08-07)
+# Graph Report - bubblegen  (2026-08-10)
 
 ## Corpus Check
-- 25 files · ~50,020 words
+- 27 files · ~54,075 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 383 nodes · 772 edges · 24 communities (10 shown, 14 thin omitted)
-- Extraction: 81% EXTRACTED · 19% INFERRED · 0% AMBIGUOUS · INFERRED: 149 edges (avg confidence: 0.78)
+- 470 nodes · 996 edges · 26 communities (12 shown, 14 thin omitted)
+- Extraction: 80% EXTRACTED · 20% INFERRED · 0% AMBIGUOUS · INFERRED: 196 edges (avg confidence: 0.78)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f306795b`
+- Built from commit: `c36ec3b9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,6 +21,8 @@
 - [[_COMMUNITY_Community 3|Community 3]]
 - [[_COMMUNITY_Community 4|Community 4]]
 - [[_COMMUNITY_Community 5|Community 5]]
+- [[_COMMUNITY_Community 6|Community 6]]
+- [[_COMMUNITY_Community 7|Community 7]]
 - [[_COMMUNITY_Community 8|Community 8]]
 - [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
@@ -33,7 +35,7 @@
 - [[_COMMUNITY_Community 17|Community 17]]
 - [[_COMMUNITY_Community 18|Community 18]]
 - [[_COMMUNITY_Community 19|Community 19]]
-- [[_COMMUNITY_Community 25|Community 25]]
+- [[_COMMUNITY_Community 20|Community 20]]
 - [[_COMMUNITY_Community 26|Community 26]]
 - [[_COMMUNITY_Community 27|Community 27]]
 - [[_COMMUNITY_Community 28|Community 28]]
@@ -41,15 +43,15 @@
 - [[_COMMUNITY_Community 30|Community 30]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `BubbleParams` - 75 edges
-2. `Font` - 30 edges
-3. `rasterize()` - 29 edges
-4. `build_letter()` - 25 edges
-5. `build_mesh()` - 22 edges
-6. `inflated()` - 20 edges
-7. `rect()` - 17 edges
-8. `height_field()` - 16 edges
-9. `puffed_square()` - 16 edges
+1. `BubbleParams` - 78 edges
+2. `Font` - 31 edges
+3. `rasterize()` - 30 edges
+4. `build_letter()` - 28 edges
+5. `build_mesh()` - 23 edges
+6. `inflated()` - 21 edges
+7. `apply_tweaks()` - 20 edges
+8. `rect()` - 18 edges
+9. `height_field()` - 17 edges
 10. `FlattenPen` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -57,7 +59,7 @@
   tests/test_cli.py → src/bubblegen/cli.py
 - `test_base_radius_defaults_to_a_fraction_of_puff()` --calls--> `BubbleParams`  [INFERRED]
   tests/test_config.py → src/bubblegen/config.py
-- `test_defaults_are_full_inflation()` --calls--> `BubbleParams`  [INFERRED]
+- `test_defaults_are_the_reference_balloon()` --calls--> `BubbleParams`  [INFERRED]
   tests/test_config.py → src/bubblegen/config.py
 - `test_explicit_base_round_wins()` --calls--> `BubbleParams`  [INFERRED]
   tests/test_config.py → src/bubblegen/config.py
@@ -67,11 +69,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (24 total, 14 thin omitted)
+## Communities (26 total, 14 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.05
-Nodes (59): LogCaptureFixture, BubbleParams, All tunables in one immutable, validated object., Blank border around the glyph so inflation and rounding never clip., Geometry and sampling parameters for one batch of letters.      Distances are mi, build_alphabet(), build_letter(), export_stl() (+51 more)
+Cohesion: 0.06
+Nodes (49): LogCaptureFixture, BubbleParams, Blank border around the glyph so inflation and rounding never clip., Geometry and sampling parameters for one batch of letters.      Distances are mi, build_alphabet(), build_letter(), LetterMesh, Field (+41 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.10
@@ -79,23 +81,31 @@ Nodes (38): SquareFactory, Axis-aligned square contour in mm, counter-clockwise.
 
 ### Community 2 - "Community 2"
 Cohesion: 0.11
-Nodes (43): height_field(), Thickness h(x, y) and the geometric half-width map, both in mm.      `puff` is h, RectFactory, Axis-aligned rectangle contour in mm: a stroke of a given width., rect(), inflated(), float64, NDArray (+35 more)
+Nodes (45): height_field(), Thickness h(x, y) and the geometric half-width map, both in mm.      `puff` is h, RectFactory, Axis-aligned rectangle contour in mm: a stroke of a given width., rect(), inflated(), float64, NDArray (+37 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.16
-Nodes (12): ArgumentParser, CaptureFixture, Namespace, build_parser(), _configure_logging(), main(), params_from_args(), Command line entry point. (+4 more)
+Cohesion: 0.15
+Nodes (18): ArgumentParser, CaptureFixture, Namespace, build_parser(), _configure_logging(), main(), params_from_args(), Command line entry point. (+10 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.16
 Nodes (18): dumbbell(), elbow(), fat_elbow(), font(), font_path(), notched(), params(), float64 (+10 more)
 
 ### Community 5 - "Community 5"
+Cohesion: 0.13
+Nodes (33): Prepared, build_mesh(), Marching-cubes the height field, then clean, smooth and decimate it.      The re, base_ring_roughness(), contact_patch(), outward_step(), puffed_square(), float64 (+25 more)
+
+### Community 6 - "Community 6"
+Cohesion: 0.06
+Nodes (70): Op, The per-letter tweaks file is missing, malformed, or invalid., TweaksError, apply_tweaks(), _band_weight(), _BandOp, _cut(), DeepenOp (+62 more)
+
+### Community 7 - "Community 7"
 Cohesion: 0.08
-Nodes (47): Prepared, _base_inset(), build_mesh(), _decimate(), _drop_degenerate_faces(), float64, NDArray, Trimesh (+39 more)
+Nodes (29): All tunables in one immutable, validated object., Parametric inflated 3D bubble letters from any TTF/OTF font., _base_inset(), _decimate(), _drop_degenerate_faces(), float64, NDArray, Trimesh (+21 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.15
-Nodes (12): bubblegen, Development, Fonts, How it works, Install, Layout, Library use, License (+4 more)
+Cohesion: 0.14
+Nodes (13): bubblegen, Development, Fonts, How it works, Install, Layout, Library use, License (+5 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.05
@@ -107,27 +117,27 @@ Nodes (21): _cone_floor(), _crest_line(), _half_width(), _largest_piece(), _memb
 
 ### Community 16 - "Community 16"
 Cohesion: 0.06
-Nodes (21): Any, BasePen, Exception, TTFont, download(), main(), pin_instance(), BubbleGenError (+13 more)
+Nodes (21): BasePen, Exception, BubbleGenError, EmptyGlyphError, FontError, GlyphNotFoundError, Exception hierarchy: every expected failure is a `BubbleGenError`., Font file missing, unreadable, or not a font. (+13 more)
 
 ## Knowledge Gaps
-- **38 isolated node(s):** `bubblegen`, `Added`, `Fixed`, `Changed`, `Fixed` (+33 more)
+- **39 isolated node(s):** `bubblegen`, `Added`, `Fixed`, `Changed`, `Fixed` (+34 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `BubbleParams` connect `Community 0` to `Community 2`, `Community 3`, `Community 4`, `Community 5`, `Community 12`?**
-  _High betweenness centrality (0.244) - this node is a cross-community bridge._
-- **Why does `Font` connect `Community 0` to `Community 16`?**
-  _High betweenness centrality (0.100) - this node is a cross-community bridge._
-- **Why does `rasterize()` connect `Community 1` to `Community 0`, `Community 2`, `Community 5`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
+- **Why does `BubbleParams` connect `Community 0` to `Community 2`, `Community 3`, `Community 4`, `Community 5`, `Community 7`, `Community 12`?**
+  _High betweenness centrality (0.214) - this node is a cross-community bridge._
+- **Why does `build_letter()` connect `Community 0` to `Community 1`, `Community 2`, `Community 5`, `Community 6`, `Community 7`?**
+  _High betweenness centrality (0.102) - this node is a cross-community bridge._
+- **Why does `apply_tweaks()` connect `Community 6` to `Community 0`?**
+  _High betweenness centrality (0.069) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `BubbleParams` (e.g. with `LetterMesh` and `test_base_radius_defaults_to_a_fraction_of_puff()`) actually correct?**
   _`BubbleParams` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 4 inferred relationships involving `Font` (e.g. with `LetterMesh` and `EmptyGlyphError`) actually correct?**
   _`Font` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 26 inferred relationships involving `rasterize()` (e.g. with `build_letter()` and `inflated()`) actually correct?**
-  _`rasterize()` has 26 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 17 inferred relationships involving `build_letter()` (e.g. with `height_field()` and `build_mesh()`) actually correct?**
-  _`build_letter()` has 17 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 27 inferred relationships involving `rasterize()` (e.g. with `build_letter()` and `inflated()`) actually correct?**
+  _`rasterize()` has 27 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 19 inferred relationships involving `build_letter()` (e.g. with `height_field()` and `build_mesh()`) actually correct?**
+  _`build_letter()` has 19 INFERRED edges - model-reasoned connections that need verification._

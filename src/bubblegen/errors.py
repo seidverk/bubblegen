@@ -17,3 +17,7 @@ class GlyphNotFoundError(BubbleGenError):
 
 class EmptyGlyphError(BubbleGenError):
     """The glyph exists but has no outline (space, control character)."""
+
+
+class TweaksError(BubbleGenError):
+    """The per-letter tweaks file is missing, malformed, or invalid."""

@@ -93,6 +93,15 @@ section the rest do not. Gluten Black draws the best single `A` of the six and s
 last, because `Æ` joins its two halves with a hairline. Fonts with steady, generous strokes
 win.
 
+A thick even tube is not the same as a good bubble letter, though. What decides the balloon
+look is the silhouette of the letter you actually care about, and the six faces differ wildly:
+in Sniglet's `E` the spine takes 73% of the width and the arms barely clear it, Modak and
+Titan One sit around 90% and the notches close entirely, Nunito Black at 35% reads as three
+thin arms on a stem, and Gluten Black at 67% keeps a plump rounded outline with all three
+notches cut open - the classic balloon shape. Draw the outlines before choosing: a face that
+wins on tube thickness can lose badly on shape, and no amount of `--tweaks` rescues a glyph
+whose proportions are wrong to begin with.
+
 My personal pick is `Sniglet-ExtraBold`: it holds the thickest even tube of the six, its
 counters shrink to pinholes that read as truly inflated, and it is the face behind every
 letter in this repository. The recommended parameters are simply the defaults - `--size 100`
@@ -126,6 +135,7 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--font` | required | Path to a `.ttf` or `.otf` |
 | `--chars` | required | Characters to generate, e.g. `"ABCÞÐÆ"` |
 | `--out` | `out` | Output directory |
+| `--tweaks` | none | TOML file with per-letter silhouette stretches, applied before inflation |
 | `--size` | `100` | Cap height in mm; shared by every letter so an alphabet stays consistent |
 | `--inflate` | `1.4` | How hard the membrane is blown up, as a share of a full round tube. `2` stands as tall as the stroke is wide (a doughnut); `1` is the bare membrane at half that. Scales the letter smoothly, so it never creases |
 | `--puff` | none | Even tube thickness in mm, dome included. Omitted, thickness follows the local stroke width scaled by `--inflate`. Given, the whole letter is capped at one thickness, and any section wider than the cap gets a flat crown |
@@ -139,6 +149,62 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
 | `--faces` | `40000` | Triangle target after decimation. `0` keeps the dense mesh |
 | `--bezier-steps` | `24` | Line segments per bezier when flattening the outline |
 | `-v` / `-q` | | More or less logging |
+
+### Per-letter tweaks
+
+A font fixes every glyph's proportions, and sometimes one letter wants one part different -
+E's middle arm, a lower leg. `--tweaks` takes a TOML file that reshapes part of a glyph's
+outline before inflation, so the rest of the pipeline never sees a seam:
+
+```toml
+[E]
+[[E.deepen]]
+band = [0.34, 0.42]   # a notch band, as fractions of the glyph's height
+beyond = 0.24         # how much spine to leave untouched, as a fraction of the width
+dx = 8.0              # how far the notch floor moves toward the spine, in mm
+feather = 5.0
+
+[[E.thicken]]
+band = [0.42, 0.56]   # which slice of the height widens, as fractions of the glyph's bbox
+beyond = 0.34         # only past this fraction of the width, so the spine stays put
+dy = 6.0              # how far each edge of the band moves outward, in mm
+feather = 4.0         # softening of the band edges in mm
+
+[[E.stretch]]
+band = [0.42, 0.56]
+beyond = 0.4          # pull starts at this fraction of the width, from the anchor side
+dx = 16.0             # pull distance in mm; use dy to pull vertically
+feather = 4.0
+```
+
+`deepen` cuts a notch further into the letter, `thicken` pushes a band's two edges apart
+symmetrically so the letter keeps its height, and `stretch` pulls an extremity outward.
+They always run in that order whatever order the file lists them in, so each one works on
+the shape the previous one left.
+
+Which one you want depends on what looks wrong. `thicken` is for a part that looks flat:
+inflation follows the local stroke width, so a thin arm stands lower than its neighbours
+however hard the letter is blown up. `deepen` is for a letter that reads as a blob with
+dents - in Sniglet's `E` the notches only cut through the last quarter of the width, so the
+arms are stubs on a 58 mm spine and stretching them alone just makes the letter wider.
+Deepening trades spine for arm and, unlike a stretch, leaves the arm tips where they are:
+the effect is windowed to end at the notch floor.
+
+The delta's sign picks the side: positive `dx` pulls the right edge right, negative `dy`
+pulls the bottom edge down. Points between the anchor side and `beyond` stay put, the rest
+move proportionally, so the extremity travels the full delta and the outline never folds.
+Several `[[X.stretch]]` blocks apply in order, each seeing the previous result.
+
+`band` and `feather` together decide what moves, and `feather` is in millimetres while
+`band` is in fractions: a band that fits between two arms can still have its feather reach
+into the neighbour and drag its edge sideways, which shows up as a bump on a part you never
+meant to touch. Measure the gap first and keep the feather under it - Sniglet's `E` has its
+arms at 0.02-0.34, 0.42-0.56 and 0.65-0.98 of the glyph height, so a 9 mm gap on either
+side of the middle arm takes a feather of 4 mm and no more.
+
+A stretch also needs a small `--round`: rounding is an opening, and the default radius
+erodes a thin stretched arm straight back to where it started. Dropping it leaves the
+strokes fatter than before, which inflates higher, so trim `--inflate` to match.
 
 ### Tuning notes
 
@@ -171,6 +237,12 @@ are named by code point: `Þ` becomes `bubble_U00DE.stl`.
   the apertures of `S`, `C` and `G` stay open no matter how large it gets.
 - Facets or steps visible on the surface: raise `--res` and `--zsteps` before raising
   `--smooth`; smoothing cannot add detail that was never sampled.
+- A pinhole through the letter, or a slicer complaining about a hole in an otherwise
+  watertight mesh: a glyph whose notch ends in a sharp wedge brings the two sides of the
+  outline within a pixel of each other, and even-odd filling leaves a speck of background
+  behind. Sniglet's `E` does this at the default `--res 5` and comes out clean at `8`.
+  Note that a mesh with such a hole still reports `watertight=True` - it is a torus, not an
+  open surface - so raise `--res` whenever a letter has wedge-shaped notches.
 - `--faces` is a target, not a cap. Each candidate is measured against the surface it should
   follow and rejected if decimation adds more than 0.15 mm of error, so letters with straight
   strokes keep more triangles than you asked for. Lower `--res` if you need smaller files.

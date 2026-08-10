@@ -9,6 +9,7 @@ import pytest
 from bubblegen.config import BubbleParams
 from bubblegen.fonts import Font
 from bubblegen.pipeline import build_alphabet, build_letter, export_stl, slug
+from bubblegen.tweaks import StretchOp
 
 
 def test_letter_is_watertight_and_grounded(font: Font, params: BubbleParams) -> None:
@@ -167,3 +168,14 @@ def test_export_writes_an_stl(font: Font, params: BubbleParams, tmp_path: Path) 
 )
 def test_slug(char: str, expected: str) -> None:
     assert slug(char) == expected
+
+
+def test_a_tweak_stretches_only_its_own_letter(font: Font, params: BubbleParams) -> None:
+    tweaks = {"I": (StretchOp(band=(0.0, 1.0), beyond=0.5, dx=4.0, feather=1.0),)}
+
+    plain = build_letter(font, "I", params)
+    tweaked = build_letter(font, "I", params, tweaks=tweaks)
+    untouched = build_letter(font, "H", params, tweaks=tweaks)
+
+    assert tweaked.extents[0] - plain.extents[0] == pytest.approx(4.0, abs=1.0)
+    assert untouched.extents[0] == pytest.approx(build_letter(font, "H", params).extents[0])

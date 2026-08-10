@@ -12,6 +12,7 @@ from bubblegen.config import BubbleParams
 from bubblegen.errors import BubbleGenError
 from bubblegen.fonts import Font
 from bubblegen.pipeline import build_alphabet, export_stl
+from bubblegen.tweaks import load_tweaks
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -33,6 +34,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--font", required=True, type=Path, help="path to a .ttf or .otf")
     parser.add_argument("--chars", required=True, help='characters, e.g. "ABCÞÐÆ" or "АБВ"')
     parser.add_argument("--out", type=Path, default=Path("out"), help="output directory")
+    parser.add_argument(
+        "--tweaks",
+        type=Path,
+        default=None,
+        help="TOML file with per-letter stretches, e.g. a longer middle arm for E",
+    )
 
     shape = parser.add_argument_group("shape")
     shape.add_argument("--size", type=float, default=defaults.size_mm, help="cap height in mm")
@@ -136,6 +143,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         params = params_from_args(args)
         font = Font.load(args.font)
+        tweaks = load_tweaks(args.tweaks) if args.tweaks else None
     except (BubbleGenError, ValueError) as exc:
         logger.error("%s", exc)
         return 1
@@ -148,7 +156,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
 
     written = 0
-    for letter in build_alphabet(font, args.chars, params):
+    for letter in build_alphabet(font, args.chars, params, tweaks):
         path = export_stl(letter, args.out)
         x, y, z = letter.extents
         logger.info(
