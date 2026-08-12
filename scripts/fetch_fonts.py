@@ -24,6 +24,7 @@ STATIC = [
     "ofl/modak/Modak-Regular.ttf",
     "ofl/titanone/TitanOne-Regular.ttf",
     "ofl/lilitaone/LilitaOne-Regular.ttf",
+    "ofl/bagelfatone/BagelFatOne-Regular.ttf",
 ]
 
 # (source path, output name, axis location) - Nunito also covers Cyrillic

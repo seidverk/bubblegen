@@ -74,7 +74,7 @@ Bubble letters need heavy fonts: thickness is capped at the stroke half-width, s
 weight at 60 mm gives you a 4 mm bubble no matter what `--puff` says. Every cap and every
 reduced rounding radius is logged, so you always know when the font is the limit.
 
-`make fonts` fetches six SIL Open Font License faces into `fonts/` (gitignored). The last
+`make fonts` fetches eight SIL Open Font License faces into `fonts/` (gitignored). The last
 column is the thickest even tube the whole Icelandic alphabet holds at `--size 80`, measured
 per font: that is the `--puff` to use if you want a matching even-thickness set instead of
 the default full inflation.
@@ -84,25 +84,29 @@ the default full inflation.
 | `Sniglet-ExtraBold.ttf` | Latin, Latin Ext | roundest, counters shrink to pinholes | 25 mm |
 | `Modak-Regular.ttf` | Latin, Latin Ext, Devanagari | fattest strokes, tiny counters | 23 mm |
 | `TitanOne-Regular.ttf` | Latin, Latin Ext | cartoon, larger counters | 20 mm |
+| `Fredoka-Bold.ttf` | Latin, Latin Ext, Hebrew | soft and geometric, wide open counters | 17 mm |
+| `BagelFatOne-Regular.ttf` | Latin, Latin Ext, Korean | squishy, already half inflated on the page | 15 mm |
 | `LilitaOne-Regular.ttf` | Latin, Latin Ext | tall and condensed | 14 mm |
 | `Gluten-Black.ttf` | Latin, Latin Ext | lovely `A`, but its `Æ` is a hairline | 5 mm |
 | `Nunito-Black.ttf` | Latin, Latin Ext, Cyrillic | the only one with Cyrillic | 6 mm |
 
 Two things decide that number: how fat the strokes are, and whether any one letter has a thin
-section the rest do not. Gluten Black draws the best single `A` of the six and still ends up
+section the rest do not. Gluten Black draws the best single `A` of the set and still ends up
 last, because `Æ` joins its two halves with a hairline. Fonts with steady, generous strokes
 win.
 
 A thick even tube is not the same as a good bubble letter, though. What decides the balloon
-look is the silhouette of the letter you actually care about, and the six faces differ wildly:
+look is the silhouette of the letter you actually care about, and the faces differ wildly:
 in Sniglet's `E` the spine takes 73% of the width and the arms barely clear it, Modak and
 Titan One sit around 90% and the notches close entirely, Nunito Black at 35% reads as three
 thin arms on a stem, and Gluten Black at 67% keeps a plump rounded outline with all three
 notches cut open - the classic balloon shape. Draw the outlines before choosing: a face that
 wins on tube thickness can lose badly on shape, and no amount of `--tweaks` rescues a glyph
-whose proportions are wrong to begin with.
+whose proportions are wrong to begin with. Bagel Fat One is the reverse trade: middling on
+tube thickness, because its `O` thins at the sides, and the best silhouette of the set - the
+strokes already bulge and pinch the way an inflated one does, so it needs no tweaks at all.
 
-My personal pick is `Sniglet-ExtraBold`: it holds the thickest even tube of the six, its
+My personal pick is `Sniglet-ExtraBold`: it holds the thickest even tube of the set, its
 counters shrink to pinholes that read as truly inflated, and it is the face behind every
 letter in this repository. The recommended parameters are simply the defaults - `--size 100`
 and no `--puff` - the balloon look: the Icelandic alphabet comes out between 29 mm (`B`)
@@ -110,6 +114,28 @@ and 47 mm (`Æ`) thick, each letter as fat as its own strokes carry it.
 
 Any other TTF/OTF works. Variable fonts are read at their default location, which is usually a
 light weight - pin a heavy instance first (see `scripts/fetch_fonts.py`).
+
+### Fonts you cannot use
+
+`--font` takes any TTF or OTF on disk, which is not the same as any font you can see. Adobe
+Fonts is the case worth spelling out, because it looks free and is not: Blow Up (HVD Fonts),
+a "sticky balloons, ready to pop" display face, is the obvious thing to want here, and the
+library really is cleared for personal and commercial use - but neither point gets you a
+letter.
+
+There is no file to point `--font` at. Adobe Fonts has no download; an activated font syncs
+into an obscured Creative Cloud cache, and the Terms of Use do not permit taking it out of
+there or passing it to another machine. And however you got the file, the licence rules out
+the output rather than the input: asked whether the fonts may be used to make "stencils,
+stickers, jewelry, or anything else that features a single letter or glyph", [Adobe's own
+FAQ](https://helpx.adobe.com/fonts/using/font-licensing.html) answers "you may not create a
+product that is individual glyphs from the font files, e.g. an alphabet set of each letter to
+spell out your own phrase". That is a description of what this tool does. Check any licence
+for the same clause before buying a face for bubble letters: the permission you need is to
+cut the letterforms as objects, and that is a separate grant from the permission to set text
+with them.
+
+Bagel Fat One is the OFL face closest to that look, which is why it is in the table above.
 
 ## Usage
 
