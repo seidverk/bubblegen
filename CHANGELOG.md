@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-08-13
+
+### Added
+
+- `bubblegen-stand`: a low stand for painting a finished letter with UV resin. The deck
+  is a honeycomb whose walls taper from `--wall` at the underside to `--crest` where the
+  letter touches, so the letter rests on crest lines rather than on a surface: resin
+  drips through, cured resin has nothing to glue itself to over an area, and a UV lamp
+  reaches the underside. `--size`, `--height`, `--deck`, `--cell`, `--wall`, `--crest`,
+  `--rim` and `--leg` are all parametric; the defaults give an 80 x 80 x 18 mm stand.
+- `StandParams` and `build_stand` are exported for library use, validated on
+  construction like `BubbleParams`.
+- `make stand`, with `STAND_SIZE` for the deck side.
+
 ## [0.11.0] - 2026-08-07
 
 ### Added

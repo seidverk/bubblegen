@@ -259,6 +259,40 @@ For hanging: the flat back takes double-sided foam tape or mounting strips direc
 above roughly 80 mm are worth printing hollow (a few perimeters, low infill) to keep the
 weight off the tape.
 
+## Painting stand
+
+`bubblegen-stand` prints a low stand for painting a finished letter with UV resin. Its deck is a
+honeycomb whose walls taper from `--wall` at the underside to `--crest` where the letter touches,
+so the letter rests on crest lines instead of a surface: resin drips through, cured resin has
+nothing to glue itself to, and a UV lamp reaches the underside.
+
+```bash
+# the default: an 80 mm deck, 18 mm tall, 8 mm cells -> out/stand.stl
+uv run bubblegen-stand
+
+# for letters at the project default of 100 mm, so nothing overhangs
+uv run bubblegen-stand --size 110 --out out/stand-110.stl
+
+# finer cells for small or thin-stroked letters
+uv run bubblegen-stand --size 60 --cell 5 --rim 2
+```
+
+| flag | default | what it sets |
+| --- | --- | --- |
+| `--size` | 80 | deck side in mm |
+| `--height` | 18 | total height, legs plus deck |
+| `--deck` | 6 | deck thickness, which is also the taper length |
+| `--cell` | 8 | hexagon across the flats, at the underside |
+| `--wall` | 1.2 | wall thickness at the underside |
+| `--crest` | 0.6 | wall thickness where the letter touches |
+| `--rim` | 2.5 | solid border; only cells that clear it are cut |
+| `--leg` | 6 | corner post section |
+| `--out` | `out/stand.stl` | output path |
+
+Prints as it comes out: flat on the plate, no supports. The cells draft by about 3°, the legs
+flare into their feet, and nothing overhangs. Stand it on a silicone mat or foil, since the
+whole point is that resin goes through the deck.
+
 ## Library use
 
 ```python
@@ -289,6 +323,8 @@ src/bubblegen/
   mesh.py       marching cubes, cleanup, smoothing, decimation
   pipeline.py   character -> LetterMesh -> STL
   cli.py        argument parsing and logging
+  stand.py      StandParams and the honeycomb painting stand
+  stand_cli.py  the `bubblegen-stand` entry point
 scripts/
   fetch_fonts.py  downloads and pins the fonts used by `make fonts`
 docs/             screenshots for this README

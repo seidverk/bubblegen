@@ -14,6 +14,7 @@ from bubblegen.errors import (
 )
 from bubblegen.fonts import Font
 from bubblegen.pipeline import LetterMesh, build_alphabet, build_letter, export_stl
+from bubblegen.stand import StandParams, build_stand
 from bubblegen.tweaks import DeepenOp, StretchOp, ThickenOp, load_tweaks
 
 try:
@@ -30,12 +31,14 @@ __all__ = [
     "FontError",
     "GlyphNotFoundError",
     "LetterMesh",
+    "StandParams",
     "StretchOp",
     "ThickenOp",
     "TweaksError",
     "__version__",
     "build_alphabet",
     "build_letter",
+    "build_stand",
     "export_stl",
     "load_tweaks",
 ]

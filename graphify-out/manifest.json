@@ -15,13 +15,13 @@
     "semantic_hash": ""
   },
   "pyproject.toml": {
-    "mtime": 1786114231.4254122,
-    "ast_hash": "5713f1caf9d7499fa7af9e3d5cdbbe31",
+    "mtime": 1786611854.2821605,
+    "ast_hash": "7c0569ece93d5f51bcd372f22ad96361",
     "semantic_hash": ""
   },
   "src/bubblegen/__init__.py": {
-    "mtime": 1786373673.483109,
-    "ast_hash": "4a0e5d530798807452843093edef31da",
+    "mtime": 1786612061.9764752,
+    "ast_hash": "bfa667b861776b10b04b9a8f17653357",
     "semantic_hash": ""
   },
   "src/bubblegen/__main__.py": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786373971.6188123,
-    "ast_hash": "4c3423b52785a57bb1a281c2b304131b",
+    "mtime": 1786612049.8852134,
+    "ast_hash": "bc35440c1311f9489b3ee690e0a37a07",
     "semantic_hash": ""
   },
   "scripts/fetch_fonts.py": {
@@ -142,6 +142,31 @@
   "tests/test_tweaks.py": {
     "mtime": 1786373696.5421557,
     "ast_hash": "aa430917bf0c194c238ad2fd011f2b3b",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/stand.py": {
+    "mtime": 1786611998.0009747,
+    "ast_hash": "4d8edfd6b3496e34e1c5f3b240c2b45d",
+    "semantic_hash": ""
+  },
+  "src/bubblegen/stand_cli.py": {
+    "mtime": 1786611893.3083713,
+    "ast_hash": "e4bf911a735814ac7390b305e29b9a07",
+    "semantic_hash": ""
+  },
+  "tests/test_stand.py": {
+    "mtime": 1786611976.2478583,
+    "ast_hash": "98a88c2b9714675ea0c7de3406fda10c",
+    "semantic_hash": ""
+  },
+  "tests/test_stand_cli.py": {
+    "mtime": 1786611927.3139606,
+    "ast_hash": "34f260e5e54b0db73ec40965fe6d2d1c",
+    "semantic_hash": ""
+  },
+  "docs/plans/2026-08-13-resin-painting-stand-design.md": {
+    "mtime": 1786611559.3827388,
+    "ast_hash": "f56e197498db132bff387fdd44e6e3fb",
     "semantic_hash": ""
   }
 }

@@ -1,6 +1,6 @@
 [project]
 name = "bubblegen"
-version = "0.11.0"
+version = "0.12.0"
 description = "Parametric inflated 3D bubble letters from any TTF/OTF font, flat-backed and printable"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -33,6 +33,7 @@ dependencies = [
 
 [project.scripts]
 bubblegen = "bubblegen.cli:main"
+bubblegen-stand = "bubblegen.stand_cli:main"
 
 [project.urls]
 Homepage = "https://github.com/ingvarch/bubble-alphabet-is"

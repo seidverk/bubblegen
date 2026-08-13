@@ -73,7 +73,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_init",
-      "community": 7,
+      "community": 0,
       "norm_label": "__init__.py"
     },
     {
@@ -83,7 +83,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_init_rationale_1",
-      "community": 7,
+      "community": 0,
       "norm_label": "parametric inflated 3d bubble letters from any ttf/otf font."
     },
     {
@@ -132,7 +132,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "argumentparser",
+      "id": "src_bubblegen_cli_py_argumentparser",
       "community": 3,
       "norm_label": "argumentparser"
     },
@@ -152,7 +152,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "namespace",
+      "id": "src_bubblegen_cli_py_namespace",
       "community": 3,
       "norm_label": "namespace"
     },
@@ -193,7 +193,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_config",
-      "community": 7,
+      "community": 0,
       "norm_label": "config.py"
     },
     {
@@ -273,7 +273,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_config_rationale_1",
-      "community": 7,
+      "community": 0,
       "norm_label": "all tunables in one immutable, validated object."
     },
     {
@@ -763,7 +763,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_bubblegen_inflate_height_field",
-      "community": 2,
+      "community": 12,
       "norm_label": "height_field()"
     },
     {
@@ -883,7 +883,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_bubblegen_inflate_rationale_71",
-      "community": 2,
+      "community": 12,
       "norm_label": "thickness h(x, y) and the geometric half-width map, both in mm.      `puff` is h"
     },
     {
@@ -973,7 +973,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_mesh",
-      "community": 7,
+      "community": 5,
       "norm_label": "mesh.py"
     },
     {
@@ -993,7 +993,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_py_ndarray",
-      "community": 7,
+      "community": 5,
       "norm_label": "ndarray"
     },
     {
@@ -1003,7 +1003,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_py_float64",
-      "community": 7,
+      "community": 5,
       "norm_label": "float64"
     },
     {
@@ -1013,7 +1013,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_py_trimesh",
-      "community": 7,
+      "community": 5,
       "norm_label": "trimesh"
     },
     {
@@ -1023,7 +1023,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_base_inset",
-      "community": 7,
+      "community": 5,
       "norm_label": "_base_inset()"
     },
     {
@@ -1033,7 +1033,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_smooth_keeping_base",
-      "community": 7,
+      "community": 5,
       "norm_label": "_smooth_keeping_base()"
     },
     {
@@ -1043,7 +1043,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_drop_degenerate_faces",
-      "community": 7,
+      "community": 5,
       "norm_label": "_drop_degenerate_faces()"
     },
     {
@@ -1053,7 +1053,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_surface_error",
-      "community": 7,
+      "community": 5,
       "norm_label": "_surface_error()"
     },
     {
@@ -1063,7 +1063,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_decimate",
-      "community": 7,
+      "community": 5,
       "norm_label": "_decimate()"
     },
     {
@@ -1073,7 +1073,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_rationale_1",
-      "community": 7,
+      "community": 5,
       "norm_label": "height field to a watertight triangle mesh with a flat, printable bottom."
     },
     {
@@ -1093,7 +1093,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_rationale_107",
-      "community": 7,
+      "community": 5,
       "norm_label": "how far the outline is pulled in at each height: fillet arc into a 45\u00b0 chamfer."
     },
     {
@@ -1103,7 +1103,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_rationale_130",
-      "community": 7,
+      "community": 5,
       "norm_label": "taubin smoothing, vertically pinned at the plate but free in its plane.      smo"
     },
     {
@@ -1113,7 +1113,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_rationale_158",
-      "community": 7,
+      "community": 5,
       "norm_label": "remove zero-area faces in place.      both marching cubes and quadric decimation"
     },
     {
@@ -1123,7 +1123,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_rationale_173",
-      "community": 7,
+      "community": 5,
       "norm_label": "worst gap between the inflated top of `mesh` and the height field it follows."
     },
     {
@@ -1133,7 +1133,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "src_bubblegen_mesh_rationale_200",
-      "community": 7,
+      "community": 5,
       "norm_label": "marching cubes is very dense; trim it to keep stl files sane.      quadric decim"
     },
     {
@@ -1143,7 +1143,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline",
-      "community": 7,
+      "community": 0,
       "norm_label": "pipeline.py"
     },
     {
@@ -1193,7 +1193,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_slug",
-      "community": 7,
+      "community": 0,
       "norm_label": "slug()"
     },
     {
@@ -1203,7 +1203,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_rounded",
-      "community": 7,
+      "community": 0,
       "norm_label": "_rounded()"
     },
     {
@@ -1263,7 +1263,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_export_stl",
-      "community": 7,
+      "community": 0,
       "norm_label": "export_stl()"
     },
     {
@@ -1273,7 +1273,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_py_path",
-      "community": 7,
+      "community": 0,
       "norm_label": "path"
     },
     {
@@ -1283,7 +1283,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_rationale_1",
-      "community": 7,
+      "community": 0,
       "norm_label": "end-to-end: character in, printable mesh out."
     },
     {
@@ -1303,7 +1303,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_rationale_57",
-      "community": 7,
+      "community": 0,
       "norm_label": "filename-safe name for a character."
     },
     {
@@ -1313,7 +1313,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_rationale_64",
-      "community": 7,
+      "community": 0,
       "norm_label": "round the silhouette as far as this particular glyph allows.      `--round` is a"
     },
     {
@@ -1353,7 +1353,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "src_bubblegen_pipeline_rationale_130",
-      "community": 7,
+      "community": 0,
       "norm_label": "write the letter as `bubble_<name>.stl` and return the path."
     },
     {
@@ -1373,7 +1373,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster",
-      "community": 7,
+      "community": 5,
       "norm_label": "raster"
     },
     {
@@ -1383,7 +1383,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_to_mm",
-      "community": 7,
+      "community": 5,
       "norm_label": ".to_mm()"
     },
     {
@@ -1393,7 +1393,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_to_pixel",
-      "community": 7,
+      "community": 5,
       "norm_label": ".to_pixel()"
     },
     {
@@ -1403,7 +1403,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
-      "community": 7,
+      "community": 5,
       "norm_label": ".with_mask()"
     },
     {
@@ -1533,7 +1533,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_35",
-      "community": 7,
+      "community": 5,
       "norm_label": "a boolean glyph mask plus the mapping back to millimetres."
     },
     {
@@ -1595,6 +1595,426 @@
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_174",
       "community": 2,
       "norm_label": "signed distance in mm: positive inside the glyph, negative outside."
+    },
+    {
+      "label": "stand.py",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand",
+      "community": 7,
+      "norm_label": "stand.py"
+    },
+    {
+      "label": "StandParams",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams",
+      "community": 7,
+      "norm_label": "standparams"
+    },
+    {
+      "label": ".__post_init__()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_post_init",
+      "community": 7,
+      "norm_label": ".__post_init__()"
+    },
+    {
+      "label": "._require_positive()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L104",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_require_positive",
+      "community": 7,
+      "norm_label": "._require_positive()"
+    },
+    {
+      "label": ".deck_z0()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L109",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_deck_z0",
+      "community": 7,
+      "norm_label": ".deck_z0()"
+    },
+    {
+      "label": ".pitch()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_pitch",
+      "community": 7,
+      "norm_label": ".pitch()"
+    },
+    {
+      "label": ".inner_span()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L119",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_inner_span",
+      "community": 7,
+      "norm_label": ".inner_span()"
+    },
+    {
+      "label": ".crest_gain()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L124",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_crest_gain",
+      "community": 7,
+      "norm_label": ".crest_gain()"
+    },
+    {
+      "label": ".widest_cell_mm()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L129",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_widest_cell_mm",
+      "community": 7,
+      "norm_label": ".widest_cell_mm()"
+    },
+    {
+      "label": ".foot_mm()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_standparams_foot_mm",
+      "community": 7,
+      "norm_label": ".foot_mm()"
+    },
+    {
+      "label": "build_stand()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L137",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_build_stand",
+      "community": 7,
+      "norm_label": "build_stand()"
+    },
+    {
+      "label": "Trimesh",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_py_trimesh",
+      "community": 7,
+      "norm_label": "trimesh"
+    },
+    {
+      "label": "_hexagon()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L142",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_hexagon",
+      "community": 7,
+      "norm_label": "_hexagon()"
+    },
+    {
+      "label": "NDArray",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_py_ndarray",
+      "community": 7,
+      "norm_label": "ndarray"
+    },
+    {
+      "label": "float64",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_py_float64",
+      "community": 7,
+      "norm_label": "float64"
+    },
+    {
+      "label": "_loft()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L153",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_loft",
+      "community": 7,
+      "norm_label": "_loft()"
+    },
+    {
+      "label": "cell_centres()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L181",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cell_centres",
+      "community": 7,
+      "norm_label": "cell_centres()"
+    },
+    {
+      "label": "_cell()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L211",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cell",
+      "community": 7,
+      "norm_label": "_cell()"
+    },
+    {
+      "label": "_deck()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L223",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_deck",
+      "community": 7,
+      "norm_label": "_deck()"
+    },
+    {
+      "label": "_legs()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L235",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_legs",
+      "community": 7,
+      "norm_label": "_legs()"
+    },
+    {
+      "label": "_merge()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L254",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_merge",
+      "community": 7,
+      "norm_label": "_merge()"
+    },
+    {
+      "label": "A honeycomb-topped stand that holds a letter while it is painted with UV resin.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_1",
+      "community": 7,
+      "norm_label": "a honeycomb-topped stand that holds a letter while it is painted with uv resin."
+    },
+    {
+      "label": "Geometry of one stand. Distances are millimetres, as everywhere in bubblegen.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_41",
+      "community": 7,
+      "norm_label": "geometry of one stand. distances are millimetres, as everywhere in bubblegen."
+    },
+    {
+      "label": "Underside of the deck: everything below it is legs.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L110",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_110",
+      "community": 7,
+      "norm_label": "underside of the deck: everything below it is legs."
+    },
+    {
+      "label": "Centre distance between neighbouring cells, which is a cell plus a wall.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_115",
+      "community": 7,
+      "norm_label": "centre distance between neighbouring cells, which is a cell plus a wall."
+    },
+    {
+      "label": "Free span inside the rim.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L120",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_120",
+      "community": 7,
+      "norm_label": "free span inside the rim."
+    },
+    {
+      "label": "How much wider a cell is at the crest, across the flats.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L125",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_125",
+      "community": 7,
+      "norm_label": "how much wider a cell is at the crest, across the flats."
+    },
+    {
+      "label": "Deck with the cells cut out, standing on four legs, sitting on z = 0.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_138",
+      "community": 7,
+      "norm_label": "deck with the cells cut out, standing on four legs, sitting on z = 0."
+    },
+    {
+      "label": "Pointy-top hexagon centred on the origin, counter-clockwise.      Pointy-top put",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L143",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_143",
+      "community": 7,
+      "norm_label": "pointy-top hexagon centred on the origin, counter-clockwise.      pointy-top put"
+    },
+    {
+      "label": "Close a stack of equally sized rings into a solid, bottom ring first.      Rings",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L154",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_154",
+      "community": 7,
+      "norm_label": "close a stack of equally sized rings into a solid, bottom ring first.      rings"
+    },
+    {
+      "label": "Cell centres whose whole footprint clears the rim, centred on the deck.      Cut",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L182",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_182",
+      "community": 7,
+      "norm_label": "cell centres whose whole footprint clears the rim, centred on the deck.      cut"
+    },
+    {
+      "label": "One drafted cell: `cell_mm` across the flats underneath, `crest_gain` wider on t",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L212",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_212",
+      "community": 7,
+      "norm_label": "one drafted cell: `cell_mm` across the flats underneath, `crest_gain` wider on t"
+    },
+    {
+      "label": "Four corner posts, flared at the foot and reaching up into the deck.      The po",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L236",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_236",
+      "community": 7,
+      "norm_label": "four corner posts, flared at the foot and reaching up into the deck.      the po"
+    },
+    {
+      "label": "Carry bodies that never touch as one mesh; the booleans take it as it is.",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L255",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_rationale_255",
+      "community": 7,
+      "norm_label": "carry bodies that never touch as one mesh; the booleans take it as it is."
+    },
+    {
+      "label": "stand_cli.py",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli",
+      "community": 7,
+      "norm_label": "stand_cli.py"
+    },
+    {
+      "label": "build_parser()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_build_parser",
+      "community": 7,
+      "norm_label": "build_parser()"
+    },
+    {
+      "label": "ArgumentParser",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_py_argumentparser",
+      "community": 7,
+      "norm_label": "argumentparser"
+    },
+    {
+      "label": "params_from_args()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_params_from_args",
+      "community": 7,
+      "norm_label": "params_from_args()"
+    },
+    {
+      "label": "Namespace",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_py_namespace",
+      "community": 7,
+      "norm_label": "namespace"
+    },
+    {
+      "label": "_configure_logging()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_configure_logging",
+      "community": 7,
+      "norm_label": "_configure_logging()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L91",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_main",
+      "community": 7,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Command line entry point for the painting stand.  Separate from `bubblegen.cli`",
+      "file_type": "rationale",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_bubblegen_stand_cli_rationale_1",
+      "community": 7,
+      "norm_label": "command line entry point for the painting stand.  separate from `bubblegen.cli`"
     },
     {
       "label": "tweaks.py",
@@ -2252,7 +2672,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "capturefixture",
+      "id": "tests_test_cli_py_capturefixture",
       "community": 3,
       "norm_label": "capturefixture"
     },
@@ -3063,7 +3483,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "tests_test_mesh_test_base_fillet_never_overhangs_past_45_degrees",
-      "community": 7,
+      "community": 5,
       "norm_label": "test_base_fillet_never_overhangs_past_45_degrees()"
     },
     {
@@ -3213,7 +3633,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "tests_test_mesh_rationale_158",
-      "community": 7,
+      "community": 5,
       "norm_label": "each layer must land on the one below: the fillet's outward step per layer     c"
     },
     {
@@ -3433,7 +3853,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "tests_test_pipeline_test_slug",
-      "community": 7,
+      "community": 0,
       "norm_label": "test_slug()"
     },
     {
@@ -3785,6 +4205,376 @@
       "id": "users_igor_repos_ingvarch_bubble_alphabet_is_tests_test_raster_rationale_155",
       "community": 1,
       "norm_label": "scipy's edt has no background to measure against, so this needs its own guard."
+    },
+    {
+      "label": "test_stand.py",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_stand",
+      "community": 7,
+      "norm_label": "test_stand.py"
+    },
+    {
+      "label": "stand_params()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "tests_test_stand_stand_params",
+      "community": 7,
+      "norm_label": "stand_params()"
+    },
+    {
+      "label": "stand()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "tests_test_stand_stand",
+      "community": 7,
+      "norm_label": "stand()"
+    },
+    {
+      "label": "Trimesh",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "tests_test_stand_py_trimesh",
+      "community": 7,
+      "norm_label": "trimesh"
+    },
+    {
+      "label": "material_area()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "tests_test_stand_material_area",
+      "community": 7,
+      "norm_label": "material_area()"
+    },
+    {
+      "label": "test_stand_is_watertight()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_stand_is_watertight",
+      "community": 7,
+      "norm_label": "test_stand_is_watertight()"
+    },
+    {
+      "label": "test_stand_fills_the_given_footprint()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_stand_fills_the_given_footprint",
+      "community": 7,
+      "norm_label": "test_stand_fills_the_given_footprint()"
+    },
+    {
+      "label": "test_deck_is_mostly_open()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_deck_is_mostly_open",
+      "community": 7,
+      "norm_label": "test_deck_is_mostly_open()"
+    },
+    {
+      "label": "test_walls_taper_towards_the_crest()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_walls_taper_towards_the_crest",
+      "community": 7,
+      "norm_label": "test_walls_taper_towards_the_crest()"
+    },
+    {
+      "label": "test_equal_crest_and_wall_leaves_the_walls_straight()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_equal_crest_and_wall_leaves_the_walls_straight",
+      "community": 7,
+      "norm_label": "test_equal_crest_and_wall_leaves_the_walls_straight()"
+    },
+    {
+      "label": "test_only_the_legs_carry_below_the_deck()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_only_the_legs_carry_below_the_deck",
+      "community": 7,
+      "norm_label": "test_only_the_legs_carry_below_the_deck()"
+    },
+    {
+      "label": "test_the_foot_is_wider_than_the_leg()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L92",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_the_foot_is_wider_than_the_leg",
+      "community": 7,
+      "norm_label": "test_the_foot_is_wider_than_the_leg()"
+    },
+    {
+      "label": "test_rim_stays_solid()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L100",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_rim_stays_solid",
+      "community": 7,
+      "norm_label": "test_rim_stays_solid()"
+    },
+    {
+      "label": "test_the_cell_field_is_centred()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_the_cell_field_is_centred",
+      "community": 7,
+      "norm_label": "test_the_cell_field_is_centred()"
+    },
+    {
+      "label": "test_finer_cells_add_walls()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_finer_cells_add_walls",
+      "community": 7,
+      "norm_label": "test_finer_cells_add_walls()"
+    },
+    {
+      "label": "test_sizes_must_be_positive()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L151",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_sizes_must_be_positive",
+      "community": 7,
+      "norm_label": "test_sizes_must_be_positive()"
+    },
+    {
+      "label": "test_crest_may_not_exceed_the_wall()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L156",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_crest_may_not_exceed_the_wall",
+      "community": 7,
+      "norm_label": "test_crest_may_not_exceed_the_wall()"
+    },
+    {
+      "label": "test_deck_must_leave_room_for_legs()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L161",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_deck_must_leave_room_for_legs",
+      "community": 7,
+      "norm_label": "test_deck_must_leave_room_for_legs()"
+    },
+    {
+      "label": "test_rim_must_leave_an_opening()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L166",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_rim_must_leave_an_opening",
+      "community": 7,
+      "norm_label": "test_rim_must_leave_an_opening()"
+    },
+    {
+      "label": "test_legs_must_fit_the_footprint()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L171",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_legs_must_fit_the_footprint",
+      "community": 7,
+      "norm_label": "test_legs_must_fit_the_footprint()"
+    },
+    {
+      "label": "test_cell_must_fit_inside_the_rim()",
+      "file_type": "code",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L176",
+      "_origin": "ast",
+      "id": "tests_test_stand_test_cell_must_fit_inside_the_rim",
+      "community": 7,
+      "norm_label": "test_cell_must_fit_inside_the_rim()"
+    },
+    {
+      "label": "Small deck: three hexagons a row keeps the booleans in the millisecond range.",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_15",
+      "community": 7,
+      "norm_label": "small deck: three hexagons a row keeps the booleans in the millisecond range."
+    },
+    {
+      "label": "Solid cross-section area at height z, measured as the volume of a thin slab.",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_31",
+      "community": 7,
+      "norm_label": "solid cross-section area at height z, measured as the volume of a thin slab."
+    },
+    {
+      "label": "At the shipped defaults the deck is more hole than wall, so resin drips through.",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_52",
+      "community": 7,
+      "norm_label": "at the shipped defaults the deck is more hole than wall, so resin drips through."
+    },
+    {
+      "label": "The holes widen upwards, so the letter meets a crest instead of a face.",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_60",
+      "community": 7,
+      "norm_label": "the holes widen upwards, so the letter meets a crest instead of a face."
+    },
+    {
+      "label": "A flared foot adds first-layer area and tipping resistance, without an overhang.",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L93",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_93",
+      "community": 7,
+      "norm_label": "a flared foot adds first-layer area and tipping resistance, without an overhang."
+    },
+    {
+      "label": "No hexagon is cut into the border, so the deck never ends in a sliver.",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L101",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_101",
+      "community": 7,
+      "norm_label": "no hexagon is cut into the border, so the deck never ends in a sliver."
+    },
+    {
+      "label": "Leftover span is split between the two borders, so the deck reads as intentional",
+      "file_type": "rationale",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "tests_test_stand_rationale_115",
+      "community": 7,
+      "norm_label": "leftover span is split between the two borders, so the deck reads as intentional"
+    },
+    {
+      "label": "test_stand_cli.py",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli",
+      "community": 21,
+      "norm_label": "test_stand_cli.py"
+    },
+    {
+      "label": "test_help_exits_cleanly()",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_test_help_exits_cleanly",
+      "community": 21,
+      "norm_label": "test_help_exits_cleanly()"
+    },
+    {
+      "label": "CaptureFixture",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_py_capturefixture",
+      "community": 21,
+      "norm_label": "capturefixture"
+    },
+    {
+      "label": "test_defaults_need_no_arguments()",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_test_defaults_need_no_arguments",
+      "community": 21,
+      "norm_label": "test_defaults_need_no_arguments()"
+    },
+    {
+      "label": "test_flags_map_onto_params()",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_test_flags_map_onto_params",
+      "community": 21,
+      "norm_label": "test_flags_map_onto_params()"
+    },
+    {
+      "label": "test_run_writes_an_stl()",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_test_run_writes_an_stl",
+      "community": 21,
+      "norm_label": "test_run_writes_an_stl()"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_py_path",
+      "community": 21,
+      "norm_label": "path"
+    },
+    {
+      "label": "test_run_creates_missing_directories()",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_test_run_creates_missing_directories",
+      "community": 21,
+      "norm_label": "test_run_creates_missing_directories()"
+    },
+    {
+      "label": "test_impossible_geometry_fails_without_a_traceback()",
+      "file_type": "code",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "tests_test_stand_cli_test_impossible_geometry_fails_without_a_traceback",
+      "community": 21,
+      "norm_label": "test_impossible_geometry_fails_without_a_traceback()"
     },
     {
       "label": "test_tweaks.py",
@@ -4667,10 +5457,20 @@
       "norm_label": "printing"
     },
     {
-      "label": "Library use",
+      "label": "Painting stand",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L262",
+      "_origin": "ast",
+      "id": "readme_painting_stand",
+      "community": 8,
+      "norm_label": "painting stand"
+    },
+    {
+      "label": "Library use",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L296",
       "_origin": "ast",
       "id": "readme_library_use",
       "community": 8,
@@ -4680,7 +5480,7 @@
       "label": "Layout",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L281",
+      "source_location": "L315",
       "_origin": "ast",
       "id": "readme_layout",
       "community": 8,
@@ -4690,7 +5490,7 @@
       "label": "Development",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L298",
+      "source_location": "L334",
       "_origin": "ast",
       "id": "readme_development",
       "community": 8,
@@ -4700,11 +5500,61 @@
       "label": "License",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L311",
+      "source_location": "L347",
       "_origin": "ast",
       "id": "readme_license",
       "community": 8,
       "norm_label": "license"
+    },
+    {
+      "label": "2026-08-13-resin-painting-stand-design.md",
+      "file_type": "document",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_plans_2026_08_13_resin_painting_stand_design",
+      "community": 22,
+      "norm_label": "2026-08-13-resin-painting-stand-design.md"
+    },
+    {
+      "label": "Resin painting stand",
+      "file_type": "document",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_plans_2026_08_13_resin_painting_stand_design_resin_painting_stand",
+      "community": 22,
+      "norm_label": "resin painting stand"
+    },
+    {
+      "label": "Geometry",
+      "file_type": "document",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "docs_plans_2026_08_13_resin_painting_stand_design_geometry",
+      "community": 22,
+      "norm_label": "geometry"
+    },
+    {
+      "label": "Parameters",
+      "file_type": "document",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "docs_plans_2026_08_13_resin_painting_stand_design_parameters",
+      "community": 22,
+      "norm_label": "parameters"
+    },
+    {
+      "label": "Implementation",
+      "file_type": "document",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "docs_plans_2026_08_13_resin_painting_stand_design_implementation",
+      "community": 22,
+      "norm_label": "implementation"
     }
   ],
   "links": [
@@ -4801,7 +5651,7 @@
       "source_location": "L15",
       "weight": 1.0,
       "source": "src_bubblegen_init",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
       "confidence_score": 1.0
     },
     {
@@ -4821,6 +5671,17 @@
       "confidence": "EXTRACTED",
       "source_file": "src/bubblegen/__init__.py",
       "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_bubblegen_init",
+      "target": "src_bubblegen_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/__init__.py",
+      "source_location": "L18",
       "weight": 1.0,
       "source": "src_bubblegen_init",
       "target": "src_bubblegen_tweaks",
@@ -4887,7 +5748,7 @@
       "source_location": "L13",
       "weight": 1.0,
       "source": "src_bubblegen_cli",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
       "confidence_score": 1.0
     },
     {
@@ -4981,7 +5842,7 @@
       "source_location": "L23",
       "weight": 1.0,
       "source": "src_bubblegen_cli_build_parser",
-      "target": "argumentparser",
+      "target": "src_bubblegen_cli_py_argumentparser",
       "confidence_score": 1.0
     },
     {
@@ -5009,39 +5870,6 @@
     {
       "relation": "calls",
       "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_cli.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "tests_test_cli_test_flags_map_onto_params",
-      "target": "src_bubblegen_cli_build_parser"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_cli.py",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "tests_test_cli_test_font_and_chars_are_required",
-      "target": "src_bubblegen_cli_build_parser"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_cli.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "tests_test_cli_test_help_exits_cleanly",
-      "target": "src_bubblegen_cli_build_parser"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/bubblegen/cli.py",
       "source_location": "L144",
@@ -5058,7 +5886,7 @@
       "source_location": "L112",
       "weight": 1.0,
       "source": "src_bubblegen_cli_params_from_args",
-      "target": "namespace",
+      "target": "src_bubblegen_cli_py_namespace",
       "confidence_score": 1.0
     },
     {
@@ -5073,17 +5901,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_cli.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "source": "tests_test_cli_test_flags_map_onto_params",
-      "target": "src_bubblegen_cli_params_from_args"
-    },
-    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -5091,7 +5908,7 @@
       "source_location": "L129",
       "weight": 1.0,
       "source": "src_bubblegen_cli_configure_logging",
-      "target": "namespace",
+      "target": "src_bubblegen_cli_py_namespace",
       "confidence_score": 1.0
     },
     {
@@ -6715,6 +7532,17 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/pipeline.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_bubblegen_pipeline",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -6745,6 +7573,39 @@
       "source": "src_bubblegen_pipeline_lettermesh",
       "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
       "confidence_score": 0.5
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/tweaks.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_bubblegen_tweaks",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/conftest.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tests_conftest",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_pipeline.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "tests_test_pipeline",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7003,6 +7864,28 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/raster.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_py",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fonts.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "users_igor_repos_ingvarch_bubble_alphabet_is_tests_test_fonts_py",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -7089,50 +7972,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/bubblegen/pipeline.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "src_bubblegen_pipeline",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/bubblegen/tweaks.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "source": "src_bubblegen_tweaks",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/conftest.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "tests_conftest",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_pipeline.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "tests_test_pipeline",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/bubblegen/fonts.py",
@@ -7146,33 +7985,11 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/bubblegen/raster.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_py",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_fonts.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "users_igor_repos_ingvarch_bubble_alphabet_is_tests_test_fonts_py",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_fonts_font_contours_mm",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/bubblegen/inflate.py",
       "source_location": "L32",
       "weight": 1.0,
       "source": "src_bubblegen_inflate",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_130",
       "confidence_score": 1.0
     },
     {
@@ -7866,7 +8683,7 @@
       "source_location": "L16",
       "weight": 1.0,
       "source": "src_bubblegen_mesh",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_130",
       "confidence_score": 1.0
     },
     {
@@ -8436,7 +9253,7 @@
       "source_location": "L16",
       "weight": 1.0,
       "source": "src_bubblegen_pipeline",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_130",
       "confidence_score": 1.0
     },
     {
@@ -9189,39 +10006,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_inflate.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "tests_test_inflate",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_mesh.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "tests_test_mesh",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_raster.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "users_igor_repos_ingvarch_bubble_alphabet_is_tests_test_raster_py",
-      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_raster_with_mask",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "INFERRED",
@@ -9885,6 +10669,1049 @@
       "weight": 1.0,
       "source": "users_igor_repos_ingvarch_bubble_alphabet_is_tests_test_raster_test_signed_distance_signs_and_magnitude",
       "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_signed_distance"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_inflate.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "tests_test_inflate",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_130",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_mesh.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tests_test_mesh",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_130",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_raster.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "users_igor_repos_ingvarch_bubble_alphabet_is_tests_test_raster_py",
+      "target": "users_igor_repos_ingvarch_bubble_alphabet_is_src_bubblegen_raster_rationale_130",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_build_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_cell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_cell_centres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_deck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_hexagon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L235",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_legs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_loft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_merge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli",
+      "target": "src_bubblegen_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_1",
+      "target": "src_bubblegen_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "src_bubblegen_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_build_stand",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cell",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cell_centres",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_build_parser",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_params_from_args",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_deck",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L235",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_legs",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_41",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_crest_gain",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_deck_z0",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_foot_mm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_inner_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_pitch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_post_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_require_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams",
+      "target": "src_bubblegen_stand_standparams_widest_cell_mm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tests_test_stand_stand",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tests_test_stand_stand_params",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_cell_must_fit_inside_the_rim",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_crest_may_not_exceed_the_wall",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_deck_is_mostly_open",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_deck_must_leave_room_for_legs",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_equal_crest_and_wall_leaves_the_walls_straight",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_finer_cells_add_walls",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_legs_must_fit_the_footprint",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_only_the_legs_carry_below_the_deck",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_rim_must_leave_an_opening",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_rim_stays_solid",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_sizes_must_be_positive",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_stand_fills_the_given_footprint",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_the_cell_field_is_centred",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_the_foot_is_wider_than_the_leg",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_walls_taper_towards_the_crest",
+      "target": "src_bubblegen_stand_standparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_standparams_post_init",
+      "target": "src_bubblegen_stand_standparams_require_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_110",
+      "target": "src_bubblegen_stand_standparams_deck_z0",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_115",
+      "target": "src_bubblegen_stand_standparams_pitch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_120",
+      "target": "src_bubblegen_stand_standparams_inner_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_125",
+      "target": "src_bubblegen_stand_standparams_crest_gain",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_build_stand",
+      "target": "src_bubblegen_stand_deck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_build_stand",
+      "target": "src_bubblegen_stand_legs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_build_stand",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_main",
+      "target": "src_bubblegen_stand_build_stand"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_138",
+      "target": "src_bubblegen_stand_build_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_stand.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "tests_test_stand_stand",
+      "target": "src_bubblegen_stand_build_stand"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_stand.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_deck_is_mostly_open",
+      "target": "src_bubblegen_stand_build_stand"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_stand.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_equal_crest_and_wall_leaves_the_walls_straight",
+      "target": "src_bubblegen_stand_build_stand"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_stand.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_finer_cells_add_walls",
+      "target": "src_bubblegen_stand_build_stand"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cell",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_deck",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L235",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_legs",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_loft",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_merge",
+      "target": "src_bubblegen_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cell",
+      "target": "src_bubblegen_stand_hexagon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_hexagon",
+      "target": "src_bubblegen_stand_py_float64",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_hexagon",
+      "target": "src_bubblegen_stand_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_143",
+      "target": "src_bubblegen_stand_hexagon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_loft",
+      "target": "src_bubblegen_stand_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_loft",
+      "target": "src_bubblegen_stand_py_float64",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cell",
+      "target": "src_bubblegen_stand_loft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L250",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_legs",
+      "target": "src_bubblegen_stand_loft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_154",
+      "target": "src_bubblegen_stand_loft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_deck",
+      "target": "src_bubblegen_stand_cell_centres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_182",
+      "target": "src_bubblegen_stand_cell_centres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_stand.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_the_cell_field_is_centred",
+      "target": "src_bubblegen_stand_cell_centres"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_deck",
+      "target": "src_bubblegen_stand_cell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_212",
+      "target": "src_bubblegen_stand_cell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_deck",
+      "target": "src_bubblegen_stand_merge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_legs",
+      "target": "src_bubblegen_stand_merge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L236",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_236",
+      "target": "src_bubblegen_stand_legs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_rationale_255",
+      "target": "src_bubblegen_stand_merge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli",
+      "target": "src_bubblegen_stand_cli_build_parser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli",
+      "target": "src_bubblegen_stand_cli_configure_logging",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli",
+      "target": "src_bubblegen_stand_cli_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli",
+      "target": "src_bubblegen_stand_cli_params_from_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_rationale_1",
+      "target": "src_bubblegen_stand_cli",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "src_bubblegen_stand_cli",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_build_parser",
+      "target": "src_bubblegen_stand_cli_py_argumentparser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_main",
+      "target": "src_bubblegen_stand_cli_build_parser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_main",
+      "target": "src_bubblegen_stand_cli_params_from_args",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_params_from_args",
+      "target": "src_bubblegen_stand_cli_py_namespace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_configure_logging",
+      "target": "src_bubblegen_stand_cli_py_namespace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/bubblegen/stand_cli.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "src_bubblegen_stand_cli_main",
+      "target": "src_bubblegen_stand_cli_configure_logging",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11880,7 +13707,7 @@
       "source_location": "L16",
       "weight": 1.0,
       "source": "tests_test_cli_test_help_exits_cleanly",
-      "target": "capturefixture",
+      "target": "tests_test_cli_py_capturefixture",
       "confidence_score": 1.0
     },
     {
@@ -14094,6 +15921,546 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_stand_params",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_cell_must_fit_inside_the_rim",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_crest_may_not_exceed_the_wall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_deck_is_mostly_open",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_deck_must_leave_room_for_legs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_equal_crest_and_wall_leaves_the_walls_straight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_finer_cells_add_walls",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_legs_must_fit_the_footprint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_only_the_legs_carry_below_the_deck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_rim_must_leave_an_opening",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_rim_stays_solid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_sizes_must_be_positive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_stand_fills_the_given_footprint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_stand_is_watertight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_the_cell_field_is_centred",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_the_foot_is_wider_than_the_leg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "tests_test_stand",
+      "target": "tests_test_stand_test_walls_taper_towards_the_crest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_15",
+      "target": "tests_test_stand_stand_params",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "tests_test_stand_stand",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tests_test_stand_material_area",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_only_the_legs_carry_below_the_deck",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_rim_stays_solid",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_stand_fills_the_given_footprint",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_stand_is_watertight",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_the_foot_is_wider_than_the_leg",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_walls_taper_towards_the_crest",
+      "target": "tests_test_stand_py_trimesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_31",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_deck_is_mostly_open",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_equal_crest_and_wall_leaves_the_walls_straight",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_finer_cells_add_walls",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_only_the_legs_carry_below_the_deck",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_the_foot_is_wider_than_the_leg",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "tests_test_stand_test_walls_taper_towards_the_crest",
+      "target": "tests_test_stand_material_area",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_52",
+      "target": "tests_test_stand_test_deck_is_mostly_open",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_60",
+      "target": "tests_test_stand_test_walls_taper_towards_the_crest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_93",
+      "target": "tests_test_stand_test_the_foot_is_wider_than_the_leg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_101",
+      "target": "tests_test_stand_test_rim_stays_solid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "tests_test_stand_rationale_115",
+      "target": "tests_test_stand_test_the_cell_field_is_centred",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "tests_test_stand_cli_test_defaults_need_no_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "tests_test_stand_cli_test_flags_map_onto_params",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "tests_test_stand_cli_test_help_exits_cleanly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "tests_test_stand_cli_test_impossible_geometry_fails_without_a_traceback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "tests_test_stand_cli_test_run_creates_missing_directories",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli",
+      "target": "tests_test_stand_cli_test_run_writes_an_stl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli_test_help_exits_cleanly",
+      "target": "tests_test_stand_cli_py_capturefixture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli_test_impossible_geometry_fails_without_a_traceback",
+      "target": "tests_test_stand_cli_py_capturefixture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli_test_run_writes_an_stl",
+      "target": "tests_test_stand_cli_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli_test_impossible_geometry_fails_without_a_traceback",
+      "target": "tests_test_stand_cli_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_stand_cli.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "tests_test_stand_cli_test_run_creates_missing_directories",
+      "target": "tests_test_stand_cli_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_tweaks.py",
       "source_location": "L116",
       "weight": 1.0,
@@ -15132,7 +17499,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L298",
+      "source_location": "L334",
       "weight": 1.0,
       "source": "readme_bubblegen",
       "target": "readme_development",
@@ -15172,7 +17539,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L281",
+      "source_location": "L315",
       "weight": 1.0,
       "source": "readme_bubblegen",
       "target": "readme_layout",
@@ -15182,7 +17549,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L262",
+      "source_location": "L296",
       "weight": 1.0,
       "source": "readme_bubblegen",
       "target": "readme_library_use",
@@ -15192,10 +17559,20 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L311",
+      "source_location": "L347",
       "weight": 1.0,
       "source": "readme_bubblegen",
       "target": "readme_license",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L262",
+      "weight": 1.0,
+      "source": "readme_bubblegen",
+      "target": "readme_painting_stand",
       "confidence_score": 1.0
     },
     {
@@ -15247,8 +17624,48 @@
       "source": "readme_usage",
       "target": "readme_tuning_notes",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_plans_2026_08_13_resin_painting_stand_design",
+      "target": "docs_plans_2026_08_13_resin_painting_stand_design_resin_painting_stand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "docs_plans_2026_08_13_resin_painting_stand_design_resin_painting_stand",
+      "target": "docs_plans_2026_08_13_resin_painting_stand_design_geometry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "docs_plans_2026_08_13_resin_painting_stand_design_resin_painting_stand",
+      "target": "docs_plans_2026_08_13_resin_painting_stand_design_implementation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/plans/2026-08-13-resin-painting-stand-design.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "docs_plans_2026_08_13_resin_painting_stand_design_resin_painting_stand",
+      "target": "docs_plans_2026_08_13_resin_painting_stand_design_parameters",
+      "confidence_score": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c36ec3b9ce28778bb1803d7f221e33c3a855d5e4"
+  "built_at_commit": "5de90b0470b96024a49c05ab1e24586089777d58"
 }
